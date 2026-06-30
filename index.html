@@ -1,0 +1,748 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ficha de RPG - D&D 5e</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="header">
+        <div class="header-content">
+          <div>
+            <h1 id="charName" class="char-name">Novo Personagem</h1>
+            <p class="char-info">
+              <span id="charClass">Classe</span> •
+              <span id="charLevel">Nível 1</span> •
+              <span id="charRace">Raça</span>
+            </p>
+          </div>
+          <div class="header-actions">
+            <button type="button" id="exportBtn" class="btn-secondary">Exportar</button>
+            <button type="button" id="importBtn" class="btn-secondary">Importar</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;" />
+            <button type="button" id="resetBtn" class="btn-danger">Limpar</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="tabs-container">
+        <nav class="tabs-nav">
+          <button class="tab-btn active" data-tab="overview">Visão Geral</button>
+          <button class="tab-btn" data-tab="attributes">Atributos</button>
+          <button class="tab-btn" data-tab="combat">Combate</button>
+          <button class="tab-btn" data-tab="inventory">Inventário</button>
+          <button class="tab-btn" data-tab="appearance">Aparência</button>
+          <button class="tab-btn" data-tab="notes">Notas</button>
+          <button class="tab-btn" data-tab="summary">Resumo de Jogo</button>
+        </nav>
+      </div>
+
+      <form id="sheetForm" class="sheet-form">
+        <!-- TAB: VISÃO GERAL -->
+        <section class="tab-content active" id="overview">
+          <div class="card">
+            <h2>Informações Básicas</h2>
+            <div class="form-grid two-col">
+              <label class="form-group">
+                <span class="label-text">Nome do Personagem</span>
+                <input name="name" type="text" placeholder="Ex.: Ragnar Blackwood" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Raça</span>
+                <select name="race" id="raceSelect">
+                  <option value="">Escolha uma raça...</option>
+                  <option value="humano">Humano</option>
+                  <option value="elfo">Elfo</option>
+                  <option value="elfo-da-floresta">Elfo da Floresta</option>
+                  <option value="elfo-de-alada">Elfo de Alada</option>
+                  <option value="elfo-negro">Elfo Negro (Drow)</option>
+                  <option value="anao">Anão</option>
+                  <option value="anao-montanha">Anão da Montanha</option>
+                  <option value="anao-colina">Anão da Colina</option>
+                  <option value="halfling">Halfling</option>
+                  <option value="halfling-leve">Halfling Leve</option>
+                  <option value="halfling-rousto">Halfling Robusto</option>
+                  <option value="dragonete">Dragonete</option>
+                  <option value="gnomo">Gnomo</option>
+                  <option value="gnomo-floresta">Gnomo da Floresta</option>
+                  <option value="gnomo-rocha">Gnomo da Rocha</option>
+                  <option value="meio-orc">Meio-orc</option>
+                  <option value="tiefling">Tiefling</option>
+                </select>
+              </label>
+            </div>
+            <div class="form-grid two-col">
+              <label class="form-group">
+                <span class="label-text">Classe</span>
+                <select name="className" id="classSelect">
+                  <option value="">Escolha uma classe...</option>
+                  <option value="barbaro">Bárbaro</option>
+                  <option value="bardo">Bardo</option>
+                  <option value="clerigo">Clérigo</option>
+                  <option value="druida">Druida</option>
+                  <option value="guerreiro">Guerreiro</option>
+                  <option value="mago">Mago</option>
+                  <option value="monge">Mônge</option>
+                  <option value="paladino">Paladino</option>
+                  <option value="ranger">Ranger</option>
+                  <option value="ladino">Ladino</option>
+                  <option value="feiticeiro">Feiticeiro</option>
+                  <option value="bruxo">Bruxo</option>
+                </select>
+              </label>
+              <label class="form-group">
+                <span class="label-text">Nível</span>
+                <input name="level" type="number" min="1" max="20" value="1" />
+              </label>
+            </div>
+            <div class="form-grid two-col">
+              <label class="form-group">
+                <span class="label-text">Subclasse</span>
+                <select name="subclass" id="subclassSelect" disabled>
+                  <option value="">Escolha uma classe primeiro...</option>
+                </select>
+              </label>
+              <label class="form-group">
+                <span class="label-text">Deslocamento (metros)</span>
+                <input name="speed" type="number" min="0" max="200" step="1.5" value="9" />
+              </label>
+            </div>
+            <div class="form-grid two-col">
+              <label class="form-group">
+                <span class="label-text">Antecedente</span>
+                <input name="background" type="text" placeholder="Ex.: Soldado, Criminoso..." />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Tendência</span>
+                <input name="alignment" type="text" placeholder="Ex.: Neutro Bom" />
+              </label>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Recursos Vitais</h2>
+            <div class="form-grid vitals-grid">
+              <label class="form-group">
+                <span class="label-text">Pontos de Vida (HP)</span>
+                <div class="input-row">
+                  <input name="hpCurrent" type="number" placeholder="Atual" />
+                  <span class="separator">/</span>
+                  <input name="hpMax" type="number" placeholder="Máximo" />
+                </div>
+              </label>
+              <label class="form-group">
+                <span class="label-text">Dado de Vida</span>
+                <input id="hitDie" type="text" readonly placeholder="d8" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Armadura</span>
+                <input name="ac" type="number" placeholder="Ex.: 16" />
+              </label>
+            </div>
+
+            <div class="form-grid">
+              <div style="grid-column: 1 / -1;">
+                <span class="label-text">Salvaguarda Contra Morte</span>
+                <div class="death-saves">
+                  <div class="death-save-group">
+                    <span>Sucessos</span>
+                    <div class="death-save-checks">
+                      <label><input type="checkbox" name="deathSaveSuccess_1" /> </label>
+                      <label><input type="checkbox" name="deathSaveSuccess_2" /> </label>
+                      <label><input type="checkbox" name="deathSaveSuccess_3" /> </label>
+                    </div>
+                  </div>
+                  <div class="death-save-group">
+                    <span>Falhas</span>
+                    <div class="death-save-checks">
+                      <label><input type="checkbox" name="deathSaveFailure_1" /> </label>
+                      <label><input type="checkbox" name="deathSaveFailure_2" /> </label>
+                      <label><input type="checkbox" name="deathSaveFailure_3" /> </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <label class="form-group">
+                <span class="label-text">Iniciativa</span>
+                <input name="initiative" type="number" placeholder="Bônus" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: ATRIBUTOS -->
+        <section class="tab-content" id="attributes">
+          <div class="card attributes-grid">
+            <h2>Atributos de Habilidade</h2>
+            <div class="attributes-layout">
+              <div class="attribute-box">
+                <span class="attr-label">Força</span>
+                <input name="strength" type="number" class="attr-input" placeholder="10" />
+                <span class="attr-mod">+0</span>
+              </div>
+              <div class="attribute-box">
+                <span class="attr-label">Destreza</span>
+                <input name="dexterity" type="number" class="attr-input" placeholder="10" />
+                <span class="attr-mod">+0</span>
+              </div>
+              <div class="attribute-box">
+                <span class="attr-label">Constituição</span>
+                <input name="constitution" type="number" class="attr-input" placeholder="10" />
+                <span class="attr-mod">+0</span>
+              </div>
+              <div class="attribute-box">
+                <span class="attr-label">Inteligência</span>
+                <input name="intelligence" type="number" class="attr-input" placeholder="10" />
+                <span class="attr-mod">+0</span>
+              </div>
+              <div class="attribute-box">
+                <span class="attr-label">Sabedoria</span>
+                <input name="wisdom" type="number" class="attr-input" placeholder="10" />
+                <span class="attr-mod">+0</span>
+              </div>
+              <div class="attribute-box">
+                <span class="attr-label">Carisma</span>
+                <input name="charisma" type="number" class="attr-input" placeholder="10" />
+                <span class="attr-mod">+0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Salvaguardas</h2>
+            <div class="saves-grid">
+              <div class="save-item">
+                <input type="checkbox" name="save_strength" class="save-checkbox" />
+                <span class="save-label">Força</span>
+                <span class="save-value" data-attr="strength">+0</span>
+              </div>
+              <div class="save-item">
+                <input type="checkbox" name="save_dexterity" class="save-checkbox" />
+                <span class="save-label">Destreza</span>
+                <span class="save-value" data-attr="dexterity">+0</span>
+              </div>
+              <div class="save-item">
+                <input type="checkbox" name="save_constitution" class="save-checkbox" />
+                <span class="save-label">Constituição</span>
+                <span class="save-value" data-attr="constitution">+0</span>
+              </div>
+              <div class="save-item">
+                <input type="checkbox" name="save_intelligence" class="save-checkbox" />
+                <span class="save-label">Inteligência</span>
+                <span class="save-value" data-attr="intelligence">+0</span>
+              </div>
+              <div class="save-item">
+                <input type="checkbox" name="save_wisdom" class="save-checkbox" />
+                <span class="save-label">Sabedoria</span>
+                <span class="save-value" data-attr="wisdom">+0</span>
+              </div>
+              <div class="save-item">
+                <input type="checkbox" name="save_charisma" class="save-checkbox" />
+                <span class="save-label">Carisma</span>
+                <span class="save-value" data-attr="charisma">+0</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Perícias</h2>
+            <div class="skills-list">
+              <label class="skill-item">
+                <input type="checkbox" name="skill_acrobatics" class="skill-checkbox" />
+                <span>Acrobacias</span>
+                <span class="skill-value" data-attr="dexterity">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_arcana" class="skill-checkbox" />
+                <span>Arcanismo</span>
+                <span class="skill-value" data-attr="intelligence">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_athletics" class="skill-checkbox" />
+                <span>Atletismo</span>
+                <span class="skill-value" data-attr="strength">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_deception" class="skill-checkbox" />
+                <span>Enganação</span>
+                <span class="skill-value" data-attr="charisma">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_history" class="skill-checkbox" />
+                <span>História</span>
+                <span class="skill-value" data-attr="intelligence">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_insight" class="skill-checkbox" />
+                <span>Intuição</span>
+                <span class="skill-value" data-attr="wisdom">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_investigation" class="skill-checkbox" />
+                <span>Investigação</span>
+                <span class="skill-value" data-attr="intelligence">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_medicine" class="skill-checkbox" />
+                <span>Medicina</span>
+                <span class="skill-value" data-attr="wisdom">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_nature" class="skill-checkbox" />
+                <span>Natureza</span>
+                <span class="skill-value" data-attr="intelligence">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_perception" class="skill-checkbox" />
+                <span>Percepção</span>
+                <span class="skill-value" data-attr="wisdom">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_performance" class="skill-checkbox" />
+                <span>Performance</span>
+                <span class="skill-value" data-attr="charisma">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_persuasion" class="skill-checkbox" />
+                <span>Persuasão</span>
+                <span class="skill-value" data-attr="charisma">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_religion" class="skill-checkbox" />
+                <span>Religião</span>
+                <span class="skill-value" data-attr="intelligence">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_sleight" class="skill-checkbox" />
+                <span>Prestidigitação</span>
+                <span class="skill-value" data-attr="dexterity">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_stealth" class="skill-checkbox" />
+                <span>Furtividade</span>
+                <span class="skill-value" data-attr="dexterity">+0</span>
+              </label>
+              <label class="skill-item">
+                <input type="checkbox" name="skill_survival" class="skill-checkbox" />
+                <span>Sobrevivência</span>
+                <span class="skill-value" data-attr="wisdom">+0</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: COMBATE -->
+        <section class="tab-content" id="combat">
+          <div class="card">
+            <h2>Ataques & Armas</h2>
+            <div class="form-group">
+              <span class="label-text">Ataques</span>
+              <textarea name="attacks" rows="5" placeholder="Espada Longa: +5 para acertar, 1d8+3 de dano&#10;Arco Curto: +4 para acertar, 1d6+2 de dano"></textarea>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Habilidades (Círculos)</h2>
+            <div class="spell-circles-grid">
+              <div class="spell-circle-group">
+                <span class="label-text">Truques</span>
+                <span class="label-text" style="font-size: 0.8em; opacity: 0.7; display: block; margin-top: +15px;">Habilidade de classe</span>
+                <div class="spell-counts">
+                </div>
+                <textarea name="spells_0_desc" rows="3" placeholder="Ex.: Raio de Gelo, Prestidigitação..."></textarea>
+              </div>
+              <div class="spell-circle-group">
+                <span class="label-text">1º Círculo</span>
+                <div class="spell-counts">
+                  <input type="number" name="spells_1_total" placeholder="Total" value="0" min="0" />
+                  <input type="number" name="spells_1_used" placeholder="Usados" value="0" min="0" />
+                  <span class="remaining" data-spell-circle="1">0</span>
+                </div>
+                <textarea name="spells_1_desc" rows="3" placeholder="Ex.: Mísseis Mágicos, Escudo..."></textarea>
+              </div>
+              <div class="spell-circle-group">
+                <span class="label-text">2º Círculo</span>
+                <div class="spell-counts">
+                  <input type="number" name="spells_2_total" placeholder="Total" value="0" min="0" />
+                  <input type="number" name="spells_2_used" placeholder="Usados" value="0" min="0" />
+                  <span class="remaining" data-spell-circle="2">0</span>
+                </div>
+                <textarea name="spells_2_desc" rows="3" placeholder="Ex.: Passo Sombrio, Sugestão..."></textarea>
+              </div>
+              <div class="spell-circle-group">
+                <span class="label-text">3º Círculo</span>
+                <div class="spell-counts">
+                  <input type="number" name="spells_3_total" placeholder="Total" value="0" min="0" />
+                  <input type="number" name="spells_3_used" placeholder="Usados" value="0" min="0" />
+                  <span class="remaining" data-spell-circle="3">0</span>
+                </div>
+                <textarea name="spells_3_desc" rows="3" placeholder="Ex.: Bola de Fogo, Dissipar Magia..."></textarea>
+              </div>
+              <div class="spell-circle-group">
+                <span class="label-text">4º Círculo</span>
+                <div class="spell-counts">
+                  <input type="number" name="spells_4_total" placeholder="Total" value="0" min="0" />
+                  <input type="number" name="spells_4_used" placeholder="Usados" value="0" min="0" />
+                  <span class="remaining" data-spell-circle="4">0</span>
+                </div>
+                <textarea name="spells_4_desc" rows="3" placeholder="Ex.: Porta Dimensional, Invisibilidade Maior..."></textarea>
+              </div>
+              <div class="spell-circle-group">
+                <span class="label-text">5º Círculo</span>
+                <div class="spell-counts">
+                  <input type="number" name="spells_5_total" placeholder="Total" value="0" min="0" />
+                  <input type="number" name="spells_5_used" placeholder="Usados" value="0" min="0" />
+                  <span class="remaining" data-spell-circle="5">0</span>
+                </div>
+                <textarea name="spells_5_desc" rows="3" placeholder="Ex.: Muralha de Força, Telepatia..."></textarea>
+              </div>
+              <div class="spell-circle-group full-width-spell-group">
+                <span class="label-text">Círculos Superiores (6º ao 9º)</span>
+                <div class="spell-counts">
+                  <input type="number" name="spells_6_9_total" placeholder="Total" value="0" min="0" />
+                  <input type="number" name="spells_6_9_used" placeholder="Usados" value="0" min="0" />
+                  <span class="remaining" data-spell-circle="6-9">0</span>
+                </div>
+                <textarea name="spells_6_9_desc" rows="3" placeholder="Ex.: Desintegrar (6º), Projeção Astral (9º)..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Resistências & Imunidades</h2>
+            <div class="form-grid two-col">
+              <label class="form-group">
+                <span class="label-text">Resistências de Dano</span>
+                <input name="resistances" type="text" placeholder="Ex.: Fogo, Frio" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Imunidades</span>
+                <input name="immunities" type="text" placeholder="Ex.: Veneno, Maldição" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: INVENTÁRIO -->
+        <section class="tab-content" id="inventory">
+          <div class="card">
+            <h2>Equipamento</h2>
+            <label class="form-group">
+              <span class="label-text">Itens Carregados</span>
+              <textarea name="inventory" rows="8" placeholder="Espada Longa&#10;Escudo&#10;Armadura de Couro&#10;Mochila de viagem&#10;Corda de 50 pés&#10;Maçarico&#10;..."></textarea>
+            </label>
+          </div>
+
+          <div class="card">
+            <h2>Moedas & Tesouro</h2>
+            <div class="form-grid five-col">
+              <label class="form-group">
+                <span class="label-text">Ouro (po)</span>
+                <input name="gold" type="number" placeholder="0" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Prata (pp)</span>
+                <input name="silver" type="number" placeholder="0" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Cobre (pc)</span>
+                <input name="copper" type="number" placeholder="0" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Platina (pp)</span>
+                <input name="platinum" type="number" placeholder="0" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Gemas</span>
+                <input name="gems" type="text" placeholder="Descrição" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB: APARÊNCIA -->
+        <section class="tab-content" id="appearance">
+          <div class="card">
+            <h2>Características Físicas</h2>
+            <div class="form-grid two-col">
+              <label class="form-group">
+                <span class="label-text">Idade</span>
+                <input name="age" type="text" placeholder="Ex.: 28 anos" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Altura</span>
+                <input name="height" type="text" placeholder="Ex.: 1,80m" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Peso</span>
+                <input name="weight" type="text" placeholder="Ex.: 80 kg" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Olhos</span>
+                <input name="eyes" type="text" placeholder="Ex.: Azuis" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Cabelo</span>
+                <input name="hair" type="text" placeholder="Ex.: Preto" />
+              </label>
+              <label class="form-group">
+                <span class="label-text">Pele</span>
+                <input name="skin" type="text" placeholder="Ex.: Clara" />
+              </label>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Traços Distintivos</h2>
+            <label class="form-group">
+              <span class="label-text">Descrição</span>
+              <textarea name="appearance" rows="6" placeholder="Cicatrizes, tatuagens, marcas especiais..."></textarea>
+            </label>
+          </div>
+
+          <div class="card">
+            <h2>Aliados & Organizações</h2>
+            <label class="form-group">
+              <span class="label-text">Aliados Importantes</span>
+              <textarea name="allies" rows="4" placeholder="NPCs importantes, companheiros, patronos..."></textarea>
+            </label>
+          </div>
+        </section>
+
+        <!-- TAB: NOTAS -->
+        <section class="tab-content" id="notes">
+          <div class="card">
+            <h2>História do Personagem</h2>
+            <label class="form-group">
+              <span class="label-text">Passado & Motivação</span>
+              <textarea name="backstory" rows="8" placeholder="Conte a história do seu personagem, seus objetivos e motivações..."></textarea>
+            </label>
+          </div>
+
+          <div class="card">
+            <h2>Anotações de Campanha</h2>
+            <label class="form-group">
+              <span class="label-text">Notas Gerais</span>
+              <textarea name="notes" rows="6" placeholder="Objetivos da campanha, quests ativas, detalhes importantes..."></textarea>
+            </label>
+          </div>
+
+          <div class="card">
+            <h2>Características & Talentos</h2>
+            <label class="form-group">
+              <span class="label-text">Habilidades Especiais</span>
+              <textarea name="traits" rows="6" placeholder="Talentos (Feats), habilidades de classe, características raciais..."></textarea>
+            </label>
+          </div>
+        </section>
+        <!-- TAB: RESUMO DE JOGO (somente leitura, alimentado pelas outras abas) -->
+        <section class="tab-content" id="summary">
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>Identidade</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <span class="summary-label">Nome</span>
+                  <span class="summary-value" data-summary="name">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Raça</span>
+                  <span class="summary-value" data-summary="race">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Classe & Nível</span>
+                  <span class="summary-value" data-summary="classLevel">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Subclasse</span>
+                  <span class="summary-value" data-summary="subclass">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Antecedente</span>
+                  <span class="summary-value" data-summary="background">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Tendência</span>
+                  <span class="summary-value" data-summary="alignment">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>Recursos Vitais</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-vitals">
+                <div class="vital-box">
+                  <span class="vital-label">HP</span>
+                  <span class="vital-value" data-summary="hp">—</span>
+                </div>
+                <div class="vital-box">
+                  <span class="vital-label">Classe de Armadura</span>
+                  <span class="vital-value" data-summary="ac">—</span>
+                </div>
+                <div class="vital-box">
+                  <span class="vital-label">Iniciativa</span>
+                  <span class="vital-value" data-summary="initiative">—</span>
+                </div>
+                <div class="vital-box">
+                  <span class="vital-label">Deslocamento</span>
+                  <span class="vital-value" data-summary="speed">—</span>
+                </div>
+                <div class="vital-box">
+                  <span class="vital-label">Dado de Vida</span>
+                  <span class="vital-value" data-summary="hitDie">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>Atributos</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-attributes" id="summaryAttributes">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>Salvaguardas & Perícias</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-skills" id="summarySkills">
+                <!-- Preenchido via JS -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>Combate & Resistências</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-grid">
+                <div class="summary-item full">
+                  <span class="summary-label">Ataques & Armas</span>
+                  <span class="summary-value" data-summary="attacks">—</span>
+                </div>
+                <div class="summary-item full">
+                  <span class="summary-label">Habilidades (Círculos)</span>
+                  <div class="summary-value" id="summarySpells">
+                    <!-- Preenchido via JS -->
+                  </div>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Resistências</span>
+                  <span class="summary-value" data-summary="resistances">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Imunidades</span>
+                  <span class="summary-value" data-summary="immunities">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>Inventário & Tesouro</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-grid">
+                <div class="summary-item full">
+                  <span class="summary-label">Equipamentos</span>
+                  <span class="summary-value" data-summary="inventory">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Moedas</span>
+                  <span class="summary-value" data-summary="coins">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Gemas</span>
+                  <span class="summary-value" data-summary="gems">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>Aparência & Aliados</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <span class="summary-label">Idade / Altura / Peso</span>
+                  <span class="summary-value" data-summary="physical">—</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Olhos / Cabelo / Pele</span>
+                  <span class="summary-value" data-summary="features">—</span>
+                </div>
+                <div class="summary-item full">
+                  <span class="summary-label">Traços Distintivos</span>
+                  <span class="summary-value" data-summary="appearance">—</span>
+                </div>
+                <div class="summary-item full">
+                  <span class="summary-label">Aliados Importantes</span>
+                  <span class="summary-value" data-summary="allies">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card summary-card" data-collapsible>
+            <div class="summary-card-header">
+              <h2>História & Talentos</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            </div>
+            <div class="summary-card-body">
+              <div class="summary-grid">
+                <div class="summary-item full">
+                  <span class="summary-label">História do Personagem</span>
+                  <span class="summary-value" data-summary="backstory">—</span>
+                </div>
+                <div class="summary-item full">
+                  <span class="summary-label">Características & Talentos</span>
+                  <span class="summary-value" data-summary="traits">—</span>
+                </div>
+                <div class="summary-item full">
+                  <span class="summary-label">Anotações de Campanha</span>
+                  <span class="summary-value" data-summary="notes">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Salvar Ficha</button>
+          <span class="status-msg" id="statusText">Ficha salva automaticamente</span>
+        </div>
+      </form>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
