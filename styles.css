@@ -712,6 +712,96 @@ button {
   font-style: italic;
 }
 
+/* ATTACKS */
+.attack-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  gap: 12px;
+  align-items: flex-end;
+  max-width: 650px;
+}
+
+.attacks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.attack-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(17, 24, 39, 0.4);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  gap: 12px;
+}
+
+.attack-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.attack-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.attack-hit-badge,
+.attack-damage-badge {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.attack-hit-badge {
+  background: rgba(56, 189, 248, 0.1);
+  color: var(--primary);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.attack-damage-badge {
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.btn-delete-attack {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 20px;
+  line-height: 1;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-attack:hover {
+  color: var(--danger);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .attack-inputs-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .add-attack-btn-container {
+    margin-top: 4px;
+  }
+  .attack-list-item {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .form-grid.two-col {

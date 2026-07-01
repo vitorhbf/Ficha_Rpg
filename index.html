@@ -340,9 +340,48 @@
         <section class="tab-content" id="combat">
           <div class="card">
             <h2>Ataques & Armas</h2>
-            <div class="form-group">
-              <span class="label-text">Ataques</span>
-              <textarea name="attacks" rows="5" placeholder="Espada Longa: +5 para acertar, 1d8+3 de dano&#10;Arco Curto: +4 para acertar, 1d6+2 de dano"></textarea>
+            <input type="hidden" name="attacks" id="attacksHidden" value="[]" />
+            
+            <div class="attack-inputs-grid">
+              <div class="form-group" style="flex: 1;">
+                <span class="label-text">Nome do Item</span>
+                <input type="text" id="attackItem" placeholder="Ex.: Espada Longa" style="max-width: 100%;" />
+              </div>
+              <div class="form-group">
+                <span class="label-text">Acerto</span>
+                <input type="number" id="attackHit" placeholder="+0" style="width: 60px; text-align: center; padding: 8px 4px;" />
+              </div>
+              <div class="form-group">
+                <span class="label-text">Dano</span>
+                <div class="damage-inputs-row" style="display: flex; gap: 4px; align-items: center;">
+                  <input type="number" id="attackDamageQty" min="1" value="" placeholder="Qtd" style="width: 70px; padding: 8px 5px; text-align: center;" title="Quantidade de Dados" />
+                  <select id="attackDamageDie" style="width: 70px; padding: 8px 2px;" title="Tipo de Dado">
+                    <option value="">D?</option>
+                    <option value="d4">D4</option>
+                    <option value="d6">D6</option>
+                    <option value="d8">D8</option>
+                    <option value="d10">D10</option>
+                    <option value="d12">D12</option>
+                    <option value="d20">D20</option>
+                  </select>
+                  <span class="damage-plus-sign" style="color: var(--text-secondary); font-weight: bold;">+</span>
+                  <input type="number" id="attackDamageBonus" placeholder="Bônus" style="width: 70px; padding: 8px 2px; text-align: center;" title="Dano Adicional" />
+                </div>
+              </div>
+              <div class="form-group add-attack-btn-container">
+                <span class="label-text" style="visibility: hidden;">Ação</span>
+                <div style="display: flex; gap: 4px; width: 100%;">
+                  <button type="button" id="addAttackBtn" class="btn-secondary" style="flex: 1; padding: 8px 10px;">Adicionar</button>
+                  <button type="button" id="cancelAttackEditBtn" class="btn-danger" style="display: none; padding: 8px 12px; font-weight: bold;" title="Cancelar Edição">X</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="attacks-list-container" style="margin-top: 16px;">
+              <span class="label-text" style="display: block; margin-bottom: 8px;">Ataques Cadastrados</span>
+              <div id="attacksList" class="attacks-list">
+                <!-- Dynamic attacks go here -->
+              </div>
             </div>
           </div>
 
@@ -641,7 +680,9 @@
               <div class="summary-grid">
                 <div class="summary-item full">
                   <span class="summary-label">Ataques & Armas</span>
-                  <span class="summary-value" data-summary="attacks">—</span>
+                  <div class="summary-value" id="summaryAttacksList" style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Beautiful attacks list from combat tab -->
+                  </div>
                 </div>
                 <div class="summary-item full">
                   <span class="summary-label">Habilidades (Círculos)</span>

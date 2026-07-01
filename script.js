@@ -11,6 +11,177 @@ const raceSelect = document.getElementById('raceSelect');
 const classSelect = document.getElementById('classSelect');
 const subclassSelect = document.getElementById('subclassSelect');
 
+// ATTACKS STATE & FUNCTIONS
+let attacksData = [];
+let editingAttackIndex = null;
+
+function renderAttacks() {
+  const attacksList = document.getElementById('attacksList');
+  const attacksHidden = document.getElementById('attacksHidden');
+  if (!attacksList || !attacksHidden) return;
+
+  // Update hidden input
+  attacksHidden.value = JSON.stringify(attacksData);
+
+  // Clear current list
+  attacksList.innerHTML = '';
+
+  if (attacksData.length === 0) {
+    attacksList.innerHTML = '<p class="empty-msg" style="padding: 8px; text-align: left;">Nenhum ataque adicionado.</p>';
+    return;
+  }
+
+  attacksData.forEach((attack, index) => {
+    const item = document.createElement('div');
+    item.className = 'attack-list-item';
+    item.innerHTML = `
+      <div class="attack-info">
+        <span class="attack-name">${attack.item}</span>
+        <span class="attack-hit-badge">Acerto: ${attack.hit}</span>
+        <span class="attack-damage-badge">Dano: ${attack.damage}</span>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button type="button" class="btn-edit-attack" data-index="${index}" title="Editar" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 14px; padding: 4px 8px;">Editar</button>
+        <button type="button" class="btn-delete-attack" data-index="${index}" title="Remover" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 20px; line-height: 1; padding: 4px 8px;">&times;</button>
+      </div>
+    `;
+    attacksList.appendChild(item);
+  });
+
+  // Attach event listeners to edit buttons
+  const editButtons = attacksList.querySelectorAll('.btn-edit-attack');
+  editButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const index = parseInt(btn.dataset.index);
+      const attack = attacksData[index];
+      
+      editingAttackIndex = index;
+
+      // Populate fields
+      document.getElementById('attackItem').value = attack.item;
+      
+      // Handle parsing hit text (e.g. "+5" -> 5)
+      const parsedHit = attack.hit === '—' ? '' : parseInt(attack.hit);
+      document.getElementById('attackHit').value = isNaN(parsedHit) ? '' : parsedHit;
+      
+      // Handle backwards compatibility for simple text damage
+      document.getElementById('attackDamageQty').value = attack.damageQty !== undefined ? attack.damageQty : 1;
+      document.getElementById('attackDamageDie').value = attack.damageDie !== undefined ? attack.damageDie : '';
+      document.getElementById('attackDamageBonus').value = (attack.damageBonus !== undefined && attack.damageBonus !== null) ? attack.damageBonus : '';
+
+      // UI state
+      document.getElementById('addAttackBtn').textContent = 'Salvar';
+      document.getElementById('cancelAttackEditBtn').style.display = 'block';
+    });
+  });
+
+  // Attach event listeners to delete buttons
+  const deleteButtons = attacksList.querySelectorAll('.btn-delete-attack');
+  deleteButtons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const index = parseInt(btn.dataset.index);
+      if (editingAttackIndex === index) {
+        // If we delete the item currently being edited, cancel edit
+        cancelEdit();
+      } else if (editingAttackIndex !== null && index < editingAttackIndex) {
+        // Adjust index if we delete an item before the edited one
+        editingAttackIndex--;
+      }
+      attacksData.splice(index, 1);
+      renderAttacks();
+      updateSummary();
+      saveForm();
+    });
+  });
+}
+
+function cancelEdit() {
+  editingAttackIndex = null;
+  document.getElementById('attackItem').value = '';
+  document.getElementById('attackHit').value = '';
+  document.getElementById('attackDamageQty').value = '';
+  document.getElementById('attackDamageDie').value = '';
+  document.getElementById('attackDamageBonus').value = '';
+
+  document.getElementById('addAttackBtn').textContent = 'Adicionar';
+  document.getElementById('cancelAttackEditBtn').style.display = 'none';
+}
+
+function setupAttacks() {
+  const addAttackBtn = document.getElementById('addAttackBtn');
+  const cancelBtn = document.getElementById('cancelAttackEditBtn');
+
+  if (addAttackBtn) {
+    addAttackBtn.addEventListener('click', () => {
+      const itemInput = document.getElementById('attackItem');
+      const hitInput = document.getElementById('attackHit');
+      const qtyInput = document.getElementById('attackDamageQty');
+      const dieInput = document.getElementById('attackDamageDie');
+      const bonusInput = document.getElementById('attackDamageBonus');
+
+      const itemVal = itemInput.value.trim();
+      const hitText = hitInput.value.trim();
+      
+      let hitVal = '—';
+      if (hitText !== '') {
+        const hitNum = parseInt(hitText);
+        hitVal = hitNum >= 0 ? `+${hitNum}` : `${hitNum}`;
+      }
+      
+      const qtyVal = parseInt(qtyInput.value) || 1;
+      const dieVal = dieInput.value;
+      const bonusText = bonusInput.value.trim();
+      const bonusVal = bonusText !== '' ? parseInt(bonusText) : null;
+
+      if (!itemVal) {
+        alert('Por favor, insira o nome do item.');
+        return;
+      }
+
+      // Compute damage string
+      let damageVal = '—';
+      if (dieVal !== '') {
+        const dieCapitalized = dieVal.toUpperCase();
+        if (bonusVal !== null && bonusVal !== 0) {
+          damageVal = `${qtyVal} ${dieCapitalized} ${bonusVal > 0 ? '+' : '-'} ${Math.abs(bonusVal)}`;
+        } else {
+          damageVal = `${qtyVal} ${dieCapitalized}`;
+        }
+      } else if (bonusVal !== null) {
+        damageVal = `${bonusVal > 0 ? '+' : ''}${bonusVal}`;
+      }
+
+      const attackObj = {
+        item: itemVal,
+        hit: hitVal,
+        damageQty: qtyVal,
+        damageDie: dieVal,
+        damageBonus: bonusVal,
+        damage: damageVal
+      };
+
+      if (editingAttackIndex !== null) {
+        // Edit existing
+        attacksData[editingAttackIndex] = attackObj;
+      } else {
+        // Add new
+        attacksData.push(attackObj);
+      }
+
+      cancelEdit();
+      renderAttacks();
+      updateSummary();
+      saveForm();
+    });
+  }
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', () => {
+      cancelEdit();
+    });
+  }
+}
+
 // TABS
 function setupTabs() {
   const tabBtns = document.querySelectorAll('.tab-btn');
@@ -327,7 +498,37 @@ function updateSummary() {
   }
 
   // Combate
-  setVal('attacks', form.elements.namedItem('attacks')?.value);
+  const summaryAttacksList = document.getElementById('summaryAttacksList');
+  if (summaryAttacksList) {
+    summaryAttacksList.innerHTML = '';
+    const attacksVal = form.elements.namedItem('attacks')?.value;
+    if (attacksVal) {
+      try {
+        const parsed = JSON.parse(attacksVal);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          parsed.forEach((attack) => {
+            const item = document.createElement('div');
+            item.className = 'attack-list-item';
+            item.style.background = 'rgba(17, 24, 39, 0.3)';
+            item.innerHTML = `
+              <div class="attack-info">
+                <span class="attack-name">${attack.item}</span>
+                <span class="attack-hit-badge">Acerto: ${attack.hit}</span>
+                <span class="attack-damage-badge">Dano: ${attack.damage}</span>
+              </div>
+            `;
+            summaryAttacksList.appendChild(item);
+          });
+        } else {
+          summaryAttacksList.innerHTML = '<span class="empty-msg" style="padding: 0; text-align: left;">Nenhum ataque adicionado.</span>';
+        }
+      } catch (e) {
+        summaryAttacksList.innerHTML = `<span class="summary-value">${attacksVal}</span>`;
+      }
+    } else {
+      summaryAttacksList.innerHTML = '<span class="empty-msg" style="padding: 0; text-align: left;">Nenhum ataque adicionado.</span>';
+    }
+  }
   setVal('resistances', form.elements.namedItem('resistances')?.value);
   setVal('immunities', form.elements.namedItem('immunities')?.value);
 
@@ -622,6 +823,8 @@ function loadForm() {
   if (!saved) {
     updateHeader();
     calculateModifiers();
+    attacksData = [];
+    renderAttacks();
     updateSummary();
     return;
   }
@@ -644,6 +847,16 @@ function loadForm() {
     updateSubclassOptions();
     if (data.subclass) subclassSelect.value = data.subclass;
     subclassSelect.dataset.lastValue = data.subclass || '';
+  }
+
+  const attacksHidden = document.getElementById('attacksHidden');
+  if (attacksHidden) {
+    try {
+      attacksData = JSON.parse(attacksHidden.value || '[]');
+    } catch (e) {
+      attacksData = [];
+    }
+    renderAttacks();
   }
 
   updateHitDice();
@@ -723,6 +936,8 @@ resetBtn.addEventListener('click', () => {
       subclassSelect.dataset.lastValue = '';
       updateSubclassOptions();
     }
+    attacksData = [];
+    renderAttacks();
     updateHeader();
     calculateModifiers();
     updateSummary();
@@ -774,5 +989,6 @@ function setupCollapsibles() {
 
 // INIT
 setupTabs();
+setupAttacks();
 loadForm();
 setupCollapsibles();
