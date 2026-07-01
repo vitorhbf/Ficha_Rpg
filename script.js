@@ -237,9 +237,20 @@ function applyRaceBonus() {
 }
 
 // APPLY CLASS FEATURES
+function clearClassFeatureSelections() {
+  saveSelectedClassFeatureChoices([]);
+  ['spells_1_desc', 'spells_2_desc', 'spells_3_desc', 'spells_4_desc', 'spells_5_desc', 'spells_6_9_desc'].forEach((name) => {
+    const field = form.elements.namedItem(name);
+    if (field) field.value = '';
+  });
+}
+
 function applyClassFeatures() {
   const selectedClass = classSelect.value;
   const classData = selectedClass && CLASSES_DATA[selectedClass] ? CLASSES_DATA[selectedClass] : null;
+
+  // Se mudou de classe, zera seleções de habilidades/magias anteriores
+  clearClassFeatureSelections();
 
   // Atualiza a lista de subclasses conforme a classe escolhida
   updateSubclassOptions();
@@ -339,7 +350,12 @@ function updateSubclassOptions() {
   const currentValue = subclassSelect.dataset.lastValue;
   if (currentValue) {
     const exists = Array.from(subclassSelect.options).some((o) => o.value === currentValue);
-    if (exists) subclassSelect.value = currentValue;
+    if (exists) {
+      subclassSelect.value = currentValue;
+    } else {
+      subclassSelect.value = '';
+      subclassSelect.dataset.lastValue = '';
+    }
   }
 }
 
@@ -1217,8 +1233,16 @@ function loadForm() {
     // Reconstrói a lista de subclasses e reaplica o valor salvo
   if (classSelect.value) {
     updateSubclassOptions();
-    if (data.subclass) subclassSelect.value = data.subclass;
-    subclassSelect.dataset.lastValue = data.subclass || '';
+    if (data.subclass) {
+      const subclassOptionExists = Array.from(subclassSelect.options).some((o) => o.value === data.subclass);
+      if (subclassOptionExists) {
+        subclassSelect.value = data.subclass;
+        subclassSelect.dataset.lastValue = data.subclass;
+      } else {
+        subclassSelect.value = '';
+        subclassSelect.dataset.lastValue = '';
+      }
+    }
   }
 
   renderClassFeaturesInCombat();
@@ -1255,6 +1279,10 @@ raceSelect.addEventListener('change', () => {
 });
 
 classSelect.addEventListener('change', () => {
+  if (subclassSelect) {
+    subclassSelect.dataset.lastValue = '';
+    subclassSelect.value = '';
+  }
   applyClassFeatures();
   updateHeader();
   saveForm();
