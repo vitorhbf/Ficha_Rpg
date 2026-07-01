@@ -879,6 +879,7 @@ function updateSummary() {
     let hasAnySpell = false;
 
     const featureSelections = [];
+    const subclassSelections = [];
     const trickSelections = [];
     const spellSelectionsByCircle = {};
 
@@ -887,6 +888,7 @@ function updateSummary() {
       if (Array.isArray(rawSelections)) {
         rawSelections.forEach((entry) => {
           if (entry?.type === 'feature') featureSelections.push(entry.name);
+          if (entry?.type === 'subclass') subclassSelections.push(entry.name);
           if (entry?.type === 'trick') trickSelections.push(entry.name);
           if (entry?.type === 'spell') {
             const circleName = entry.circle || 'Círculo não informado';
@@ -922,6 +924,14 @@ function updateSummary() {
       const item = document.createElement('div');
       item.style.marginBottom = '8px';
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de classe:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${featureSelections.map((name) => `• ${name}`).join('<br>')}</div>`;
+      spellsBox.appendChild(item);
+    }
+
+    if (subclassSelections.length) {
+      hasAnySpell = true;
+      const item = document.createElement('div');
+      item.style.marginBottom = '8px';
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de subclasse:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${subclassSelections.map((name) => `• ${name}`).join('<br>')}</div>`;
       spellsBox.appendChild(item);
     }
 
