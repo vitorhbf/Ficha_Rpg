@@ -239,11 +239,13 @@ function applyRaceBonus() {
 // APPLY CLASS FEATURES
 function applyClassFeatures() {
   const selectedClass = classSelect.value;
-  if (!selectedClass || !CLASSES_DATA[selectedClass]) return;
-  const classData = CLASSES_DATA[selectedClass];
+  const classData = selectedClass && CLASSES_DATA[selectedClass] ? CLASSES_DATA[selectedClass] : null;
 
   // Atualiza a lista de subclasses conforme a classe escolhida
   updateSubclassOptions();
+  renderClassFeaturesInCombat();
+
+  if (!classData) return;
 
   // Preenche HP máximo
   const hpMaxInput = form.elements.namedItem('hpMax');
@@ -339,6 +341,318 @@ function updateSubclassOptions() {
     const exists = Array.from(subclassSelect.options).some((o) => o.value === currentValue);
     if (exists) subclassSelect.value = currentValue;
   }
+}
+
+function normalizeFeatureItems(items) {
+  if (!Array.isArray(items)) return [];
+  return items
+    .map((item) => {
+      if (typeof item === 'string') {
+        return { name: item, descricao: '' };
+      }
+      if (item && typeof item === 'object' && item.name) {
+        return { name: item.name, descricao: item.descricao || '' };
+      }
+      return null;
+    })
+    .filter(Boolean);
+}
+
+function dedupeFeatureItems(items) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = item.name.trim().toLowerCase();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function getClassFeatureSummary() {
+  const selectedClass = classSelect?.value || '';
+  const selectedSubclass = subclassSelect?.value || '';
+  const classData = selectedClass && CLASSES_DATA[selectedClass] ? CLASSES_DATA[selectedClass] : null;
+
+  if (!classData) {
+    return {
+      title: 'Habilidades de classe',
+      features: [],
+      tricks: [],
+      spellsByCircle: {},
+      text: 'Escolha uma classe para ver as habilidades, truques e magias disponíveis.'
+    };
+  }
+
+  let features = normalizeFeatureItems(classData.habilidades);
+  let subclassFeatures = [];
+  let tricks = normalizeFeatureItems(classData.truques);
+  let spellsByCircle = {};
+
+  if (classData.magiasPorCirculo && typeof classData.magiasPorCirculo === 'object') {
+    spellsByCircle = Object.fromEntries(
+      Object.entries(classData.magiasPorCirculo).map(([circle, items]) => [circle, normalizeFeatureItems(items)])
+    );
+  }
+
+  if (selectedClass && selectedSubclass && Array.isArray(SUBCLASSES_DATA[selectedClass])) {
+    const subclassData = SUBCLASSES_DATA[selectedClass].find((item) => item.name === selectedSubclass);
+    if (subclassData) {
+      subclassFeatures = normalizeFeatureItems(subclassData.habilidades);
+      tricks = tricks.concat(normalizeFeatureItems(subclassData.truques));
+
+      if (subclassData.magiasPorCirculo && typeof subclassData.magiasPorCirculo === 'object') {
+        Object.entries(subclassData.magiasPorCirculo).forEach(([circle, items]) => {
+          const currentItems = spellsByCircle[circle] || [];
+          spellsByCircle[circle] = dedupeFeatureItems(currentItems.concat(normalizeFeatureItems(items)));
+        });
+      }
+    }
+  }
+
+  Object.keys(spellsByCircle).forEach((circle) => {
+    spellsByCircle[circle] = dedupeFeatureItems(spellsByCircle[circle]);
+  });
+
+  return {
+    title: selectedSubclass ? `${classData.name} • ${selectedSubclass}` : classData.name,
+    features: dedupeFeatureItems(features),
+    subclassFeatures: dedupeFeatureItems(subclassFeatures),
+    tricks: dedupeFeatureItems(tricks),
+    spellsByCircle,
+    text: ''
+  };
+}
+
+function getSelectedClassFeatureChoices() {
+  const spellsTextarea = document.querySelector('textarea[name="spells_0_desc"]');
+  if (!spellsTextarea || !spellsTextarea.value) return [];
+
+  try {
+    const parsed = JSON.parse(spellsTextarea.value);
+    if (Array.isArray(parsed)) {
+      return parsed.filter((item) => item && typeof item === 'object' && item.name && item.type);
+    }
+  } catch (error) {
+    return [];
+  }
+
+  return [];
+}
+
+function saveSelectedClassFeatureChoices(items) {
+  const spellsTextarea = document.querySelector('textarea[name="spells_0_desc"]');
+  if (!spellsTextarea) return;
+  spellsTextarea.value = JSON.stringify(items);
+}
+
+function parseCircleSpellSelections(rawValue) {
+  if (!rawValue) return [];
+
+  try {
+    const parsed = JSON.parse(rawValue);
+    if (Array.isArray(parsed)) {
+      return parsed
+        .filter((item) => item && typeof item === 'object' && item.name)
+        .map((item) => ({ name: String(item.name).trim(), circle: item.circle ? String(item.circle).trim() : null }))
+        .filter((item) => item.name);
+    }
+  } catch (error) {
+    // Fallback para texto simples.
+  }
+
+  return String(rawValue)
+    .split(/\n|,|;/)
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((name) => ({ name, circle: null }));
+}
+
+function getCircleSpellSelections(fieldName) {
+  const field = form.elements.namedItem(fieldName);
+  if (!field || !field.value) return [];
+  return parseCircleSpellSelections(field.value);
+}
+
+function saveCircleSpellSelections(fieldName, values) {
+  const field = form.elements.namedItem(fieldName);
+  if (!field) return;
+  field.value = JSON.stringify(values.map((item) => ({ name: item.name, circle: item.circle || null })));
+}
+
+function renderClassFeaturesInCombat() {
+  const featureHint = document.getElementById('classFeatureHint');
+  const optionsContainer = document.getElementById('classFeatureOptions');
+  const spellsTextarea = document.querySelector('textarea[name="spells_0_desc"]');
+  if (!spellsTextarea || !optionsContainer) return;
+
+  const summary = getClassFeatureSummary();
+  const previousSelections = getSelectedClassFeatureChoices();
+  const selectedKeySet = new Set(previousSelections.map((item) => `${item.type}:${(item.name || '').toLowerCase()}:${(item.circle || '').toLowerCase()}`));
+
+  if (featureHint) {
+    featureHint.textContent = summary.features.length || summary.tricks.length || Object.keys(summary.spellsByCircle).length
+      ? 'Selecione as habilidades, truques e magias por círculo desejados'
+      : 'Habilidade de classe';
+  }
+
+  optionsContainer.innerHTML = '';
+
+  if (!summary.features.length && !summary.tricks.length && !Object.keys(summary.spellsByCircle).length) {
+    optionsContainer.innerHTML = '<span class="empty-msg" style="padding: 0; text-align: left;">Escolha uma classe para ver as opções disponíveis.</span>';
+    saveSelectedClassFeatureChoices([]);
+    return;
+  }
+
+  const addGroup = (title, items, type, circle = null) => {
+    if (!items.length) return;
+
+    const group = document.createElement('div');
+    group.style.display = 'flex';
+    group.style.flexDirection = 'column';
+    group.style.gap = '6px';
+
+    const heading = document.createElement('strong');
+    heading.textContent = title;
+    heading.style.fontSize = '12px';
+    heading.style.color = 'var(--primary)';
+    heading.style.textTransform = 'uppercase';
+    heading.style.letterSpacing = '0.5px';
+
+    group.appendChild(heading);
+
+    items.forEach((item) => {
+      const label = document.createElement('label');
+      label.style.display = 'flex';
+      label.style.alignItems = 'center';
+      label.style.gap = '8px';
+      label.style.padding = '6px 8px';
+      label.style.border = '1px solid var(--border)';
+      label.style.borderRadius = '6px';
+      label.style.background = 'rgba(255,255,255,0.03)';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.dataset.type = type;
+      checkbox.dataset.circle = circle || '';
+      const selectionKey = `${type}:${item.name.toLowerCase()}:${(circle || '').toLowerCase()}`;
+      checkbox.checked = selectedKeySet.has(selectionKey);
+      checkbox.addEventListener('change', () => {
+        const currentSelections = getSelectedClassFeatureChoices();
+        const nextSelections = currentSelections.filter((selection) => {
+          const currentKey = `${selection.type || 'feature'}:${(selection.name || '').toLowerCase()}:${(selection.circle || '').toLowerCase()}`;
+          return currentKey !== selectionKey;
+        });
+        if (checkbox.checked) {
+          nextSelections.push({ type, name: item.name, circle: circle || null });
+        }
+        saveSelectedClassFeatureChoices(nextSelections);
+        updateSummary();
+      });
+
+      const text = document.createElement('span');
+      text.textContent = item.name;
+      text.style.fontSize = '13px';
+
+      label.appendChild(checkbox);
+      label.appendChild(text);
+      group.appendChild(label);
+    });
+
+    optionsContainer.appendChild(group);
+  };
+
+  addGroup('Habilidades de classe', summary.features, 'feature');
+  addGroup('Habilidades de subclasse', summary.subclassFeatures, 'subclass');
+  addGroup('Truques', summary.tricks, 'trick');
+
+  const circleFields = [
+    { fieldName: 'spells_1_desc', label: '1º Círculo', circleKeys: ['1º Círculo'] },
+    { fieldName: 'spells_2_desc', label: '2º Círculo', circleKeys: ['2º Círculo'] },
+    { fieldName: 'spells_3_desc', label: '3º Círculo', circleKeys: ['3º Círculo'] }
+  ];
+
+  circleFields.forEach(({ fieldName, label, circleKeys }) => {
+    const field = form.elements.namedItem(fieldName);
+    const groupWrapper = field?.closest('.spell-circle-group');
+    if (!groupWrapper) return;
+
+    const existingOptions = groupWrapper.querySelector('.spell-circle-option-list');
+    if (existingOptions) existingOptions.remove();
+
+    const optionList = document.createElement('div');
+    optionList.className = 'spell-circle-option-list';
+    optionList.style.display = 'flex';
+    optionList.style.flexDirection = 'column';
+    optionList.style.gap = '6px';
+    optionList.style.margin = '8px 0';
+
+    const availableItems = circleKeys.flatMap((circleKey) => (summary.spellsByCircle[circleKey] || []).map((item) => ({ ...item, circleKey })));
+    if (availableItems.length) {
+      const heading = document.createElement('strong');
+      heading.textContent = `Magias de ${label}`;
+      heading.style.fontSize = '11px';
+      heading.style.color = 'var(--primary)';
+      heading.style.textTransform = 'uppercase';
+      heading.style.letterSpacing = '0.5px';
+      optionList.appendChild(heading);
+
+      const selectedSelections = getCircleSpellSelections(fieldName);
+      const selectedNames = new Set(selectedSelections.map((selection) => selection.name.toLowerCase()));
+      availableItems.forEach((item) => {
+        const itemLabel = document.createElement('label');
+        itemLabel.style.display = 'flex';
+        itemLabel.style.alignItems = 'center';
+        itemLabel.style.gap = '8px';
+        itemLabel.style.padding = '6px 8px';
+        itemLabel.style.border = '1px solid var(--border)';
+        itemLabel.style.borderRadius = '6px';
+        itemLabel.style.background = 'rgba(255,255,255,0.03)';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = selectedNames.has(item.name.toLowerCase());
+        checkbox.addEventListener('change', () => {
+          const currentSelections = getCircleSpellSelections(fieldName);
+          const nextSelections = currentSelections.filter((selection) => {
+            return !(selection.name.toLowerCase() === item.name.toLowerCase() && (selection.circle || '') === (item.circleKey || ''));
+          });
+          if (checkbox.checked) {
+            nextSelections.push({ name: item.name, circle: item.circleKey || null });
+          }
+          saveCircleSpellSelections(fieldName, nextSelections);
+          updateSummary();
+        });
+
+        const text = document.createElement('span');
+        text.textContent = item.name;
+        text.style.fontSize = '13px';
+
+        itemLabel.appendChild(checkbox);
+        itemLabel.appendChild(text);
+        optionList.appendChild(itemLabel);
+      });
+    } else {
+      const empty = document.createElement('span');
+      empty.className = 'empty-msg';
+      empty.style.padding = '0';
+      empty.style.textAlign = 'left';
+      empty.textContent = 'Nenhuma magia disponível para este círculo para a classe selecionada.';
+      optionList.appendChild(empty);
+    }
+
+    groupWrapper.insertBefore(optionList, field);
+  });
+
+  const selectedItems = [];
+  optionsContainer.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+    const label = checkbox.closest('label');
+    const text = label?.textContent?.trim();
+    if (!checkbox.checked || !text) return;
+    const type = checkbox.dataset.type || 'feature';
+    const circle = checkbox.dataset.circle || null;
+    selectedItems.push({ type, name: text, circle });
+  });
+  saveSelectedClassFeatureChoices(selectedItems);
 }
 
 // UPDATE SUMMARY TAB
@@ -547,7 +861,74 @@ function updateSummary() {
     ];
 
     let hasAnySpell = false;
+
+    const featureSelections = [];
+    const trickSelections = [];
+    const spellSelectionsByCircle = {};
+
+    try {
+      const rawSelections = JSON.parse(form.elements.namedItem('spells_0_desc')?.value || '[]');
+      if (Array.isArray(rawSelections)) {
+        rawSelections.forEach((entry) => {
+          if (entry?.type === 'feature') featureSelections.push(entry.name);
+          if (entry?.type === 'trick') trickSelections.push(entry.name);
+          if (entry?.type === 'spell') {
+            const circleName = entry.circle || 'Círculo não informado';
+            if (!spellSelectionsByCircle[circleName]) spellSelectionsByCircle[circleName] = [];
+            spellSelectionsByCircle[circleName].push(entry.name);
+          }
+        });
+      }
+    } catch (error) {
+      // Ignora se não houver seleção válida
+    }
+
+    const circleFieldConfigs = [
+      { fieldName: 'spells_1_desc', label: '1º Círculo' },
+      { fieldName: 'spells_2_desc', label: '2º Círculo' },
+      { fieldName: 'spells_3_desc', label: '3º Círculo' },
+      { fieldName: 'spells_4_desc', label: '4º Círculo' },
+      { fieldName: 'spells_5_desc', label: '5º Círculo' },
+      { fieldName: 'spells_6_9_desc', label: 'Círculos Superiores (6º ao 9º)' }
+    ];
+
+    circleFieldConfigs.forEach(({ fieldName, label }) => {
+      const selections = getCircleSpellSelections(fieldName);
+      selections.forEach((entry) => {
+        const circleName = entry.circle || label;
+        if (!spellSelectionsByCircle[circleName]) spellSelectionsByCircle[circleName] = [];
+        spellSelectionsByCircle[circleName].push(entry.name);
+      });
+    });
+
+    if (featureSelections.length) {
+      hasAnySpell = true;
+      const item = document.createElement('div');
+      item.style.marginBottom = '8px';
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de classe:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${featureSelections.map((name) => `• ${name}`).join('<br>')}</div>`;
+      spellsBox.appendChild(item);
+    }
+
+    if (trickSelections.length) {
+      hasAnySpell = true;
+      const item = document.createElement('div');
+      item.style.marginBottom = '8px';
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Truques:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${trickSelections.map((name) => `• ${name}`).join('<br>')}</div>`;
+      spellsBox.appendChild(item);
+    }
+
+    Object.entries(spellSelectionsByCircle).forEach(([circleName, names]) => {
+      if (!names.length) return;
+      hasAnySpell = true;
+      const item = document.createElement('div');
+      item.style.marginBottom = '8px';
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Magia de Círculo — ${circleName}:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${names.map((name) => `• ${name}`).join('<br>')}</div>`;
+      spellsBox.appendChild(item);
+    });
+
     spellFields.forEach((field) => {
+      if (field.name === 'spells_0') return;
+
       const total = parseInt(form.elements.namedItem(`${field.name}_total`)?.value) || 0;
       const used = parseInt(form.elements.namedItem(`${field.name}_used`)?.value) || 0;
       const remaining = total - used;
@@ -556,15 +937,6 @@ function updateSummary() {
       const remainingEl = document.querySelector(`.remaining[data-spell-circle="${field.name.split("_")[1] === "6_9" ? "6-9" : field.name.split("_")[1]}"]`);
       if (remainingEl) {
         remainingEl.textContent = remaining;
-      }
-
-      const val = form.elements.namedItem(`${field.name}_desc`)?.value;
-      if (val && val.trim()) {
-        hasAnySpell = true;
-        const item = document.createElement('div');
-        item.style.marginBottom = '8px';
-        item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">${field.label}:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${val}</div>`;
-        spellsBox.appendChild(item);
       }
     });
 
@@ -849,6 +1221,8 @@ function loadForm() {
     subclassSelect.dataset.lastValue = data.subclass || '';
   }
 
+  renderClassFeaturesInCombat();
+
   const attacksHidden = document.getElementById('attacksHidden');
   if (attacksHidden) {
     try {
@@ -889,6 +1263,8 @@ classSelect.addEventListener('change', () => {
 if (subclassSelect) {
   subclassSelect.addEventListener('change', () => {
     subclassSelect.dataset.lastValue = subclassSelect.value;
+    renderClassFeaturesInCombat();
+    updateSummary();
     saveForm();
   });
 }
@@ -940,6 +1316,7 @@ resetBtn.addEventListener('click', () => {
     renderAttacks();
     updateHeader();
     calculateModifiers();
+    renderClassFeaturesInCombat();
     updateSummary();
     statusText.textContent = 'Ficha limpa';
     setTimeout(() => {
@@ -962,7 +1339,7 @@ if (importBtn && importFile) {
 // COLLAPSIBLE CARDS
 // Adiciona comportamento de minimizar nos cards com atributo data-collapsible
 function setupCollapsibles() {
-  const cards = document.querySelectorAll('.summary-card[data-collapsible]');
+  const cards = document.querySelectorAll('[data-collapsible]');
   cards.forEach((card) => {
     const header = card.querySelector('.summary-card-header');
     const toggle = card.querySelector('.summary-toggle');

@@ -169,9 +169,28 @@ body {
 
 .spell-circles-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: 1.25fr 0.9fr;
   gap: 12px;
   margin-bottom: 12px;
+  align-items: start;
+}
+
+.spell-column-left,
+.spell-column-right {
+  display: grid;
+  gap: 12px;
+}
+
+.spell-column-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (max-width: 980px) {
+  .spell-circles-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .spell-circle-group {
@@ -209,6 +228,26 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+.summary-card-header {
+  user-select: none;
+}
+
+.summary-toggle {
+  font-weight: bold;
+}
+
+.card.collapsed .spell-circles-grid {
+  display: none;
+}
+
+#classFeatureOptions label {
+  transition: all 0.2s ease;
+}
+
+#classFeatureOptions label:hover {
+  border-color: var(--primary);
 }
 
 .label-text {

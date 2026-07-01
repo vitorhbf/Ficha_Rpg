@@ -385,69 +385,76 @@
             </div>
           </div>
 
-          <div class="card">
-            <h2>Habilidades (Círculos)</h2>
+          <div class="card" data-collapsible="true">
+            <div class="summary-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; cursor: pointer;">
+              <h2 style="margin: 0;">Habilidades (Círculos)</h2>
+              <button type="button" class="summary-toggle" aria-label="Minimizar seção" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 18px;">−</button>
+            </div>
             <div class="spell-circles-grid">
-              <div class="spell-circle-group">
-                <span class="label-text">Truques</span>
-                <span class="label-text" style="font-size: 0.8em; opacity: 0.7; display: block; margin-top: +15px;">Habilidade de classe</span>
-                <div class="spell-counts">
+              <div class="spell-column-left">
+                <div class="spell-circle-group">
+                  <span class="label-text">Truques</span>
+                  <span id="classFeatureHint" class="label-text" style="font-size: 0.8em; opacity: 0.7; display: block; margin-top: +15px;">Selecione as habilidades, truques e magias por círculo desejados</span>
+                  <div id="classFeatureOptions" style="display: flex; flex-direction: column; gap: 8px; margin: 10px 0;"></div>
+                  <textarea name="spells_0_desc" rows="3" placeholder="Selecione as opções desejadas" style="display: none;"></textarea>
                 </div>
-                <textarea name="spells_0_desc" rows="3" placeholder="Ex.: Raio de Gelo, Prestidigitação..."></textarea>
               </div>
-              <div class="spell-circle-group">
-                <span class="label-text">1º Círculo</span>
-                <div class="spell-counts">
-                  <input type="number" name="spells_1_total" placeholder="Total" value="" min="0" />
-                  <input type="number" name="spells_1_used" placeholder="Usados" value="" min="0" />
-                  <span class="remaining" data-spell-circle="1">0</span>
+
+              <div class="spell-column-right">
+                <div class="spell-circle-group">
+                  <span class="label-text">1º Círculo</span>
+                  <div class="spell-counts">
+                    <input type="number" name="spells_1_total" placeholder="Total" value="" min="0" />
+                    <input type="number" name="spells_1_used" placeholder="Usados" value="" min="0" />
+                    <span class="remaining" data-spell-circle="1">0</span>
+                  </div>
+                  <textarea name="spells_1_desc" rows="3" placeholder="Ex.: Mísseis Mágicos, Escudo..." style="display: none;"></textarea>
                 </div>
-                <textarea name="spells_1_desc" rows="3" placeholder="Ex.: Mísseis Mágicos, Escudo..."></textarea>
-              </div>
-              <div class="spell-circle-group">
-                <span class="label-text">2º Círculo</span>
-                <div class="spell-counts">
-                  <input type="number" name="spells_2_total" placeholder="Total" value="" min="0" />
-                  <input type="number" name="spells_2_used" placeholder="Usados" value="" min="0" />
-                  <span class="remaining" data-spell-circle="2">0</span>
+                <div class="spell-circle-group">
+                  <span class="label-text">2º Círculo</span>
+                  <div class="spell-counts">
+                    <input type="number" name="spells_2_total" placeholder="Total" value="" min="0" />
+                    <input type="number" name="spells_2_used" placeholder="Usados" value="" min="0" />
+                    <span class="remaining" data-spell-circle="2">0</span>
+                  </div>
+                  <textarea name="spells_2_desc" rows="3" placeholder="Ex.: Passo Sombrio, Sugestão..." style="display: none;"></textarea>
                 </div>
-                <textarea name="spells_2_desc" rows="3" placeholder="Ex.: Passo Sombrio, Sugestão..."></textarea>
-              </div>
-              <div class="spell-circle-group">
-                <span class="label-text">3º Círculo</span>
-                <div class="spell-counts">
-                  <input type="number" name="spells_3_total" placeholder="Total" value="" min="0" />
-                  <input type="number" name="spells_3_used" placeholder="Usados" value="" min="0" />
-                  <span class="remaining" data-spell-circle="3">0</span>
+                <div class="spell-circle-group">
+                  <span class="label-text">3º Círculo</span>
+                  <div class="spell-counts">
+                    <input type="number" name="spells_3_total" placeholder="Total" value="" min="0" />
+                    <input type="number" name="spells_3_used" placeholder="Usados" value="" min="0" />
+                    <span class="remaining" data-spell-circle="3">0</span>
+                  </div>
+                  <textarea name="spells_3_desc" rows="3" placeholder="Ex.: Bola de Fogo, Dissipar Magia..." style="display: none;"></textarea>
                 </div>
-                <textarea name="spells_3_desc" rows="3" placeholder="Ex.: Bola de Fogo, Dissipar Magia..."></textarea>
-              </div>
-              <div class="spell-circle-group">
-                <span class="label-text">4º Círculo</span>
-                <div class="spell-counts">
-                  <input type="number" name="spells_4_total" placeholder="Total" value="" min="0" />
-                  <input type="number" name="spells_4_used" placeholder="Usados" value="" min="0" />
-                  <span class="remaining" data-spell-circle="4">0</span>
+                <div class="spell-circle-group" style="display: none;">
+                  <span class="label-text">4º Círculo</span>
+                  <div class="spell-counts">
+                    <input type="number" name="spells_4_total" placeholder="Total" value="" min="0" />
+                    <input type="number" name="spells_4_used" placeholder="Usados" value="" min="0" />
+                    <span class="remaining" data-spell-circle="4">0</span>
+                  </div>
+                  <textarea name="spells_4_desc" rows="3" placeholder="Ex.: Porta Dimensional, Invisibilidade Maior..." style="display: none;"></textarea>
                 </div>
-                <textarea name="spells_4_desc" rows="3" placeholder="Ex.: Porta Dimensional, Invisibilidade Maior..."></textarea>
-              </div>
-              <div class="spell-circle-group">
-                <span class="label-text">5º Círculo</span>
-                <div class="spell-counts">
-                  <input type="number" name="spells_5_total" placeholder="Total" value="" min="0" />
-                  <input type="number" name="spells_5_used" placeholder="Usados" value="" min="0" />
-                  <span class="remaining" data-spell-circle="5">0</span>
+                <div class="spell-circle-group" style="display: none;">
+                  <span class="label-text">5º Círculo</span>
+                  <div class="spell-counts">
+                    <input type="number" name="spells_5_total" placeholder="Total" value="" min="0" />
+                    <input type="number" name="spells_5_used" placeholder="Usados" value="" min="0" />
+                    <span class="remaining" data-spell-circle="5">0</span>
+                  </div>
+                  <textarea name="spells_5_desc" rows="3" placeholder="Ex.: Muralha de Força, Telepatia..." style="display: none;"></textarea>
                 </div>
-                <textarea name="spells_5_desc" rows="3" placeholder="Ex.: Muralha de Força, Telepatia..."></textarea>
-              </div>
-              <div class="spell-circle-group full-width-spell-group">
-                <span class="label-text">Círculos Superiores (6º ao 9º)</span>
-                <div class="spell-counts">
-                  <input type="number" name="spells_6_9_total" placeholder="Total" value="" min="0" />
-                  <input type="number" name="spells_6_9_used" placeholder="Usados" value="" min="0" />
-                  <span class="remaining" data-spell-circle="6-9">0</span>
+                <div class="spell-circle-group full-width-spell-group" style="display: none;">
+                  <span class="label-text">Círculos Superiores (6º ao 9º)</span>
+                  <div class="spell-counts">
+                    <input type="number" name="spells_6_9_total" placeholder="Total" value="" min="0" />
+                    <input type="number" name="spells_6_9_used" placeholder="Usados" value="" min="0" />
+                    <span class="remaining" data-spell-circle="6-9">0</span>
+                  </div>
+                  <textarea name="spells_6_9_desc" rows="3" placeholder="Ex.: Desintegrar (6º), Projeção Astral (9º)..." style="display: none;"></textarea>
                 </div>
-                <textarea name="spells_6_9_desc" rows="3" placeholder="Ex.: Desintegrar (6º), Projeção Astral (9º)..."></textarea>
               </div>
             </div>
           </div>
