@@ -178,36 +178,57 @@
         <!-- TAB: ATRIBUTOS -->
         <section class="tab-content" id="attributes">
           <div class="card attributes-grid">
-            <h2>Atributos de Habilidade</h2>
+            <div class="attributes-heading">
+              <h2>Atributos de Habilidade</h2>
+              <p id="raceBonusSummary" class="attr-race-summary">Selecione uma raça para ver o bônus racial.</p>
+            </div>
             <div class="attributes-layout">
               <div class="attribute-box">
                 <span class="attr-label">Força</span>
-                <input name="strength" type="number" class="attr-input" placeholder="10" />
+                <div class="attr-input-row">
+                  <input name="strength" type="number" class="attr-input" placeholder="10" />
+                  <span class="attr-race-bonus" data-race-bonus-for="strength"></span>
+                </div>
                 <span class="attr-mod">+0</span>
               </div>
               <div class="attribute-box">
                 <span class="attr-label">Destreza</span>
-                <input name="dexterity" type="number" class="attr-input" placeholder="10" />
+                <div class="attr-input-row">
+                  <input name="dexterity" type="number" class="attr-input" placeholder="10" />
+                  <span class="attr-race-bonus" data-race-bonus-for="dexterity"></span>
+                </div>
                 <span class="attr-mod">+0</span>
               </div>
               <div class="attribute-box">
                 <span class="attr-label">Constituição</span>
-                <input name="constitution" type="number" class="attr-input" placeholder="10" />
+                <div class="attr-input-row">
+                  <input name="constitution" type="number" class="attr-input" placeholder="10" />
+                  <span class="attr-race-bonus" data-race-bonus-for="constitution"></span>
+                </div>
                 <span class="attr-mod">+0</span>
               </div>
               <div class="attribute-box">
                 <span class="attr-label">Inteligência</span>
-                <input name="intelligence" type="number" class="attr-input" placeholder="10" />
+                <div class="attr-input-row">
+                  <input name="intelligence" type="number" class="attr-input" placeholder="10" />
+                  <span class="attr-race-bonus" data-race-bonus-for="intelligence"></span>
+                </div>
                 <span class="attr-mod">+0</span>
               </div>
               <div class="attribute-box">
                 <span class="attr-label">Sabedoria</span>
-                <input name="wisdom" type="number" class="attr-input" placeholder="10" />
+                <div class="attr-input-row">
+                  <input name="wisdom" type="number" class="attr-input" placeholder="10" />
+                  <span class="attr-race-bonus" data-race-bonus-for="wisdom"></span>
+                </div>
                 <span class="attr-mod">+0</span>
               </div>
               <div class="attribute-box">
                 <span class="attr-label">Carisma</span>
-                <input name="charisma" type="number" class="attr-input" placeholder="10" />
+                <div class="attr-input-row">
+                  <input name="charisma" type="number" class="attr-input" placeholder="10" />
+                  <span class="attr-race-bonus" data-race-bonus-for="charisma"></span>
+                </div>
                 <span class="attr-mod">+0</span>
               </div>
             </div>

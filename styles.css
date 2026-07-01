@@ -323,6 +323,19 @@ textarea {
 }
 
 /* ATTRIBUTES GRID */
+.attributes-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.attr-race-summary {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin: 0;
+}
+
 .attributes-layout {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -348,6 +361,13 @@ textarea {
   color: var(--text-secondary);
 }
 
+.attr-input-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
 .attr-input {
   font-size: 16px !important;
   font-weight: 700;
@@ -355,6 +375,19 @@ textarea {
   padding: 8px 4px !important;
   background: transparent !important;
   border: none !important;
+  flex: 1;
+}
+
+.attr-race-bonus {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 28px;
+  text-align: left;
+}
+
+.attr-race-bonus.is-hidden {
+  display: none;
 }
 
 .attr-mod {

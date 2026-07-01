@@ -10,6 +10,16 @@ const STORAGE_KEY = 'rpg-character-sheet-v2';
 const raceSelect = document.getElementById('raceSelect');
 const classSelect = document.getElementById('classSelect');
 const subclassSelect = document.getElementById('subclassSelect');
+const ATTRIBUTE_KEYS = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+const PROFICIENCY_BONUS = 2;
+const ATTRIBUTE_LABELS = {
+  strength: 'Força',
+  dexterity: 'Destreza',
+  constitution: 'Constituição',
+  intelligence: 'Inteligência',
+  wisdom: 'Sabedoria',
+  charisma: 'Carisma'
+};
 
 // ATTACKS STATE & FUNCTIONS
 let attacksData = [];
@@ -211,28 +221,85 @@ function setupTabs() {
   }
 }
 
+function formatBonusValue(value) {
+  return `${value >= 0 ? '+' : '-'}${Math.abs(value)}`;
+}
+
+function formatBonusBadge(value) {
+  return value !== 0 ? `(${formatBonusValue(value)})` : '';
+}
+
+function getRaceBonusForAttribute(attr) {
+  const selectedRace = raceSelect.value;
+  if (!selectedRace || !RACES_DATA[selectedRace]) return 0;
+  return RACES_DATA[selectedRace].bonusAtributos?.[attr] || 0;
+}
+
+function getAttributeBaseValue(attr) {
+  const input = form.elements.namedItem(attr);
+  if (!input) return 10;
+
+  const datasetValue = parseInt(input.dataset.baseValue || '');
+  if (!Number.isNaN(datasetValue)) return datasetValue;
+
+  const currentValue = parseInt(input.value || '');
+  if (!Number.isNaN(currentValue)) return currentValue;
+
+  return 10;
+}
+
+function getEffectiveAttributeValue(attr) {
+  return getAttributeBaseValue(attr) + getRaceBonusForAttribute(attr);
+}
+
+function updateRaceBonusSummary() {
+  const summaryEl = document.getElementById('raceBonusSummary');
+  if (!summaryEl) return;
+
+  const selectedRace = raceSelect.value;
+  if (!selectedRace || !RACES_DATA[selectedRace]) {
+    summaryEl.textContent = 'Selecione uma raça para ver o bônus racial.';
+    return;
+  }
+
+  const raceData = RACES_DATA[selectedRace];
+  const bonusParts = Object.entries(raceData.bonusAtributos || {})
+    .filter(([, value]) => value !== 0)
+    .map(([attr, value]) => `${formatBonusValue(value)} ${ATTRIBUTE_LABELS[attr] || attr}`);
+
+  summaryEl.textContent = bonusParts.length
+    ? `${raceData.name} · ${bonusParts.join(', ')}`
+    : `${raceData.name} · sem bônus adicional`;
+}
+
+function updateRaceBonusBadges() {
+  ATTRIBUTE_KEYS.forEach((attr) => {
+    const bonus = getRaceBonusForAttribute(attr);
+    const badgeEl = document.querySelector(`[data-race-bonus-for="${attr}"]`);
+
+    if (badgeEl) {
+      badgeEl.textContent = bonus !== 0 ? formatBonusBadge(bonus) : '';
+      badgeEl.classList.toggle('is-hidden', bonus === 0);
+    }
+  });
+}
+
 // APPLY RACE BONUSES
 function applyRaceBonus() {
   const selectedRace = raceSelect.value;
-  if (!selectedRace || !RACES_DATA[selectedRace]) return;
-
-  const raceData = RACES_DATA[selectedRace];
-  const bonuses = raceData.bonusAtributos;
-
-  const attrs = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+  const attrs = ATTRIBUTE_KEYS;
 
   attrs.forEach((attr) => {
     const input = form.elements.namedItem(attr);
-    if (input) {
-      // Sempre começa com 10 e aplica o bônus da raça
-      const baseValue = 10;
-      const bonus = bonuses[attr] || 0;
-      const finalValue = baseValue + bonus;
-      input.value = finalValue;
-      input.dataset.baseValue = baseValue;
-    }
+    if (!input) return;
+
+    const baseValue = getAttributeBaseValue(attr);
+    input.value = baseValue;
+    input.dataset.baseValue = baseValue;
   });
 
+  updateRaceBonusBadges();
+  updateRaceBonusSummary();
   calculateModifiers();
 }
 
@@ -1025,13 +1092,11 @@ function updateHeader() {
 
 // CALCULATE ATTRIBUTE MODIFIERS
 function calculateModifiers() {
-  const attrs = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-
-  attrs.forEach((attr) => {
+  ATTRIBUTE_KEYS.forEach((attr) => {
     const input = form.elements.namedItem(attr);
     if (!input) return;
 
-    const value = parseInt(input.value) || 10;
+    const value = getEffectiveAttributeValue(attr);
     const mod = Math.floor((value - 10) / 2);
     const modEl = input.closest('.attribute-box')?.querySelector('.attr-mod');
 
@@ -1047,20 +1112,18 @@ function calculateModifiers() {
 
 // CALCULATE SAVING THROWS
 function calculateSaves() {
-  const attrs = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-
-  attrs.forEach((attr) => {
+  ATTRIBUTE_KEYS.forEach((attr) => {
     const input = form.elements.namedItem(attr);
     if (!input) return;
 
-    const value = parseInt(input.value) || 10;
+    const value = getEffectiveAttributeValue(attr);
     const mod = Math.floor((value - 10) / 2);
 
     // Verificar se a salvaguarda está marcada (checkbox com name="save_[attr]")
     const checkbox = form.elements.namedItem(`save_${attr}`);
     let finalMod = mod;
     if (checkbox && checkbox.checked) {
-      finalMod = mod * 2; // Dobra o valor se marcado
+      finalMod = mod + PROFICIENCY_BONUS;
     }
 
     const saveEl = document.querySelector(`.save-value[data-attr="${attr}"]`);
@@ -1112,15 +1175,6 @@ function calculateSkills() {
     skill_survival: 'wisdom'
   };
 
-  // Calcular bônus de proficiência baseado no nível
-  const levelInput = form.elements.namedItem('level');
-  const level = parseInt(levelInput?.value) || 1;
-  let proficiencyBonus = 2;
-  if (level >= 5) proficiencyBonus = 3;
-  if (level >= 9) proficiencyBonus = 4;
-  if (level >= 13) proficiencyBonus = 5;
-  if (level >= 17) proficiencyBonus = 6;
-
   // Obter perícias disponíveis da classe
   const selectedClass = classSelect.value;
   let classSkills = [];
@@ -1139,13 +1193,13 @@ function calculateSkills() {
     const attrInput = form.elements.namedItem(attrName);
     if (!attrInput) return;
 
-    const value = parseInt(attrInput.value) || 10;
+    const value = getEffectiveAttributeValue(attrName);
     const mod = Math.floor((value - 10) / 2);
 
-    // Se checkbox está marcado, dobra o modificador
+    // Se checkbox está marcado, soma o bônus de proficiência fixo
     let finalMod = mod;
     if (checkbox.checked) {
-      finalMod = mod * 2; // Dobra apenas o modificador do atributo
+      finalMod = mod + PROFICIENCY_BONUS;
     }
 
     valueEl.textContent = (finalMod >= 0 ? '+' : '') + finalMod;
@@ -1219,6 +1273,7 @@ function importCharacter(e) {
 function loadForm() {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (!saved) {
+    applyRaceBonus();
     updateHeader();
     calculateModifiers();
     attacksData = [];
@@ -1268,6 +1323,7 @@ function loadForm() {
   }
 
   updateHitDice();
+  applyRaceBonus();
   updateHeader();
   calculateModifiers();
   updateSummary();
@@ -1312,7 +1368,10 @@ form.addEventListener('input', (e) => {
     updateHeader();
   }
 
-  if (['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'].includes(e.target.name)) {
+  if (ATTRIBUTE_KEYS.includes(e.target.name)) {
+    const input = e.target;
+    const parsedValue = parseInt(input.value || '');
+    input.dataset.baseValue = Number.isNaN(parsedValue) ? 10 : parsedValue;
     calculateModifiers();
   }
 
@@ -1352,6 +1411,7 @@ resetBtn.addEventListener('click', () => {
     }
     attacksData = [];
     renderAttacks();
+    applyRaceBonus();
     updateHeader();
     calculateModifiers();
     renderClassFeaturesInCombat();
