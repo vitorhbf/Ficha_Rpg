@@ -521,7 +521,24 @@ function getFeatureTooltip(name, type) {
       }
       return 'Sem descrição disponível.';
     }
-    return found.descricao || 'Sem descrição disponível.';
+    // Se tem descrição, usa ela
+    if (found.descricao) {
+      const parts = [found.descricao];
+      // Adiciona dano, alcance e alvos se existirem
+      if (found.dano) parts.push(`Dano: ${found.dano}`);
+      if (found.alcance) parts.push(`Alcance: ${found.alcance}`);
+      if (found.alvos) parts.push(`Alvos: ${found.alvos}`);
+      return parts.join(' | ') + (found.level ? ` (Nível ${found.level})` : '');
+    }
+    // Se tem dano, alcance e alvos mas sem descrição, constrói a descrição
+    if (found.dano || found.alcance || found.alvos) {
+      const parts = [];
+      if (found.dano) parts.push(`Dano: ${found.dano}`);
+      if (found.alcance) parts.push(`Alcance: ${found.alcance}`);
+      if (found.alvos) parts.push(`Alvos: ${found.alvos}`);
+      return parts.join(' | ') + (found.level ? ` (Nível ${found.level})` : '');
+    }
+    return 'Sem descrição disponível.';
   };
   // 1. Habilidades de classe
   if (type === 'feature' && selectedClass && CLASSES_DATA[selectedClass]) {
@@ -991,7 +1008,7 @@ function updateSummary() {
       skill_deception: 'Enganação', skill_history: 'História', skill_insight: 'Intuição',
       skill_investigation: 'Investigação', skill_medicine: 'Medicina', skill_nature: 'Natureza',
       skill_perception: 'Percepção', skill_performance: 'Performance', skill_persuasion: 'Persuasão',
-      skill_religion: 'Religião', skill_sleight: 'Presteza de Mãos', skill_stealth: 'Furtividade',
+      skill_religion: 'Religião', skill_sleight: 'Prestidigitação', skill_stealth: 'Furtividade',
       skill_survival: 'Sobrevivência'
     };
     const attrForSkill = {
@@ -1304,7 +1321,13 @@ function calculateSaves() {
     const checkbox = form.elements.namedItem(`save_${attr}`);
     let finalMod = mod;
     if (checkbox && checkbox.checked) {
-      finalMod = mod + PROFICIENCY_BONUS;
+      const lvl = parseInt(form.elements.namedItem('level')?.value) || 1;
+      let profBonus = 2;
+      if (lvl >= 5) profBonus = 3;
+      if (lvl >= 9) profBonus = 4;
+      if (lvl >= 13) profBonus = 5;
+      if (lvl >= 17) profBonus = 6;
+      finalMod = mod + profBonus;
     }
 
     const saveEl = document.querySelector(`.save-value[data-attr="${attr}"]`);
@@ -1377,10 +1400,16 @@ function calculateSkills() {
     const value = getEffectiveAttributeValue(attrName);
     const mod = Math.floor((value - 10) / 2);
 
-    // Se checkbox está marcado, soma o bônus de proficiência fixo
+    // Se checkbox está marcado, soma o bônus de proficiência baseado no nível
     let finalMod = mod;
     if (checkbox.checked) {
-      finalMod = mod + PROFICIENCY_BONUS;
+      const lvl = parseInt(form.elements.namedItem('level')?.value) || 1;
+      let profBonus = 2;
+      if (lvl >= 5) profBonus = 3;
+      if (lvl >= 9) profBonus = 4;
+      if (lvl >= 13) profBonus = 5;
+      if (lvl >= 17) profBonus = 6;
+      finalMod = mod + profBonus;
     }
 
     valueEl.textContent = (finalMod >= 0 ? '+' : '') + finalMod;
