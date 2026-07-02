@@ -769,7 +769,39 @@ function updateSummary() {
   setVal('speed', speed ? `${speed} m` : '');
   setVal('hitDie', document.getElementById('hitDie')?.value);
 
-  // Atributos
+  // 1. CAPTURAR OS DADOS DA RAÇA SELECIONADA
+  const selectedRace = form.elements.namedItem('race')?.value || '';
+  const raceData = RACES_DATA[selectedRace];
+  const raceBonusData = raceData?.bonusAtributos || {};
+
+  // 2. EXIBIR O TEXTO INFORMATIVO DA RAÇA DIRETO NO TÍTULO DE ATRIBUTOS
+  const attrsBox = document.getElementById('summaryAttributes');
+  const attrsTitle = attrsBox?.closest('.summary-card')?.querySelector('.summary-card-header h2');
+  
+  if (attrsTitle) {
+    if (raceData) {
+      const raceText = `${raceData.name} · ${Object.entries(raceData.bonusAtributos)
+        .filter(([_, val]) => val > 0)
+        .map(([attr, val]) => {
+          const labelMap = { 
+            intelligence: 'Inteligência', 
+            constitution: 'Constituição', 
+            strength: 'Força', 
+            dexterity: 'Destreza', 
+            wisdom: 'Sabedoria', 
+            charisma: 'Carisma' 
+          };
+          return `+${val} ${labelMap[attr] || attr}`;
+        })
+        .join(', ')}`;
+        
+      attrsTitle.textContent = `Atributos - ${raceText}`;
+    } else {
+      attrsTitle.textContent = 'Atributos';
+    }
+  }
+
+  // 3. RENDERIZAR OS CARDS DE ATRIBUTOS
   const attrs = [
     { key: 'strength', label: 'Força' },
     { key: 'dexterity', label: 'Destreza' },
@@ -778,65 +810,66 @@ function updateSummary() {
     { key: 'wisdom', label: 'Sabedoria' },
     { key: 'charisma', label: 'Carisma' }
   ];
-  const attrsBox = document.getElementById('summaryAttributes');
+
+  // Objeto temporário para armazenar os modificadores finais corretos e unificados
+  const finalModifiers = {};
+
   if (attrsBox) {
     attrsBox.innerHTML = '';
     attrs.forEach((a) => {
       const input = form.elements.namedItem(a.key);
-      const value = parseInt(input?.value) || 10;
-      const mod = Math.floor((value - 10) / 2);
+      const baseValue = parseInt(input?.value) || 10;
+      const raceBonus = raceBonusData[a.key] || 0;
+      
+      const totalValue = baseValue + raceBonus; // Soma o valor base com o bônus da raça
+      const mod = Math.floor((totalValue - 10) / 2); // Calcula o modificador correto baseado no total
+      
+      // Salva o modificador calculado para uso nas salvaguardas e perícias
+      finalModifiers[a.key] = mod;
+
       const modStr = (mod >= 0 ? '+' : '') + mod;
+      
+      // Cria a estrutura idêntica à primeira aba: valor base + bônus racial entre parênteses
+      const bonusHtml = raceBonus > 0 ? `<span class="attr-race-bonus" style="color: #38bdf8; font-size: 13px; font-weight: 700; text-align: left; width: 35px; flex: none; margin: 0 !important;">(+${raceBonus})</span>` : '';
+      
       const item = document.createElement('div');
       item.className = 'summary-attr-box';
+      item.style.cssText = "background: rgba(17, 24, 39, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; gap: 8px;";
+      
       item.innerHTML = `
-        <span class="summary-attr-label">${a.label}</span>
-        <span class="summary-attr-value">${value}</span>
-        <span class="summary-attr-mod">${modStr}</span>
+        <span class="summary-attr-label" style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #94a3b8;">${a.label}</span>
+        <div class="attr-input-row" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important; width: 100% !important;">
+          <span class="summary-attr-value" style="font-size: 16px !important; font-weight: 700 !important; text-align: ${raceBonus > 0 ? 'right' : 'center'} !important; width: ${raceBonus > 0 ? '36px' : 'auto'} !important; flex: none !important;">${baseValue}</span>
+          ${bonusHtml}
+        </div>
+        <span class="summary-attr-mod" style="font-size: 18px; font-weight: 700; color: #38bdf8;">${modStr}</span>
       `;
       attrsBox.appendChild(item);
     });
   }
 
-  // Salvaguardas & Perícias (mostra apenas as proficientes)
+  // 4. SALVAGUARDAS & PERÍCIAS (mostra apenas as proficientes)
   const skillsBox = document.getElementById('summarySkills');
   if (skillsBox) {
     skillsBox.innerHTML = '';
     const skillMap = {
-      skill_acrobatics: 'Acrobacias',
-      skill_arcana: 'Arcanismo',
-      skill_athletics: 'Atletismo',
-      skill_deception: 'Enganação',
-      skill_history: 'História',
-      skill_insight: 'Intuição',
-      skill_investigation: 'Investigação',
-      skill_medicine: 'Medicina',
-      skill_nature: 'Natureza',
-      skill_perception: 'Percepção',
-      skill_performance: 'Performance',
-      skill_persuasion: 'Persuasão',
-      skill_religion: 'Religião',
-      skill_sleight: 'Prestidigitação',
-      skill_stealth: 'Furtividade',
+      skill_acrobatics: 'Acrobacias', skill_arcana: 'Arcanismo', skill_athletics: 'Atletismo',
+      skill_deception: 'Enganação', skill_history: 'História', skill_insight: 'Intuição',
+      skill_investigation: 'Investigação', skill_medicine: 'Medicina', skill_nature: 'Natureza',
+      skill_perception: 'Percepção', skill_performance: 'Performance', skill_persuasion: 'Persuasão',
+      skill_religion: 'Religião', skill_sleight: 'Presteza de Mãos', skill_stealth: 'Furtividade',
       skill_survival: 'Sobrevivência'
     };
     const attrForSkill = {
-      skill_acrobatics: 'dexterity',
-      skill_arcana: 'intelligence',
-      skill_athletics: 'strength',
-      skill_deception: 'charisma',
-      skill_history: 'intelligence',
-      skill_insight: 'wisdom',
-      skill_investigation: 'intelligence',
-      skill_medicine: 'wisdom',
-      skill_nature: 'intelligence',
-      skill_perception: 'wisdom',
-      skill_performance: 'charisma',
-      skill_persuasion: 'charisma',
-      skill_religion: 'intelligence',
-      skill_sleight: 'dexterity',
-      skill_stealth: 'dexterity',
+      skill_acrobatics: 'dexterity', skill_arcana: 'intelligence', skill_athletics: 'strength',
+      skill_deception: 'charisma', skill_history: 'intelligence', skill_insight: 'wisdom',
+      skill_investigation: 'intelligence', skill_medicine: 'wisdom', skill_nature: 'intelligence',
+      skill_perception: 'wisdom', skill_performance: 'charisma', skill_persuasion: 'charisma',
+      skill_religion: 'intelligence', skill_sleight: 'dexterity', skill_stealth: 'dexterity',
       skill_survival: 'wisdom'
     };
+    
+    // Cálculo do bônus de proficiência baseado no nível
     const lvl = parseInt(form.elements.namedItem('level')?.value) || 1;
     let profBonus = 2;
     if (lvl >= 5) profBonus = 3;
@@ -854,17 +887,19 @@ function updateSummary() {
       const cb = form.elements.namedItem(`save_${a}`);
       return cb && cb.checked;
     });
+    
     if (proficientSaves.length > 0) {
       const title = document.createElement('h3');
       title.className = 'summary-subtitle';
       title.textContent = 'Salvaguardas Proficientes';
       skillsBox.appendChild(title);
       proficientSaves.forEach((a) => {
-        const value = parseInt(form.elements.namedItem(a)?.value) || 10;
-        const mod = Math.floor((value - 10) / 2) + profBonus;
+        const attributeMod = finalModifiers[a] !== undefined ? finalModifiers[a] : 0;
+        const finalSaveMod = attributeMod + profBonus;
+        
         const item = document.createElement('div');
         item.className = 'summary-skill-item';
-        item.innerHTML = `<span>${saveLabels[a]}</span><strong>${(mod >= 0 ? '+' : '') + mod}</strong>`;
+        item.innerHTML = `<span>${saveLabels[a]}</span><strong>${(finalSaveMod >= 0 ? '+' : '') + finalSaveMod}</strong>`;
         skillsBox.appendChild(item);
       });
     }
@@ -874,6 +909,7 @@ function updateSummary() {
       const cb = form.elements.namedItem(s);
       return cb && cb.checked;
     });
+    
     if (proficientSkills.length > 0) {
       const title = document.createElement('h3');
       title.className = 'summary-subtitle';
@@ -881,14 +917,16 @@ function updateSummary() {
       skillsBox.appendChild(title);
       proficientSkills.forEach((s) => {
         const attr = attrForSkill[s];
-        const value = parseInt(form.elements.namedItem(attr)?.value) || 10;
-        const mod = Math.floor((value - 10) / 2) + profBonus;
+        const attributeMod = finalModifiers[attr] !== undefined ? finalModifiers[attr] : 0;
+        const finalSkillMod = attributeMod + profBonus;
+        
         const item = document.createElement('div');
         item.className = 'summary-skill-item';
-        item.innerHTML = `<span>${skillMap[s]}</span><strong>${(mod >= 0 ? '+' : '') + mod}</strong>`;
+        item.innerHTML = `<span>${skillMap[s]}</span><strong>${(finalSkillMod >= 0 ? '+' : '') + finalSkillMod}</strong>`;
         skillsBox.appendChild(item);
       });
     }
+    
     if (proficientSaves.length === 0 && proficientSkills.length === 0) {
       skillsBox.innerHTML = '<p class="empty-msg">Nenhuma salvaguarda ou perícia proficiente marcada.</p>';
     }
