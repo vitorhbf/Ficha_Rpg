@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -422,13 +422,30 @@ function updateSubclassOptions() {
   subclassSelect.appendChild(defaultOpt);
 
   // Adiciona as subclasses
+  const levelInput = form.elements.namedItem('level');
+  const currentLevel = levelInput ? Math.max(1, parseInt(levelInput.value || '1') || 1) : 1;
+  // Verifica se existe ao menos uma subclasse disponível para o nível atual
+  const hasUnlocked = subclasses.some((sc) => currentLevel >= sc.nivel);
   subclasses.forEach((sc) => {
     const opt = document.createElement('option');
     opt.value = sc.name;
     opt.textContent = `${sc.name} (Nível ${sc.nivel})`;
     opt.title = sc.descricao;
+    // Bloqueia subclasses cujo nível mínimo ainda não foi atingido
+    if (currentLevel < sc.nivel) {
+      opt.disabled = true;
+      opt.textContent = `${sc.name} (Libera no Nível ${sc.nivel})`;
+    }
     subclassSelect.appendChild(opt);
   });
+  // Se nenhuma subclasse foi liberada ainda, mantém o select desabilitado
+  if (!hasUnlocked) {
+    subclassSelect.disabled = true;
+    // Substitui o placeholder padrão pelo aviso de nível mínimo
+    const firstUnlocked = subclasses.reduce((min, sc) => (min === null || sc.nivel < min ? sc.nivel : min), null);
+    defaultOpt.value = '';
+    defaultOpt.textContent = `Libera no Nível ${firstUnlocked !== null ? firstUnlocked : '?'} — suba de nível para escolher`;
+  }
 
   // Mantém o valor previamente selecionado se ainda existir
   const currentValue = subclassSelect.dataset.lastValue;
@@ -1433,6 +1450,7 @@ form.addEventListener('input', (e) => {
   if (e.target.name === 'level' || e.target.name === 'className') {
     updateHitDice();
     updateMaxHp();
+    updateSubclassOptions();
   }
 
   updateSummary();
