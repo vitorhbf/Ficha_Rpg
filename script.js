@@ -1,4 +1,4 @@
-﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -64,16 +64,16 @@ function renderAttacks() {
     btn.addEventListener('click', () => {
       const index = parseInt(btn.dataset.index);
       const attack = attacksData[index];
-      
+
       editingAttackIndex = index;
 
       // Populate fields
       document.getElementById('attackItem').value = attack.item;
-      
+
       // Handle parsing hit text (e.g. "+5" -> 5)
       const parsedHit = attack.hit === '—' ? '' : parseInt(attack.hit);
       document.getElementById('attackHit').value = isNaN(parsedHit) ? '' : parsedHit;
-      
+
       // Handle backwards compatibility for simple text damage
       document.getElementById('attackDamageQty').value = attack.damageQty !== undefined ? attack.damageQty : 1;
       document.getElementById('attackDamageDie').value = attack.damageDie !== undefined ? attack.damageDie : '';
@@ -131,13 +131,13 @@ function setupAttacks() {
 
       const itemVal = itemInput.value.trim();
       const hitText = hitInput.value.trim();
-      
+
       let hitVal = '—';
       if (hitText !== '') {
         const hitNum = parseInt(hitText);
         hitVal = hitNum >= 0 ? `+${hitNum}` : `${hitNum}`;
       }
-      
+
       const qtyVal = parseInt(qtyInput.value) || 1;
       const dieVal = dieInput.value;
       const bonusText = bonusInput.value.trim();
@@ -312,6 +312,24 @@ function clearClassFeatureSelections() {
   });
 }
 
+// CALCULATE MAX HP AUTOMATICALLY
+// HP máximo = hpInicial da classe × nível
+// Usado ao mudar o nível (e também chamado dentro de applyClassFeatures)
+function updateMaxHp() {
+  const selectedClass = classSelect.value;
+  if (!selectedClass || !CLASSES_DATA[selectedClass]) return;
+  const classData = CLASSES_DATA[selectedClass];
+  const levelInput = form.elements.namedItem('level');
+  const level = levelInput ? Math.max(1, parseInt(levelInput.value || '1') || 1) : 1;
+  const hpMaxInput = form.elements.namedItem('hpMax');
+  if (hpMaxInput) {
+    hpMaxInput.value = classData.hpInicial * level;
+  }
+  const hpCurrentInput = form.elements.namedItem('hpCurrent');
+  if (hpCurrentInput) {
+    hpCurrentInput.value = classData.hpInicial * level;
+  }
+}
 function applyClassFeatures() {
   const selectedClass = classSelect.value;
   const classData = selectedClass && CLASSES_DATA[selectedClass] ? CLASSES_DATA[selectedClass] : null;
@@ -324,19 +342,18 @@ function applyClassFeatures() {
   renderClassFeaturesInCombat();
 
   if (!classData) return;
-
-  // Preenche HP máximo
+  // Calcula HP máximo = hpInicial da classe × nível
   const hpMaxInput = form.elements.namedItem('hpMax');
-  if (hpMaxInput && !hpMaxInput.value) {
-    hpMaxInput.value = classData.hpInicial;
+  const levelInput = form.elements.namedItem('level');
+  const level = levelInput ? Math.max(1, parseInt(levelInput.value || '1') || 1) : 1;
+  if (hpMaxInput) {
+    hpMaxInput.value = classData.hpInicial * level;
   }
-
   // Preenche HP atual com o máximo se vazio
   const hpCurrentInput = form.elements.namedItem('hpCurrent');
   if (hpCurrentInput && !hpCurrentInput.value) {
-    hpCurrentInput.value = classData.hpInicial;
+    hpCurrentInput.value = classData.hpInicial * level;
   }
-
   // Atualiza o Dado de Vida (Hit Die) com base na classe e no nível
   updateHitDice();
 }
@@ -777,24 +794,24 @@ function updateSummary() {
   // 2. EXIBIR O TEXTO INFORMATIVO DA RAÇA DIRETO NO TÍTULO DE ATRIBUTOS
   const attrsBox = document.getElementById('summaryAttributes');
   const attrsTitle = attrsBox?.closest('.summary-card')?.querySelector('.summary-card-header h2');
-  
+
   if (attrsTitle) {
     if (raceData) {
       const raceText = `${raceData.name} · ${Object.entries(raceData.bonusAtributos)
         .filter(([_, val]) => val > 0)
         .map(([attr, val]) => {
-          const labelMap = { 
-            intelligence: 'Inteligência', 
-            constitution: 'Constituição', 
-            strength: 'Força', 
-            dexterity: 'Destreza', 
-            wisdom: 'Sabedoria', 
-            charisma: 'Carisma' 
+          const labelMap = {
+            intelligence: 'Inteligência',
+            constitution: 'Constituição',
+            strength: 'Força',
+            dexterity: 'Destreza',
+            wisdom: 'Sabedoria',
+            charisma: 'Carisma'
           };
           return `+${val} ${labelMap[attr] || attr}`;
         })
         .join(', ')}`;
-        
+
       attrsTitle.textContent = `Atributos - ${raceText}`;
     } else {
       attrsTitle.textContent = 'Atributos';
@@ -820,22 +837,22 @@ function updateSummary() {
       const input = form.elements.namedItem(a.key);
       const baseValue = parseInt(input?.value) || 10;
       const raceBonus = raceBonusData[a.key] || 0;
-      
+
       const totalValue = baseValue + raceBonus; // Soma o valor base com o bônus da raça
       const mod = Math.floor((totalValue - 10) / 2); // Calcula o modificador correto baseado no total
-      
+
       // Salva o modificador calculado para uso nas salvaguardas e perícias
       finalModifiers[a.key] = mod;
 
       const modStr = (mod >= 0 ? '+' : '') + mod;
-      
+
       // Cria a estrutura idêntica à primeira aba: valor base + bônus racial entre parênteses
       const bonusHtml = raceBonus > 0 ? `<span class="attr-race-bonus" style="color: #38bdf8; font-size: 13px; font-weight: 700; text-align: left; width: 35px; flex: none; margin: 0 !important;">(+${raceBonus})</span>` : '';
-      
+
       const item = document.createElement('div');
       item.className = 'summary-attr-box';
       item.style.cssText = "background: rgba(17, 24, 39, 0.6); border: 2px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 12px; text-align: center; display: flex; flex-direction: column; gap: 8px;";
-      
+
       item.innerHTML = `
         <span class="summary-attr-label" style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: #94a3b8;">${a.label}</span>
         <div class="attr-input-row" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 4px !important; width: 100% !important;">
@@ -868,7 +885,7 @@ function updateSummary() {
       skill_religion: 'intelligence', skill_sleight: 'dexterity', skill_stealth: 'dexterity',
       skill_survival: 'wisdom'
     };
-    
+
     // Cálculo do bônus de proficiência baseado no nível
     const lvl = parseInt(form.elements.namedItem('level')?.value) || 1;
     let profBonus = 2;
@@ -887,7 +904,7 @@ function updateSummary() {
       const cb = form.elements.namedItem(`save_${a}`);
       return cb && cb.checked;
     });
-    
+
     if (proficientSaves.length > 0) {
       const title = document.createElement('h3');
       title.className = 'summary-subtitle';
@@ -896,7 +913,7 @@ function updateSummary() {
       proficientSaves.forEach((a) => {
         const attributeMod = finalModifiers[a] !== undefined ? finalModifiers[a] : 0;
         const finalSaveMod = attributeMod + profBonus;
-        
+
         const item = document.createElement('div');
         item.className = 'summary-skill-item';
         item.innerHTML = `<span>${saveLabels[a]}</span><strong>${(finalSaveMod >= 0 ? '+' : '') + finalSaveMod}</strong>`;
@@ -909,7 +926,7 @@ function updateSummary() {
       const cb = form.elements.namedItem(s);
       return cb && cb.checked;
     });
-    
+
     if (proficientSkills.length > 0) {
       const title = document.createElement('h3');
       title.className = 'summary-subtitle';
@@ -919,14 +936,14 @@ function updateSummary() {
         const attr = attrForSkill[s];
         const attributeMod = finalModifiers[attr] !== undefined ? finalModifiers[attr] : 0;
         const finalSkillMod = attributeMod + profBonus;
-        
+
         const item = document.createElement('div');
         item.className = 'summary-skill-item';
         item.innerHTML = `<span>${skillMap[s]}</span><strong>${(finalSkillMod >= 0 ? '+' : '') + finalSkillMod}</strong>`;
         skillsBox.appendChild(item);
       });
     }
-    
+
     if (proficientSaves.length === 0 && proficientSkills.length === 0) {
       skillsBox.innerHTML = '<p class="empty-msg">Nenhuma salvaguarda ou perícia proficiente marcada.</p>';
     }
@@ -1415,6 +1432,7 @@ form.addEventListener('input', (e) => {
 
   if (e.target.name === 'level' || e.target.name === 'className') {
     updateHitDice();
+    updateMaxHp();
   }
 
   updateSummary();
