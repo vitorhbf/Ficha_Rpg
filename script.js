@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -23,6 +23,38 @@ const ATTRIBUTE_LABELS = {
 
 // ATTACKS STATE & FUNCTIONS
 let attacksData = [];
+// Gera o tooltip padronizado de um ataque para mostrar ao passar o mouse
+function buildAttackTooltip(attack) {
+  if (!attack) return '';
+  const lines = [];
+  lines.push(`⚔️ ${attack.item || 'Ataque'}`);
+  lines.push(`🎯 Acerto: ${attack.hit || '—'}`);
+  lines.push(`💥 Dano: ${attack.damage || '—'}`);
+  // Parse do dano: "1d8 + 2" ou "2 d6 + 1" ou "+3"
+  const damageStr = attack.damage || '';
+  // Distância: inferir pelo tipo (corpo-a-corpo vs à distância). Heurística: se o nome contém "Arco" ou "Besta" ou "Dardo", é à distância.
+  const lowerName = (attack.item || '').toLowerCase();
+  const isRanged = /\b(arco|besta|fundar?|dardo|javelina|azagaia|flecha|arrow|bow|crossbow|throwing|sling)\b/.test(lowerName);
+  lines.push(`📏 Alcance: ${isRanged ? 'À distância (consulte o mestre)' : 'Corpo a corpo (1,5 m)'}`);
+  // Alvos: 1 por padrão
+  const lowerDamage = damageStr.toLowerCase();
+  if (/\b(aoe|área|cone|explosão|explosao|raio)\b/.test(lowerName) || /\b(aoe|área|cone|explosão|explosao)\b/.test(lowerDamage)) {
+    lines.push(`👥 Alvos: Múltiplos (veja descrição da arma)`);
+  } else {
+    lines.push(`👥 Alvos: 1 criatura`);
+  }
+  // Cálculo médio de dano (se tiver dados)
+  const match = damageStr.match(/(\d+)\s*d\s*(\d+)/i);
+  if (match) {
+    const qty = parseInt(match[1]);
+    const die = parseInt(match[2]);
+    const bonusMatch = damageStr.match(/[+\-]\s*(\d+)/);
+    const bonus = bonusMatch ? parseInt(damageStr.includes('-') && !damageStr.match(/\+\s*\d+/) ? `-${bonusMatch[1]}` : bonusMatch[1]) : 0;
+    const avg = Math.floor((qty * (die + 1)) / 2) + bonus;
+    lines.push(`📊 Dano médio: ${avg}`);
+  }
+  return lines.join('\n');
+}
 let editingAttackIndex = null;
 
 function renderAttacks() {
@@ -42,10 +74,11 @@ function renderAttacks() {
   }
 
   attacksData.forEach((attack, index) => {
+    const tooltipText = buildAttackTooltip(attack);
     const item = document.createElement('div');
     item.className = 'attack-list-item';
     item.innerHTML = `
-      <div class="attack-info">
+      <div class="attack-info" style="cursor: help;" title="${tooltipText}">
         <span class="attack-name">${attack.item}</span>
         <span class="attack-hit-badge">Acerto: ${attack.hit}</span>
         <span class="attack-damage-badge">Dano: ${attack.damage}</span>
@@ -460,6 +493,71 @@ function updateSubclassOptions() {
   }
 }
 
+// GET FEATURE TOOLTIP
+// Busca a descrição completa de uma habilidade/magia para usar como tooltip
+function getFeatureTooltip(name, type) {
+  const selectedClass = classSelect?.value || '';
+  const selectedSubclass = subclassSelect?.value || '';
+  const searchName = (name || '').toLowerCase().trim();
+  // Procura em todas as fontes de dados possíveis
+  const searchInList = (list) => {
+    if (!Array.isArray(list)) return null;
+    const found = list.find((entry) => {
+      if (typeof entry === 'string') {
+        return entry.toLowerCase().trim() === searchName;
+      }
+      if (entry && entry.name) {
+        return entry.name.toLowerCase().trim() === searchName;
+      }
+      return false;
+    });
+    if (!found) return null;
+    if (typeof found === 'string') {
+      // Truques: buscar descrição na classe também
+      if (type === 'trick' && selectedClass && CLASSES_DATA[selectedClass]) {
+        const classTruques = CLASSES_DATA[selectedClass].truques || [];
+        const match = classTruques.find((t) => (typeof t === 'string' ? t : t.name) === found);
+        if (match && typeof match === 'object' && match.descricao) return match.descricao;
+      }
+      return 'Sem descrição disponível.';
+    }
+    return found.descricao || 'Sem descrição disponível.';
+  };
+  // 1. Habilidades de classe
+  if (type === 'feature' && selectedClass && CLASSES_DATA[selectedClass]) {
+    const desc = searchInList(CLASSES_DATA[selectedClass].habilidades);
+    if (desc) return desc;
+  }
+  // 2. Habilidades de subclasse
+  if (type === 'subclass' && selectedClass && SUBCLASSES_DATA[selectedClass]) {
+    const subclassData = SUBCLASSES_DATA[selectedClass].find((sc) => sc.name === selectedSubclass);
+    if (subclassData) {
+      const desc = searchInList(subclassData.habilidades);
+      if (desc) return desc;
+    }
+  }
+  // 3. Truques
+  if (type === 'trick' && selectedClass && CLASSES_DATA[selectedClass]) {
+    const desc = searchInList(CLASSES_DATA[selectedClass].truques);
+    if (desc) return desc;
+  }
+  // 4. Magias por círculo
+  if (type === 'spell' && selectedClass && CLASSES_DATA[selectedClass]) {
+    if (CLASSES_DATA[selectedClass].magiasPorCirculo) {
+      const desc = searchInList(Object.values(CLASSES_DATA[selectedClass].magiasPorCirculo).flat());
+      if (desc) return desc;
+    }
+    // Também nas subclasses
+    if (SUBCLASSES_DATA[selectedClass]) {
+      const subclassData = SUBCLASSES_DATA[selectedClass].find((sc) => sc.name === selectedSubclass);
+      if (subclassData && subclassData.magiasPorCirculo) {
+        const desc = searchInList(Object.values(subclassData.magiasPorCirculo).flat());
+        if (desc) return desc;
+      }
+    }
+  }
+  return 'Sem descrição disponível.';
+}
 function normalizeFeatureItems(items) {
   if (!Array.isArray(items)) return [];
   return items
@@ -669,15 +767,15 @@ function renderClassFeaturesInCombat() {
       const text = document.createElement('span');
       text.textContent = item.name;
       text.style.fontSize = '13px';
-
+      text.style.cursor = 'help';
+      text.style.borderBottom = '1px dotted var(--primary)';
+      text.title = getFeatureTooltip(item.name, type);
       label.appendChild(checkbox);
       label.appendChild(text);
       group.appendChild(label);
     });
-
     optionsContainer.appendChild(group);
   };
-
   addGroup('Habilidades de classe', summary.features, 'feature');
   addGroup('Habilidades de subclasse', summary.subclassFeatures, 'subclass');
   addGroup('Truques', summary.tricks, 'trick');
@@ -743,7 +841,9 @@ function renderClassFeaturesInCombat() {
         const text = document.createElement('span');
         text.textContent = item.name;
         text.style.fontSize = '13px';
-
+        text.style.cursor = 'help';
+        text.style.borderBottom = '1px dotted var(--primary)';
+        text.title = getFeatureTooltip(item.name, 'spell');
         itemLabel.appendChild(checkbox);
         itemLabel.appendChild(text);
         optionList.appendChild(itemLabel);
@@ -1062,32 +1162,41 @@ function updateSummary() {
       hasAnySpell = true;
       const item = document.createElement('div');
       item.style.marginBottom = '8px';
-      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de classe:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${featureSelections.map((name) => `• ${name}`).join('<br>')}</div>`;
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de classe:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${featureSelections.map((name) => {
+        const tip = getFeatureTooltip(name, 'feature');
+        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
+      }).join('<br>')}</div>`;
       spellsBox.appendChild(item);
     }
-
     if (subclassSelections.length) {
       hasAnySpell = true;
       const item = document.createElement('div');
       item.style.marginBottom = '8px';
-      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de subclasse:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${subclassSelections.map((name) => `• ${name}`).join('<br>')}</div>`;
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de subclasse:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${subclassSelections.map((name) => {
+        const tip = getFeatureTooltip(name, 'subclass');
+        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
+      }).join('<br>')}</div>`;
       spellsBox.appendChild(item);
     }
-
     if (trickSelections.length) {
       hasAnySpell = true;
       const item = document.createElement('div');
       item.style.marginBottom = '8px';
-      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Truques:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${trickSelections.map((name) => `• ${name}`).join('<br>')}</div>`;
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Truques:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${trickSelections.map((name) => {
+        const tip = getFeatureTooltip(name, 'trick');
+        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
+      }).join('<br>')}</div>`;
       spellsBox.appendChild(item);
     }
-
     Object.entries(spellSelectionsByCircle).forEach(([circleName, names]) => {
       if (!names.length) return;
       hasAnySpell = true;
       const item = document.createElement('div');
       item.style.marginBottom = '8px';
-      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Magia de Círculo — ${circleName}:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${names.map((name) => `• ${name}`).join('<br>')}</div>`;
+      item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Magia de Círculo — ${circleName}:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${names.map((name) => {
+        const tip = getFeatureTooltip(name, 'spell');
+        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
+      }).join('<br>')}</div>`;
       spellsBox.appendChild(item);
     });
 

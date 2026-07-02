@@ -167,17 +167,29 @@ const CLASSES_DATA = {
       { name: 'Inspiração de Bardo (Bardic Inspiration)', descricao: 'Você pode inspirar aliados com um bônus de competência em testes.' }
     ],
     truques: [
-      'Mensagem (Message)',
-      'Prestidigitação (Prestidigitation)',
-      'Ilusão Menor (Minor Illusion)',
-      'Amizade (Friends)',
-      'Luz (Light)',
-      'Mãos Mágicas (Mage Hand)'
+      { name: 'Mensagem (Message)', descricao: 'Truque — Duração 1 rodada. Você aponta para uma criatura e sussurra uma mensagem. O alvo (e só ele) ouve a mensagem e pode responder.' },
+      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Truque — Duração até 1 hora. Pequenos efeitos mágicos: acender/apagar uma vela, limpar/manchar objeto, sabor/cheiro/luz/temperatura, símbolo que aparece, etc.' },
+      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Truque — Duração 1 minuto. Cria um som ou imagem de um objeto inanimado que não exceda 1,5 m³. Teste de Investigação para desmascarar.' },
+      { name: 'Amizade (Friends)', descricao: 'Truque — Duração 1 minuto (Concentração). Você tem vantagem em testes de Carisma contra uma criatura, mas ela percebe que foi enfeitiçada se hostil.' },
+      { name: 'Luz (Light)', descricao: 'Truque — Duração 1 hora. Um objeto emite luz brilhante em 6 m e penumbra por mais 6 m. Sem parâmetros de ataque.' },
+      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Truque — Duração 1 minuto. Cria uma mão espectral que pode manipular objetos de até 5 kg a 9 m de distância.' }
     ],
     magiasPorCirculo: {
-      '1º Círculo': ['Sono (Sleep)', 'Cativar (Charm Person)', 'Acalmar Emoções (Calm Emotions)'],
-      '2º Círculo': ['Sugestão (Suggestion)', 'Silêncio (Silence)', 'Invisibilidade (Invisibility)'],
-      '3º Círculo': ['Leque Cromático (Color Spray)', 'Talas de Vento (Wind Wall)', 'Círculo Mágico (Magic Circle)']
+      '1º Círculo': [
+        { name: 'Sono (Sleep)', descricao: '1º Círculo — Duração 1 minuto. 5d8 de HP de criaturas (começando pelas mais próximas) caem inconscientes. Sem parâmetros de ataque.' },
+        { name: 'Cativar (Charm Person)', descricao: '1º Círculo — Duração 1 hora. Teste de Sabedoria ou a criatura humana te vê como amigo. Sem ataque.' },
+        { name: 'Acalmar Emoções (Calm Emotions)', descricao: '1º Círculo — Duração 1 minuto. Suprime efeitos de medo e chamego em 6 m raio. Sem ataque.' }
+      ],
+      '2º Círculo': [
+        { name: 'Sugestão (Suggestion)', descricao: '2º Círculo — Duração 8 horas. Sugere uma atividade razoável; Teste de Sabedoria ou a criatura segue. Sem ataque.' },
+        { name: 'Silêncio (Silence)', descricao: '2º Círculo — Duração 10 minutos. Esfera de 6 m onde nenhum som é emitido. Sem ataque.' },
+        { name: 'Invisibilidade (Invisibility)', descricao: '2º Círculo — Duração 1 hora. Uma criatura vira invisível. O ataque termina a magia. Sem ataque.' }
+      ],
+      '3º Círculo': [
+        { name: 'Leque Cromático (Color Spray)', descricao: '3º Círculo — Instantâneo. Cone 4,5 m × 4,5 m. 6d10 de dano de energia (cega por 1 rodada) em Teste de Constituição.' },
+        { name: 'Talas de Vento (Wind Wall)', descricao: '3º Círculo — Duração 1 minuto. Muro de vento 15 m x 3 m x 4,5 cm. Bloqueia projéteis e criaturas voadoras.' },
+        { name: 'Círculo Mágico (Magic Circle)', descricao: '3º Círculo — Duração 1 hora. Círculo protetor de 3 m contra uma categoria de criatura. Sem ataque.' }
+      ]
     }
   },
   clerigo: {
@@ -194,15 +206,26 @@ const CLASSES_DATA = {
       { name: 'Canalizar Divindade (Channel Divinity)', descricao: 'Você pode usar energia divina para efeitos mágicos e curativos.' }
     ],
     truques: [
-      'Orientação (Guidance)',
-      'Luz (Light)',
-      'Chama Sagrada (Sacred Flame)',
-      'Thaumaturgia (Thaumaturgy)',
-      'Voz Divina (Word of Radiance)'
+      { name: 'Orientação (Guidance)', descricao: 'Truque — Duração 1 minuto (Concentração). Alvo recebe +1d4 em teste de habilidade. Sem ataque.' },
+      { name: 'Luz (Light)', descricao: 'Truque — Duração 1 hora. Objeto emite luz em 6 m. Sem ataque.' },
+      { name: 'Chama Sagrada (Sacred Flame)', descricao: 'Truque — Dano: 1d8 de dano radiante. Teste de Destreza, ignora cobertura. Alcance 18 m. 1 alvo.' },
+      { name: 'Thaumaturgia (Thaumaturgy)', descricao: 'Truque — 1 minuto. Pequenos milagres: sua voz ecoa, chamas tremem, comida se deteriora, você abre/fecha uma porta à distância, etc. Sem ataque.' },
+      { name: 'Voz Divina (Word of Radiance)', descricao: 'Truque — Dano: 1d6 de dano radiante. Todos em 1,5 m de você (CD teste Constituição). 1 ação.' }
     ],
     magiasPorCirculo: {
-      '1º Círculo': ['Cura Wounds (Cure Wounds)', 'Bênção (Bless)', 'Comando (Command)', 'Escudo da Fé (Shield of Faith)', 'Sanar Feridas (Healing Word)'],
-      '2º Círculo': ['Augúrio (Augury)', 'Consagração (Consecration)', 'Luz do Dia (Aid)', 'Imobilizar Pessoa (Hold Person)']
+      '1º Círculo': [
+        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — Duração Instantâneo. Toque: 1d8 + modificador de magia de cura. 1 alvo. Sem ataque.' },
+        { name: 'Bênção (Bless)', descricao: '1º Círculo — Duração 1 minuto (Concentração). 3 criaturas ganham +1d4 em ataques e testes de resistência. Sem ataque.' },
+        { name: 'Comando (Command)', descricao: '1º Círculo — Duração 1 rodada. Alvo faz Teste de Sabedoria ou segue um comando de 1 palavra (Soltar, Fugir, Pousar, etc.). 1 alvo. Sem ataque.' },
+        { name: 'Escudo da Fé (Shield of Faith)', descricao: '1º Círculo — Duração 10 minutos (Concentração). +2 CA para 1 criatura. Sem ataque.' },
+        { name: 'Palavra Curativa (Healing Word)', descricao: '1º Círculo — Duração Instantâneo. À distância 18 m: 1d4 + mod. magia de cura. 1 alvo. Sem ataque.' }
+      ],
+      '2º Círculo': [
+        { name: 'Augúrio (Augury)', descricao: '2º Círculo — Duração Instantâneo. Faz pergunta sobre evento em 30 min. Resposta: bom/fracasso.' },
+        { name: 'Auxílio (Aid)', descricao: '2º Círculo — Duração 8 horas. 3 criaturas ganham 5 PV máximos e atuais. Sem ataque.' },
+        { name: 'Imobilizar Pessoa (Hold Person)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Teste de Sabedoria; sem sucesso, alvo fica paralisado. Re-teste por turno. 1 alvo. Sem ataque.' },
+        { name: 'Restauração Menor (Lesser Restoration)', descricao: '2º Círculo — Remove 1 doença/condição (cego, surdo, paralisado, envenenado). Sem ataque.' }
+      ]
     }
   },
   druida: {
@@ -219,14 +242,24 @@ const CLASSES_DATA = {
       { name: 'Druidismo (Druidic)', descricao: 'Você aprende e usa os segredos da magia da natureza.' }
     ],
     truques: [
-      'Orientação (Guidance)',
-      'Druidcraft (Druidcraft)',
-      'Produzir Chamas (Produce Flame)',
-      'Chicote de Espinhos (Thorn Whip)'
+      { name: 'Orientação (Guidance)', descricao: 'Truque — Duração 1 minuto (Concentração). Alvo +1d4 em teste. Sem ataque.' },
+      { name: 'Druidismo (Druidcraft)', descricao: 'Truque — Duração Instantânea. Predizer clima, fazer uma flor brotar, acender/apagar chama, etc. Sem ataque.' },
+      { name: 'Produzir Chamas (Produce Flame)', descricao: 'Truque — Duração 10 minutos. Ilumina 3 m ou dispara chama. Dano: 1d8 ígneo, Teste de Constituição, alcance 9 m. 1 alvo.' },
+      { name: 'Chicote de Espinhos (Thorn Whip)', descricao: 'Truque — Duração Instantâneo. Dano: 1d6 perfurante, Teste de Força, alcance 9 m, 9 m de puxão. 1 alvo.' }
     ],
     magiasPorCirculo: {
-      '1º Círculo': ['Curar Feridas (Cure Wounds)', 'Crescimento de Plantas (Entangle)', 'Luz do Dia (Goodberry)', 'Bênção da Natureza (Healing Word)'],
-      '2º Círculo': ['Pele de Árvore (Barkskin)', 'Muralha de Vento (Gust of Wind)', 'Passo da Árvore (Pass without Trace)']
+      '1º Círculo': [
+        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — Toque: 1d8 + mod. magia de cura. Sem ataque.' },
+        { name: 'Emaranhar (Entangle)', descricao: '1º Círculo — Duração 1 minuto (Concentração). Cubo 6 m; Teste de Força ou fica enraizado. Sem ataque.' },
+        { name: 'Bagoá (Goodberry)', descricao: '1º Círculo — Duração Instantâneo. Cria 10 bagas que curam 1 PV cada.' },
+        { name: 'Palavra Curativa (Healing Word)', descricao: '1º Círculo — À distância 18 m: 1d4 + mod. magia de cura. 1 alvo. Sem ataque.' }
+      ],
+      '2º Círculo': [
+        { name: 'Pele de Árvore (Barkskin)', descricao: '2º Círculo — Duração 1 hora (Concentração). CA mínima 16. Sem ataque.' },
+        { name: 'Rajada de Vento (Gust of Wind)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Linha 18 m: Teste de Força ou empurrado 4,5 m. Sem ataque.' },
+        { name: 'Passo sem Rastro (Pass without Trace)', descricao: '2º Círculo — Duração 1 hora (Concentração). +10 testes de Furtividade para 9 m.' },
+        { name: 'Chamejante (Flaming Sphere)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Esfera 1,5 m; Dano: 2d6 ígneo, Teste de Destreza, alcance 18 m. 1 alvo.' }
+      ]
     }
   },
   guerreiro: {
@@ -257,20 +290,39 @@ const CLASSES_DATA = {
       { name: 'Recuperação Arcana (Arcane Recovery)', descricao: 'Você pode recuperar espaços de magia durante um descanso curto.' }
     ],
     truques: [
-      'Mãos Mágicas (Mage Hand)',
-      'Prestidigitação (Prestidigitation)',
-      'Ilusão Menor (Minor Illusion)',
-      'Toque Chocante (Shocking Grasp)',
-      'Raio de Gelo (Ray of Frost)',
-      'Luz (Light)',
-      'Mensagem (Message)',
-      'Bola de Fogo (Fire Bolt)',
-      'Rajada de Veneno (Poison Spray)'
+      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Truque — Duração 1 minuto. Mão espectral manipula até 5 kg a 9 m. Sem ataque.' },
+      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Truque — Duração até 1 hora. Pequenos truques. Sem ataque.' },
+      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Truque — Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.' },
+      { name: 'Toque Chocante (Shocking Grasp)', descricao: 'Truque — Duração Instantâneo. Dano: 1d8 elétrico. Vantagem contra alvo com armadura metálica. Reação. 1 alvo. Toque.' },
+      { name: 'Raio de Gelo (Ray of Frost)', descricao: 'Truque — Duração Instantâneo. Dano: 1d8 frio. Reduz velocidade em 3 m. Teste de Constituição, alcance 18 m. 1 alvo.' },
+      { name: 'Luz (Light)', descricao: 'Truque — Duração 1 hora. Objeto emite luz em 6 m. Sem ataque.' },
+      { name: 'Mensagem (Message)', descricao: 'Truque — Duração 1 rodada. Sussurra mensagem a 36 m. Sem ataque.' },
+      { name: 'Raio de Fogo (Fire Bolt)', descricao: 'Truque — Duração Instantâneo. Dano: 1d10 ígneo. Teste de Destreza, alcance 36 m. 1 alvo.' },
+      { name: 'Rajada de Veneno (Poison Spray)', descricao: 'Truque — Duração Instantâneo. Dano: 1d12 venenoso. Teste de Constituição, alcance 3 m. 1 alvo.' }
     ],
     magiasPorCirculo: {
-      '1º Círculo': ['Mísseis Mágicos (Magic Missile)', 'Escudo Arcano (Shield)', 'Armadura Arcana (Mage Armor)', 'Identificar (Identify)', 'Proteção contra o Mal e o Bem (Protection from Evil and Good)'],
-      '2º Círculo': ['Invisibilidade (Invisibility)', 'Passo Sombrio (Misty Step)', 'Sugestão (Suggestion)', 'Nuvem de Nevoa (Fog Cloud)'],
-      '3º Círculo': ['Bola de Fogo (Fireball)', 'Contramágica (Counterspell)', 'Gelo Negro (Ice Storm)', 'Dissipar Magia (Dispel Magic)']
+      '1º Círculo': [
+        { name: 'Mísseis Mágicos (Magic Missile)', descricao: '1º Círculo — Dano: 1d4+1 de dano de força por dardo (3 dardos). Acerto automático. Alcance 36 m. 1-3 alvos.' },
+        { name: 'Escudo Arcano (Shield)', descricao: '1º Círculo — Duração 1 rodada. Reação. +5 CA até o próximo turno. Sem ataque.' },
+        { name: 'Armadura Arcana (Mage Armor)', descricao: '1º Círculo — Duração 8 horas. CA base 13 + modificador de Destreza. Sem ataque.' },
+        { name: 'Identificar (Identify)', descricao: '1º Círculo — Duração Instantâneo. Aprende propriedades de item mágico. Sem ataque.' },
+        { name: 'Proteção contra o Mal e o Bem (Protection from Evil and Good)', descricao: '1º Círculo — Duração 10 minutos (Concentração). +1 CA e testes de resistência contra 1 tipo de criatura. Sem ataque.' },
+        { name: 'Onda Trovejante (Thunderwave)', descricao: '1º Círculo — Dano: 2d8 trovejante, Teste de Constituição, empurra 3 m. Cubo 4,5 m. Múltiplos alvos.' }
+      ],
+      '2º Círculo': [
+        { name: 'Invisibilidade (Invisibility)', descricao: '2º Círculo — Duração 1 hora (Concentração). 1 criatura vira invisível. Sem ataque.' },
+        { name: 'Passo Nebuloso (Misty Step)', descricao: '2º Círculo — Duração Instantâneo. Teleporte até 9 m. Sem ataque.' },
+        { name: 'Sugestão (Suggestion)', descricao: '2º Círculo — Duração 8 horas. Teste de Sabedoria ou segue sugestão. 1 alvo. Sem ataque.' },
+        { name: 'Nuvem de Névoa (Fog Cloud)', descricao: '2º Círculo — Duração 1 hora. Esfera 6 m de neblina pesada. Sem ataque.' },
+        { name: 'Manto do Cruzado (Mirror Image)', descricao: '2º Círculo — Duração 1 minuto. 3 duplicatas que confundem ataques. Sem ataque.' }
+      ],
+      '3º Círculo': [
+        { name: 'Bola de Fogo (Fireball)', descricao: '3º Círculo — Dano: 8d6 ígneo, Teste de Destreza (metade em falha). Esfera 6 m raio. Múltiplos alvos.' },
+        { name: 'Contramágica (Counterspell)', descricao: '3º Círculo — Duração Instantâneo. Reação. Anula magia alvo.' },
+        { name: 'Tempestade de Gelo (Ice Storm)', descricao: '3º Círculo — Dano: 4d6 frio + 2d6 cortante, Teste de Destreza. Cilindro 6 m x 3 m.' },
+        { name: 'Dissipar Magia (Dispel Magic)', descricao: '3º Círculo — Duração Instantâneo. Encerra magia de 3º círculo ou menor.' },
+        { name: 'Voar (Fly)', descricao: '3º Círculo — Duração 10 minutos (Concentração). 1 alvo ganha velocidade de voo 18 m.' }
+      ]
     }
   },
   monge: {
@@ -297,11 +349,34 @@ const CLASSES_DATA = {
     descricao: 'Um guerreiro sagrado que faz juramento para uma causa nobre.',
     toque: 'Juramento Sagrado, Magia Divina, Aura Sagrada',
     habilidades: [
-      { name: 'Sentido Divino (Divine Sense)', descricao: 'Você percebe a presença de entidades divinas e extraplanares.' },
-      { name: 'Mãos Curativas (Lay on Hands)', descricao: 'Você pode curar feridas tocando outra criatura.' },
-      { name: 'Conjuração (Spellcasting)', descricao: 'Você pode aprender e lançar magias de paladino.' }
+      { name: 'Sentido Divino (Divine Sense)', descricao: 'Duração 1 minuto (Concentração). 1+CA mod. vezes por descanso longo. Detecta celestiais, dríades, feéricos e abissais em 18 m.' },
+      { name: 'Mãos Curativas (Lay on Hands)', descricao: 'Pool de cura: 5 × nível por descanso longo. Como ação, cura PV até o valor do pool ou cura doenças/venenos.' },
+      { name: 'Conjuração (Spellcasting)', descricao: 'Meio-conjurador: prepara magias de paladino. Truques sempre, magias 1º a 5º círculo. Atributo: Carisma.' }
     ],
-    truques: []
+    truques: [
+      { name: 'Toque Sagrado (Sacred Flame)', descricao: 'Dano: 1d8 radiante. Teste de Destreza, alcance 18 m. 1 alvo. (Em portugês é Chama Sagrada; mesmo feitiço.)' },
+      { name: 'Orientação Divina (Divine Guidance)', descricao: 'Truque (Xanathar). Adiciona +1d4 a um teste de ataque ou salvaguarda.' },
+      { name: 'Luz (Light)', descricao: 'Duração 1 hora. Luz em 6 m. Sem ataque.' },
+      { name: 'Thaumaturgia (Thaumaturgy)', descricao: 'Pequenos milagres: voz ecoante, chamas tremem, etc. Sem ataque.' }
+    ],
+    magiasPorCirculo: {
+      '1º Círculo': [
+        { name: 'Bênção (Bless)', descricao: '1º Círculo — Duração 1 minuto (Concentração). 3 criaturas ganham +1d4 em ataques e salv. Sem ataque.' },
+        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — 1d8 + mod. magia de cura. Toque. Sem ataque.' },
+        { name: 'Comando (Command)', descricao: '1º Círculo — 1 rodada. Teste de Sabedoria ou segue 1 comando. Sem ataque.' },
+        { name: 'Palavra Curativa (Healing Word)', descricao: '1º Círculo — 1d4 + mod. cura. À distância 18 m. Sem ataque.' },
+        { name: 'Escudo da Fé (Shield of Faith)', descricao: '1º Círculo — Duração 10 min (Concentração). +2 CA. Sem ataque.' },
+        { name: 'Punição Marcante (Searing Smite)', descricao: '1º Círculo — Duração 1 min (Concentração). +1d6 ígneo, +1d6/turno. Adiciona ao ataque corpo a corpo. 1 alvo.' }
+      ],
+      '2º Círculo': [
+        { name: 'Aura de Proteção (não é magia)', descricao: 'Você e aliados em 3 m ganham bônus de salvaguarda = mod. Carisma.' },
+        { name: 'Auxílio (Aid)', descricao: '2º Círculo — 3 criaturas ganham 5 PV máximos. Sem ataque.' },
+        { name: 'Imobilizar Pessoa (Hold Person)', descricao: '2º Círculo — 1 min (Concentração). Teste de Sabedoria ou fica paralisado. Sem ataque.' },
+        { name: 'Restauração Menor (Lesser Restoration)', descricao: '2º Círculo — Remove 1 condição/doença. Sem ataque.' },
+        { name: 'Localizar Objeto (Locate Object)', descricao: '2º Círculo — 10 min (Concentração). Sente direção a um objeto familiar. Sem ataque.' },
+        { name: 'Marca da Punição (Branding Smite)', descricao: '2º Círculo — 1 min (Concentração). +2d6 radiante, alvo brilha. Ataque corpo a corpo. 1 alvo.' }
+      ]
+    }
   },
   ranger: {
     name: 'Ranger',
@@ -312,11 +387,33 @@ const CLASSES_DATA = {
     descricao: 'Um guerreiro das terras selvagens que caça e rastreia inimigos.',
     toque: 'Campesinato Favorito, Magia Natural, Companheiro Animal',
     habilidades: [
-      { name: 'Campesinato Favorito (Favored Enemy)', descricao: 'Você se adapta a um ambiente e se torna mais eficiente nele.' },
-      { name: 'Explorador Natural (Natural Explorer)', descricao: 'Você é especialista em rastrear e sobreviver em ambientes específicos.' },
-      { name: 'Conjuração (Spellcasting)', descricao: 'Você pode aprender e lançar magias de ranger.' }
+      { name: 'Campesinato Favorito (Favored Enemy)', descricao: 'Vantagem em testes de Sobrevivência para rastrear, e aprende +1 idioma. Escolha tipo de inimigo (humanoides, monstros etc.).' },
+      { name: 'Explorador Natural (Natural Explorer)', descricao: 'Vantagem em testes de iniciativa e Investigação/Percepção/Stealth/Sobrevivência ao viajar 1h em terreno familiar. Não se perde.' },
+      { name: 'Conjuração (Spellcasting)', descricao: 'Meio-conjurador (começa no nível 2). Truques sempre, magias 1º a 5º círculo. Atributo: Sabedoria.' }
     ],
-    truques: []
+    truques: [
+      { name: 'Orientação (Guidance)', descricao: 'Duração 1 min (Concentração). +1d4 em teste. Sem ataque.' },
+      { name: 'Produzir Chamas (Produce Flame)', descricao: 'Duração 10 min. Ilumina 3 m ou dispara chama. Dano: 1d8 ígneo, Teste Constituição, alcance 9 m. 1 alvo.' },
+      { name: 'Chicote de Espinhos (Thorn Whip)', descricao: 'Dano: 1d6 perfurante. Teste de Força, alcance 9 m, puxa 9 m. 1 alvo.' },
+      { name: 'Resistência (Resistance)', descricao: 'Duração 1 min (Concentração). +1d4 em teste de salvaguarda. Sem ataque.' },
+      { name: 'Druidcraft (Druidcraft)', descricao: 'Pequenos truques de natureza. Sem ataque.' }
+    ],
+    magiasPorCirculo: {
+      '1º Círculo': [
+        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — 1d8 + mod. cura. Toque. Sem ataque.' },
+        { name: 'Marca do Caçador (Hunter\'s Mark)', descricao: '1º Círculo — 1h (Concentração). +1d6 dano em 1 alvo. Sem ataque.' },
+        { name: 'Passo sem Rastro (Pass without Trace)', descricao: '2º Círculo (PHB). +10 Furtividade para 9 m. (Listado como 1º círculo no jogo.)' },
+        { name: 'Bom Fruto (Goodberry)', descricao: '1º Círculo — Cria 10 bagas que curam 1 PV. Sem ataque.' },
+        { name: 'Nó de Chifre (Entangle)', descricao: '1º Círculo — 1 min (Concentração). Cubo 6 m; Teste de Força ou enraizado. Sem ataque.' }
+      ],
+      '2º Círculo': [
+        { name: 'Chamejante (Flaming Sphere)', descricao: '2º Círculo — 1 min (Concentração). Esfera 1,5 m; 2d6 ígneo, Teste Destreza, alcance 18 m. 1 alvo.' },
+        { name: 'Imobilizar Pessoa (Hold Person)', descricao: '2º Círculo — 1 min (Concentração). Teste Sabedoria ou paralisado. Sem ataque.' },
+        { name: 'Localizar Animais ou Plantas (Locate Animals or Plants)', descricao: '2º Círculo — Duração Instantânea. Sente direção. Sem ataque.' },
+        { name: 'Arma Espiritual (Spiritual Weapon)', descricao: '2º Círculo — 1 min. Dano: 1d8 + mod. por ataque mágico. Sem ataque direto (cria arma flutuante).' },
+        { name: 'Restauração Menor (Lesser Restoration)', descricao: '2º Círculo — Remove condição. Sem ataque.' }
+      ]
+    }
   },
   ladino: {
     name: 'Ladino',
@@ -327,7 +424,7 @@ const CLASSES_DATA = {
     descricao: 'Um especialista em furtividade, roubo e precisão.',
     toque: 'Ataque Sorrateiro, Perícia, Senso Especial',
     habilidades: [
-      { name: 'Ataque Sorrateiro (Sneak Attack)', descricao: 'Você pode causar dano extra quando ataca um alvo desprevenido ou aliado próximo.' },
+      { name: 'Ataque Sorrateiro (Sneak Attack)', descricao: 'Dano: escala com o nível — 1d6 (1º), 2d6 (3º), 3d6 (5º), 4d6 (7º), 5d6 (9º), 6d6 (11º), 7d6 (13º), 8d6 (15º), 9d6 (17º), 10d6 (19º). Adiciona dano extra (1x por turno) ao acertar com ataque com Furtividade ou à distância, se tiver vantagem ou um aliado adjacente ao alvo. Requer: arma Furtiva ou à distância. Exemplo: nível 3 = 2d6 de dano extra.' },
       { name: 'Perícia (Expertise)', descricao: 'Você pode escolher perícias para se tornar particularmente hábil nelas.' }
     ],
     truques: []
@@ -341,18 +438,46 @@ const CLASSES_DATA = {
     descricao: 'Um mago inato que canaliza magia através de seu poder interior.',
     toque: 'Magia Inata, Pontos de Feitiçaria, Metamagia',
     habilidades: [
-      { name: 'Magia Inata (Innate Spellcasting)', descricao: 'Sua magia surge de um poder interior, sem necessidade de estudo.' },
-      { name: 'Metamagia (Metamagic)', descricao: 'Você pode modificar os efeitos de suas magias.' },
-      { name: 'Fonte de Feitiçaria (Sorcery Points)', descricao: 'Seu poder mágico vem de uma origem especial.' }
+      { name: 'Magia Inata (Innate Spellcasting)', descricao: 'Conjurador completo. Truques sempre, magias 1º a 9º círculo. Atributo: Carisma. Conhece poucas magias mas lança mais.' },
+      { name: 'Metamagia (Metamagic)', descricao: 'Pode modificar magias (trans, dupla, ampliação etc.). Custa Pontos de Feitiçaria.' },
+      { name: 'Fonte de Feitiçaria (Sorcery Points)', descricao: 'Pontos de Feitiçaria por descanso longo: iguais ao nível. Usados para Metamagia ou para criar espaços de magia.' }
     ],
     truques: [
-      'Prestidigitação',
-      'Mãos Mágicas',
-      'Luz',
-      'Ilusão Menor',
-      'Toque Chocante',
-      'Raio de Gelo'
-    ]
+      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Duração até 1 hora. Pequenos efeitos. Sem ataque.' },
+      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Duração 1 minuto. Mão espectral, 5 kg, 9 m. Sem ataque.' },
+      { name: 'Luz (Light)', descricao: 'Duração 1 hora. Luz em 6 m. Sem ataque.' },
+      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.' },
+      { name: 'Toque Chocante (Shocking Grasp)', descricao: 'Dano: 1d8 elétrico. Vantagem contra armadura metálica. Reação. 1 alvo.' },
+      { name: 'Raio de Gelo (Ray of Frost)', descricao: 'Dano: 1d8 frio. Reduz velocidade 3 m. Alcance 18 m. 1 alvo.' },
+      { name: 'Raio de Fogo (Fire Bolt)', descricao: 'Dano: 1d10 ígneo. Teste de Destreza, alcance 36 m. 1 alvo.' },
+      { name: 'Rajada de Veneno (Poison Spray)', descricao: 'Dano: 1d12 venenoso. Teste de Constituição, alcance 3 m. 1 alvo.' }
+    ],
+    magiasPorCirculo: {
+      '1º Círculo': [
+        { name: 'Mísseis Mágicos (Magic Missile)', descricao: '1º Círculo — 1d4+1 de dano de força por dardo (3 dardos). Acerto automático. Alcance 36 m. 1-3 alvos.' },
+        { name: 'Armadura Arcana (Mage Armor)', descricao: '1º Círculo — Duração 8 horas. CA 13 + mod. Destreza. Sem ataque.' },
+        { name: 'Escudo Arcano (Shield)', descricao: '1º Círculo — Duração 1 rodada. Reação. +5 CA. Sem ataque.' },
+        { name: 'Chama (Burning Hands)', descricao: '1º Círculo — Dano: 3d6 ígneo, Teste Destreza (metade em falha). Cone 4,5 m. Múltiplos alvos.' },
+        { name: 'Onda Trovejante (Thunderwave)', descricao: '1º Círculo — Dano: 2d8 trovejante, Teste Constituição, empurra 3 m. Cubo 4,5 m.' },
+        { name: 'Maldição (Hex)', descricao: '1º Círculo — 1 hora (Concentração). +1d6 dano, desvantagem em teste específico. 1 alvo.' }
+      ],
+      '2º Círculo': [
+        { name: 'Invisibilidade (Invisibility)', descricao: '2º Círculo — 1 hora (Concentração). 1 criatura invisível. Sem ataque.' },
+        { name: 'Passo Nebuloso (Misty Step)', descricao: '2º Círculo — Instantâneo. Teleporte até 9 m. Sem ataque.' },
+        { name: 'Sugestão (Suggestion)', descricao: '2º Círculo — 8 horas. Teste de Sabedoria ou segue sugestão. Sem ataque.' },
+        { name: 'Manto do Cruzado (Mirror Image)', descricao: '2º Círculo — 1 minuto. 3 duplicatas. Sem ataque.' },
+        { name: 'Nuvem de Névoa (Fog Cloud)', descricao: '2º Círculo — 1 hora. Esfera 6 m de neblina. Sem ataque.' },
+        { name: 'Nublar (Blur)', descricao: '2º Círculo — 1 minuto (Concentração). Ataques contra você têm desvantagem. Sem ataque.' }
+      ],
+      '3º Círculo': [
+        { name: 'Bola de Fogo (Fireball)', descricao: '3º Círculo — 8d6 ígneo, Teste de Destreza (metade em falha). Esfera 6 m raio. Múltiplos alvos.' },
+        { name: 'Contramágica (Counterspell)', descricao: '3º Círculo — Reação. Anula magia alvo. Sem ataque.' },
+        { name: 'Tempestade de Gelo (Ice Storm)', descricao: '3º Círculo — 4d6 frio + 2d6 cortante, Teste Destreza. Cilindro 6 m x 3 m.' },
+        { name: 'Dissipar Magia (Dispel Magic)', descricao: '3º Círculo — Encerra magia de 3º ou menor. Sem ataque.' },
+        { name: 'Voar (Fly)', descricao: '3º Círculo — 10 min (Concentração). Velocidade de voo 18 m. Sem ataque.' },
+        { name: 'Relâmpago (Lightning Bolt)', descricao: '3º Círculo — 8d6 elétrico, Teste Destreza. Linha 30 m. Múltiplos alvos.' }
+      ]
+    }
   },
   bruxo: {
     name: 'Bruxo',
@@ -368,12 +493,10 @@ const CLASSES_DATA = {
       { name: 'Invocações (Eldritch Invocations)', descricao: 'Você pode aprender invocações especiais inspiradas em seu pacto.' }
     ],
     truques: [
-      'Prestidigitação (Prestidigitation)',
-      'Mãos Mágicas (Mage Hand)',
-      'Ilusão Menor (Minor Illusion)',
-      'Toque Chocante (Eldritch Blast)',
-      'Raio de Eldritch (Eldritch Blast)',
-      'Mordida do Inferno (Eldritch Blast)'
+      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Truque — Duração até 1 hora. Pequenos efeitos. Sem ataque.' },
+      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Truque — Duração 1 minuto. Mão espectral, 5 kg, 9 m. Sem ataque.' },
+      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Truque — Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.' },
+      { name: 'Raio de Eldritch (Eldritch Blast)', descricao: 'Truque — Dano: 1d10 de força. Acerto automático. Alcance 18 m. 1 alvo. (Aumenta para 2 feixes no nível 5, 3 no 11, 4 no 17.)' }
     ]
   }
 };
@@ -443,7 +566,7 @@ const SUBCLASSES_DATA = {
     { name: 'Escola de Magia de Guerra (War Magic)', nivel: 2, descricao: 'Mago de combate, com defesas arcanas e poder de fogo.', habilidades: [{ name: 'Defesa Arcana', descricao: 'Você usa magia para aumentar sua resistência em combate.' }], truques: [] },
     { name: 'Escola de Gravitação (Graviturgy)', nivel: 2, descricao: 'Mago com poder sobre a gravidade.', habilidades: [{ name: 'Manipular Gravidade', descricao: 'Você altera o peso e o movimento de criaturas e objetos.' }], truques: [] },
     { name: 'Escola Temporal (Chronurgy)', nivel: 2, descricao: 'Mago com controle sobre o tempo.', habilidades: [{ name: 'Dobra Temporal', descricao: 'Você manipula o tempo para alterar resultados e efeitos.' }], truques: [] },
-    { name: 'Trilha do Artilheiro (Bladesinger)', nivel: 2, descricao: 'Mago élfico que mistura magia e combate corpo a corpo.', habilidades: [{ name: 'Canção da Lâmina', descricao: 'Você anima sua lâmina com magia para lutar melhor enquanto conjura.' }], truques: [] }
+    { name: 'Escola do Filão de Lâmina (Bladesinging)', nivel: 2, descricao: 'Mago élfico que mistura magia e combate corpo a corpo.', habilidades: [{ name: 'Canção da Lâmina', descricao: 'Você anima sua lâmina com magia para lutar melhor enquanto conjura.' }], truques: [] }
   ],
   monge: [
     { name: 'Caminho da Mão Aberta', nivel: 3, descricao: 'Monge focado em técnicas de Ki desimpedidas.', habilidades: [{ name: 'Técnica da Mão Aberta', descricao: 'Seus ataques desarmados aplicam efeitos adicionais de Ki.' }], truques: [] },
@@ -482,11 +605,13 @@ const SUBCLASSES_DATA = {
     { name: 'Ladrão', nivel: 3, descricao: 'Ladino clássico, mestre da escalada, fintagem e mãos rápidas.', habilidades: [{ name: 'Mãos Rápidas', descricao: 'Você age rapidamente e manipula objetos com maior habilidade.' }], truques: [] },
     { name: 'Assassino', nivel: 3, descricao: 'Ladino letal, especialista em emboscadas e一击致命.', habilidades: [{ name: 'Assassinar', descricao: 'Você causa ataque surpresa e dano crítico contra inimigos desprevenidos.' }], truques: [] },
     { name: 'Trapaceiro Arcano', nivel: 3, descricao: 'Ladino que mistura truques arcanos com a sua trapaçaria.', habilidades: [{ name: 'Mãos Mágicas Aprimoradas', descricao: 'Você utiliza Mãos Mágicas de forma furtiva e potente.' }], truques: [] },
-    { name: 'Lâmina Psíquica (Soulknife)', nivel: 3, descricao: 'Ladino com poder psônico, cria lâminas mentais e usa habilidades telepáticas.', habilidades: [
-      { name: 'Lâminas Psíquicas (Psychic Blades)', descricao: 'Você cria lâminas mentais que causam dano de força e podem ser lançadas à distância.' },
-      { name: 'Dados Psíquicos (Psionic Dice)', descricao: 'Você usa dados psíquicos para aprimorar ataques, defesas e testes de habilidade.' },
-      { name: 'Fala Telepática (Telepathic Speech)', descricao: 'Você pode se comunicar mentalmente com aliados próximos.' }
-    ], truques: [] },
+    {
+      name: 'Lâmina Psíquica (Soulknife)', nivel: 3, descricao: 'Ladino com poder psônico, cria lâminas mentais e usa habilidades telepáticas.', habilidades: [
+        { name: 'Lâminas Psíquicas (Psychic Blades)', descricao: 'Você cria lâminas mentais que causam dano de força e podem ser lançadas à distância.' },
+        { name: 'Dados Psíquicos (Psionic Dice)', descricao: 'Você usa dados psíquicos para aprimorar ataques, defesas e testes de habilidade.' },
+        { name: 'Fala Telepática (Telepathic Speech)', descricao: 'Você pode se comunicar mentalmente com aliados próximos.' }
+      ], truques: []
+    },
     { name: 'Espião (Swashbuckler)', nivel: 3, descricao: 'Ladino carismático, especialista em combate individual e estilo.', habilidades: [{ name: 'Movimento Elegante', descricao: 'Você se move com graça e evita ataques de oportunidade.' }], truques: [] },
     { name: 'Investigador (Investigator)', nivel: 3, descricao: 'Ladino detetive, analisa fraquezas dos inimigos antes de atacar.', habilidades: [{ name: 'Instinto do Inquisidor', descricao: 'Você encontra pistas e explora fraquezas com precisão.' }], truques: [] },
     { name: 'Mestre da Trapaça (Mastermind)', nivel: 3, descricao: 'Ladino manipulador, com truques de intimidação e controle social.', habilidades: [{ name: 'Manipulação Maestral', descricao: 'Você engana e direciona aliados e inimigos com perícia.' }], truques: [] },
