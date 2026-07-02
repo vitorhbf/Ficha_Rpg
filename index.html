@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ficha de RPG - D&D 5e</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=1.0.1" />
   </head>
   <body>
     <main class="app-shell">
@@ -106,7 +106,7 @@
               </label>
               <label class="form-group">
                 <span class="label-text">Deslocamento (metros)</span>
-                <input name="speed" type="number" min="0" max="200" step="1.5" value="9" />
+                <input name="speed" type="number" min="0" max="200" step="1.5" value="" placeholder="Ex.: 1.5" />
               </label>
             </div>
             <div class="form-grid two-col">
@@ -134,7 +134,7 @@
               </label>
               <label class="form-group">
                 <span class="label-text">D Vida</span>
-                <input id="hitDie" type="text" readonly placeholder="d8" />
+                <input id="hitDie" type="text" readonly placeholder="d8" style="width: 60px; text-align: center;" />
               </label>
               <label class="form-group">
                 <span class="label-text">Armadura</span>
@@ -811,7 +811,7 @@
       </form>
     </main>
 
-    <script src="data.js"></script>
-    <script src="script.js"></script>
+    <script src="data.js?v=1.0.1"></script>
+    <script src="script.js?v=1.0.1"></script>
   </body>
 </html>

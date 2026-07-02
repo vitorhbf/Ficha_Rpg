@@ -362,28 +362,32 @@ textarea {
 }
 
 .attr-input-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important; /* Espaço perfeito entre o número e o (+1) */
+  width: 100% !important;
 }
 
 .attr-input {
   font-size: 16px !important;
-  font-weight: 700;
-  text-align: center;
-  padding: 8px 4px !important;
+  font-weight: 700 !important;
+  text-align: center !important; /* Centraliza o dígito dentro do próprio espaço dele */
+  padding: 8px 0 !important;
   background: transparent !important;
   border: none !important;
-  flex: 1;
+  width: 36px !important; /* Aumentado para 36px para o número 10 não cortar */
+  flex: none !important;
 }
 
 .attr-race-bonus {
-  color: var(--primary);
-  font-size: 13px;
-  font-weight: 700;
-  min-width: 28px;
-  text-align: left;
+  color: var(--primary) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-align: left !important;
+  width: 35px !important;
+  flex: none !important;
+  margin: 0 !important;
 }
 
 .attr-race-bonus.is-hidden {
@@ -858,6 +862,27 @@ button {
 .btn-delete-attack:hover {
   color: var(--danger);
   transform: scale(1.1);
+}
+
+.recursos-vitais-container, 
+div:has(> label > #hitDie) {
+  display: flex !important;
+  justify-content: flex-start !important; /* Alinha todos os blocos colados à esquerda */
+  gap: 24px !important;                  /* Define o espaçamento fixo exato entre eles */
+  flex-wrap: wrap;
+}
+
+/* Define a largura exata e controlada apenas para o bloco do D Vida */
+label.form-group:has(#hitDie) {
+  width: 80px !important;
+  min-width: 80px !important;
+  flex: none !important;
+}
+
+/* Garante que o input ocupe o espaço correto desse novo bloco menor */
+#hitDie {
+  width: 100% !important;
+  text-align: center !important;
 }
 
 @media (max-width: 768px) {
