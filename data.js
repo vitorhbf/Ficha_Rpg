@@ -167,28 +167,28 @@ const CLASSES_DATA = {
       { name: 'Inspiração de Bardo (Bardic Inspiration)', level: 1, dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo', descricao: 'Você pode inspirar aliados com um bônus de competência em testes. Duração: 10 rodadas. 1x por descanso curto ou longo (aumenta com o nível).' }
     ],
     truques: [
-      { name: 'Mensagem (Message)', descricao: 'Truque — Duração 1 rodada. Você aponta para uma criatura e sussurra uma mensagem. O alvo (e só ele) ouve a mensagem e pode responder.' },
-      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Truque — Duração até 1 hora. Pequenos efeitos mágicos: acender/apagar uma vela, limpar/manchar objeto, sabor/cheiro/luz/temperatura, símbolo que aparece, etc.' },
-      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Truque — Duração 1 minuto. Cria um som ou imagem de um objeto inanimado que não exceda 1,5 m³. Teste de Investigação para desmascarar.' },
-      { name: 'Amizade (Friends)', descricao: 'Truque — Duração 1 minuto (Concentração). Você tem vantagem em testes de Carisma contra uma criatura, mas ela percebe que foi enfeitiçada se hostil.' },
-      { name: 'Luz (Light)', descricao: 'Truque — Duração 1 hora. Um objeto emite luz brilhante em 6 m e penumbra por mais 6 m. Sem parâmetros de ataque.' },
-      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Truque — Duração 1 minuto. Cria uma mão espectral que pode manipular objetos de até 5 kg a 9 m de distância.' }
+      { name: 'Mensagem (Message)', level: 0, descricao: 'Você aponta o dedo em direção a uma criatura dentro do alcance e sussurra uma mensagem. O alvo (e somente ele) ouve a mensagem e pode responder em sussurro que só você ouve. Você pode lançar este truque através de objetos sólidos se conhecer o alvo e ele estiver dentro do alcance.', dano: 'Não causa dano direto', alcance: '36 m', alvos: '1 alvo' },
+      { name: 'Prestidigitação (Prestidigitation)', level: 0, descricao: 'Você cria um dos seguintes efeitos mágicos menores: acender ou apagar uma chama; limpar ou sujar um objeto; esfriar, aquecer ou dar sabor a até 0,03 m³ de material não vivo; criar um pequeno efeito sensório (cheiro, som, imagem); criar uma marca ou símbolo em uma superfície. Cada efeito dura até 1 hora.', dano: 'Não causa dano direto', alcance: '3 m', alvos: 'Varia pelo efeito' },
+      { name: 'Ilusão Menor (Minor Illusion)', level: 0, descricao: 'Você cria um som ou imagem de um objeto dentro do alcance que dura 1 minuto. A ilusão termina se você a dispensar ou lançar este truque novamente. Se criar um som, ele pode ser qualquer voz, música, animal ou outro som. Se criar uma imagem, ela não pode exceder 1,5 m³ e não pode produzir luz, som, cheiro ou qualquer outro efeito sensório. Uma criatura pode usar sua ação para examinar o som ou imagem e fazer um teste de Investigação contra a CD da sua magia.', dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo (objeto)' },
+      { name: 'Amizade (Friends)', level: 0, descricao: 'Durante a duração, você tem vantagem em todos os testes de Carisma direcionados a uma criatura não hostil de sua escolha. Quando a magia terminar, a criatura percebe que você usou magia para influenciá-la e fica hostil a você. Uma criatura que seja propensa à violência pode atacar você.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: '1 alvo' },
+      { name: 'Luz (Light)', level: 0, descricao: 'Você toca um objeto que não seja maior que 3 m em qualquer dimensão. Até o fim da duração, o objeto emite luz brilhante em um raio de 6 m e luz fraca por mais 6 m. A cor da luz pode ser escolhida por você. Se um ser hostil estiver segurando ou carregando o objeto, ele pode fazer um teste de Destreza para evitar o efeito.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo (objeto)' },
+      { name: 'Mãos Mágicas (Mage Hand)', level: 0, descricao: 'Uma mão espectral flutuante aparece no ponto que você escolher dentro do alcance. A mão dura 1 minuto e desaparece se você a dispensar ou lançar este truque novamente. Você pode usar a mão para manipular um objeto, abrir uma porta ou recipiente destrancado, guardar ou recuperar um item de um recipiente aberto, ou derramar o conteúdo de um frasco. A mão não pode atacar, ativar itens mágicos ou carregar mais de 5 kg.', dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo (objeto)' }
     ],
     magiasPorCirculo: {
       '1º Círculo': [
-        { name: 'Sono (Sleep)', descricao: '1º Círculo — Duração 1 minuto. Alcance 27 m. Afeta criaturas em raio de 6 m somando 5d8 PV (começando pelas mais fracas). Sem teste de resistência. Múltiplos alvos.' },
-        { name: 'Cativar Pessoa (Charm Person)', descricao: '1º Círculo — Duração 1 hora. Alcance 9 m. Teste de Sabedoria ou a criatura te trata como amigo. 1 alvo humanoide.' },
-        { name: 'Acalmar Emoções (Calm Emotions)', descricao: '1º Círculo — Duração 1 minuto (Concentração). Alcance 18 m. Esfera 6 m raio: suprime medo/charme ou torna criaturas indiferentes. Múltiplos alvos.' }
+        { name: 'Sono (Sleep)', level: 1, descricao: 'Você escolhe um ponto dentro do alcance. Criaturas em um raio de 6 m a partir desse ponto devem fazer um teste de resistência de Constituição. As criaturas são afetadas em ordem, começando pelas que têm menos PV. As criaturas afetadas ficam inconscientes. Uma criatura que sofre dano ou recebe um teste de habilidade com vantagem acaba com o efeito.', dano: 'Não causa dano direto (efeito)', alcance: '27 m', alvos: 'Múltiplos alvos' },
+        { name: 'Cativar Pessoa (Charm Person)', level: 1, descricao: 'Você aponta uma criatura que possa ser vista dentro do alcance. A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, você a encanta até o fim da duração ou até que você ou seus aliados causem dano nela. Enquanto encantada, a criatura te trata como um amigo e tem desvantagem em testes de habilidade para detectar que foi encantada.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo humanoide' },
+        { name: 'Acalmar Emoções (Calm Emotions)', level: 1, descricao: 'Você escolhe um ponto dentro do alcance. Criaturas em uma esfera de 6 m a partir desse ponto devem fazer um teste de resistência de Sabedoria. Você pode suprimir qualquer efeito que cause medo ou encantamento nelas, ou torná-las indiferentes se já estiverem hostis. As criaturas indiferentes não atacam você a menos que sejam provocadas.', dano: 'Não causa dano direto (efeito)', alcance: '18 m', alvos: 'Múltiplos alvos' }
       ],
       '2º Círculo': [
-        { name: 'Sugestão (Suggestion)', descricao: '2º Círculo — Duração 8 horas (Concentração). Alcance 9 m. Teste de Sabedoria ou a criatura segue sugestão razoável. 1 alvo.' },
-        { name: 'Silêncio (Silence)', descricao: '2º Círculo — Duração 10 minutos (Concentração). Alcance 36 m. Esfera 6 m raio: nenhum som emitido, magias com componente verbal bloqueadas. Múltiplos alvos.' },
-        { name: 'Invisibilidade (Invisibility)', descricao: '2º Círculo — Duração 1 hora (Concentração). Alcance toque. 1 criatura fica invisível. Termina se atacar ou lançar magia. 1 alvo.' }
+        { name: 'Sugestão (Suggestion)', level: 2, descricao: 'Você faz uma sugestão razoável (máximo de 10 palavras) para uma criatura que possa ser vista e ouvida por você dentro do alcance. Ela deve fazer um teste de resistência de Sabedoria. Se falhar, seguirá a sugestão o máximo possível durante a duração. A sugestão deve ser feita de forma que pareça natural.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo' },
+        { name: 'Silêncio (Silence)', level: 2, descricao: 'Você escolhe um ponto dentro do alcance. Uma esfera de 6 m de raio a partir desse ponto fica imersa em silêncio. Nenhum som é emitido ou pode ser ouvido dentro da esfera. Magias com componente verbal não podem ser lançadas dentro da área.', dano: 'Não causa dano direto', alcance: '36 m', alvos: 'Múltiplos alvos' },
+        { name: 'Invisibilidade (Invisibility)', level: 2, descricao: 'Você toca uma criatura e ela fica invisível até o fim da duração ou até que ataque, lance uma magia ou use uma ação de reação. A invisibilidade termina se a criatura causar dano ou lançar uma magia.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' }
       ],
       '3º Círculo': [
-        { name: 'Muro de Vento (Wind Wall)', descricao: '3º Círculo — Duração 1 minuto (Concentração). Alcance 36 m. Muro 15 m × 3 m × 0,3 m. Dano: 3d8 cortante, Teste de Força ou empurrado. Bloqueia projéteis e criaturas voadoras. Múltiplos alvos.' },
-        { name: 'Círculo Mágico (Magic Circle)', descricao: '3º Círculo — Duração 1 hora. Alcance 3 m. Cilindro 3 m raio × 6 m altura. Protege contra 1 tipo de criatura (celestial, elemental, fada, infernal ou morto-vivo). Sem ataque.' },
-        { name: 'Hipnotizar (Hypnotic Pattern)', descricao: '3º Círculo — Duração 1 minuto (Concentração). Alcance 36 m. Cubo 9 m: Teste de Sabedoria ou fica enfeitiçado e incapacitado. Múltiplos alvos.' }
+        { name: 'Muro de Vento (Wind Wall)', level: 3, descricao: 'Você cria um muro de vento forte que bloqueia projéteis e criaturas voadoras. O muro tem 15 m de comprimento, 3 m de altura e 0,3 m de espessura. Criaturas que tentam atravessar o muro devem fazer um teste de resistência de Força. Se falharem, são empurradas para trás 1,5 m.', dano: 'Não causa dano direto (efeito)', alcance: '36 m', alvos: 'Múltiplos alvos' },
+        { name: 'Círculo Mágico (Magic Circle)', level: 3, descricao: 'Você cria um círculo mágico no chão em um ponto dentro do alcance. O círculo tem 3 m de raio e 6 m de altura. Ele protege contra criaturas de um tipo específico (celestial, elemental, fada, infernal ou morto-vivo). As criaturas do tipo escolhido não podem entrar na área ou atacar através do círculo.', dano: 'Não causa dano direto', alcance: '3 m', alvos: '1 alvo (área protegida)' },
+        { name: 'Hipnotizar (Hypnotic Pattern)', level: 3, descricao: 'Você cria um padrão de luzes coloridas que se movem em um cubo de 9 m. Criaturas no cubo devem fazer um teste de resistência de Sabedoria. Se falharem, ficam enfeitiçadas até o fim da duração. Uma criatura enfeitiçada fica incapacitada e não se move, a menos que seja empurrada.', dano: 'Não causa dano direto (efeito)', alcance: '36 m', alvos: 'Múltiplos alvos' }
       ]
     }
   },
@@ -206,25 +206,25 @@ const CLASSES_DATA = {
       { name: 'Canalizar Divindade (Channel Divinity)', level: 1, dano: 'Não causa dano direto', alcance: 'Varia pelo domínio', alvos: 'Varia pelo domínio', descricao: 'Você pode usar energia divina para efeitos mágicos e curativos. 1x por descanso curto ou longo.' }
     ],
     truques: [
-      { name: 'Orientação (Guidance)', descricao: 'Truque — Duração 1 minuto (Concentração). Alvo recebe +1d4 em teste de habilidade. Sem ataque.' },
-      { name: 'Luz (Light)', descricao: 'Truque — Duração 1 hora. Objeto emite luz em 6 m. Sem ataque.' },
-      { name: 'Chama Sagrada (Sacred Flame)', descricao: 'Truque — Dano: 1d8 de dano radiante. Teste de Destreza, ignora cobertura. Alcance 18 m. 1 alvo.' },
-      { name: 'Thaumaturgia (Thaumaturgy)', descricao: 'Truque — 1 minuto. Pequenos milagres: sua voz ecoa, chamas tremem, comida se deteriora, você abre/fecha uma porta à distância, etc. Sem ataque.' },
-      { name: 'Voz Divina (Word of Radiance)', descricao: 'Truque — Dano: 1d6 de dano radiante. Todos em 1,5 m de você (CD teste Constituição). 1 ação.' }
+      { name: 'Orientação (Guidance)', level: 0, descricao: 'Você toca uma criatura disposta. Uma vez antes da magia terminar, o alvo pode rolar 1d4 e adicionar o número rolado a um teste de habilidade de sua escolha. Ele pode rolar o dado antes ou depois de fazer o teste de habilidade. A magia termina após isso.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+      { name: 'Luz (Light)', level: 0, descricao: 'Você toca um objeto que não seja maior que 3 m em qualquer dimensão. Até o fim da duração, o objeto emite luz brilhante em um raio de 6 m e luz fraca por mais 6 m. A cor da luz pode ser escolhida por você. Se um ser hostil estiver segurando ou carregando o objeto, ele pode fazer um teste de Destreza para evitar o efeito.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo (objeto)' },
+      { name: 'Chama Sagrada (Sacred Flame)', level: 0, descricao: 'Chamas semelhantes à luz radiante descem sobre uma criatura que você possa ver dentro do alcance. O alvo deve ser bem-sucedido em um teste de resistência de Destreza ou sofrer 1d8 de dano radiante. O alvo não se beneficia de cobertura para este teste de resistência. O dano aumenta em 1d8 quando você atinge o 5º nível (2d8), 11º nível (3d8) e 17º nível (4d8).', dano: '1d8 radiante', alcance: '18 m', alvos: '1 alvo' },
+      { name: 'Thaumaturgia (Thaumaturgy)', level: 0, descricao: 'Você manifesta um sinal menor de poder sobrenatural. Você cria um dos seguintes efeitos mágicos: sua voz ecoa até três vezes mais alto pelo próximo minuto; chamas tremem, ficam mais brilhantes ou mudam de cor pelo próximo minuto; tremores inofensivos no chão pelo próximo minuto; um som instantâneo que se origina de um ponto de sua escolha; você abre ou fecha instantaneamente uma porta ou janela destrancada.', dano: 'Não causa dano direto', alcance: '9 m', alvos: 'Varia pelo efeito' },
+      { name: 'Voz Divina (Word of Radiance)', level: 0, descricao: 'Você pronuncia uma palavra divina e energia radiante irrompe de você. Cada criatura de sua escolha que você possa ver dentro do alcance deve ser bem-sucedida em um teste de resistência de Constituição ou sofrer 1d6 de dano radiante. O dano aumenta em 1d6 quando você atinge o 5º nível (2d6), 11º nível (3d6) e 17º nível (4d6).', dano: '1d6 radiante', alcance: '1,5 m', alvos: 'Múltiplos alvos' }
     ],
     magiasPorCirculo: {
       '1º Círculo': [
-        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — Duração Instantâneo. Toque: 1d8 + modificador de magia de cura. 1 alvo. Sem ataque.' },
-        { name: 'Bênção (Bless)', descricao: '1º Círculo — Duração 1 minuto (Concentração). 3 criaturas ganham +1d4 em ataques e testes de resistência. Sem ataque.' },
-        { name: 'Comando (Command)', descricao: '1º Círculo — Duração 1 rodada. Alvo faz Teste de Sabedoria ou segue um comando de 1 palavra (Soltar, Fugir, Pousar, etc.). 1 alvo. Sem ataque.' },
-        { name: 'Escudo da Fé (Shield of Faith)', descricao: '1º Círculo — Duração 10 minutos (Concentração). +2 CA para 1 criatura. Sem ataque.' },
-        { name: 'Palavra Curativa (Healing Word)', descricao: '1º Círculo — Duração Instantâneo. À distância 18 m: 1d4 + mod. magia de cura. 1 alvo. Sem ataque.' }
+        { name: 'Curar Feridas (Cure Wounds)', level: 1, descricao: 'Você toca uma criatura e ela recupera uma quantidade de PV igual ao 1d8 + seu modificador de Sabedoria (ou outro atributo usado para conjuração). A magia não tem efeito em mortos-vivos.', dano: 'Não causa dano direto (cura)', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Bênção (Bless)', level: 1, descricao: 'Você abençoa até três criaturas de sua escolha dentro do alcance. Enquanto abençoadas, cada criatura adiciona 1d4 ao resultado de seus testes de ataque e de salvaguarda. As criaturas devem ser vistas por você.', dano: 'Não causa dano direto', alcance: '30 m', alvos: '3 alvos' },
+        { name: 'Comando (Command)', level: 1, descricao: 'Você fala uma palavra de poder que obriga uma criatura a agir de uma certa forma. A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, segue o comando (como Soltar, Fugir, Pousar, Render-se, etc.) no próximo turno.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo' },
+        { name: 'Escudo da Fé (Shield of Faith)', level: 1, descricao: 'Você cria um campo de força celestial que envolve uma criatura. A criatura ganha +2 à CA até o fim da duração. A criatura deve ser vista por você.', dano: 'Não causa dano direto', alcance: '30 m', alvos: '1 alvo' },
+        { name: 'Palavra Curativa (Healing Word)', level: 1, descricao: 'Você cura uma criatura que possa ser ouvida por você dentro do alcance. A criatura recupera 1d4 + seu modificador de Sabedoria (ou outro atributo usado para conjuração) em PV. A criatura deve ser vista por você.', dano: 'Não causa dano direto (cura)', alcance: '18 m', alvos: '1 alvo' }
       ],
       '2º Círculo': [
-        { name: 'Augúrio (Augury)', descricao: '2º Círculo — Duração Instantâneo. Alcance pessoal. Ritual: faz pergunta sobre ação nos próximos 30 min. Resposta: Bem, Mal, Bem e Mal, ou Nada. Sem ataque. 1 alvo (você).' },
-        { name: 'Auxílio (Aid)', descricao: '2º Círculo — Duração 8 horas. Alcance 9 m. 3 criaturas ganham +5 PV máximos e atuais. Sem ataque. 3 alvos.' },
-        { name: 'Imobilizar Pessoa (Hold Person)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Alcance 18 m. Teste de Sabedoria ou fica paralisado. Novo teste a cada turno. 1 alvo humanoide.' },
-        { name: 'Restauração Menor (Lesser Restoration)', descricao: '2º Círculo — Duração Instantâneo. Alcance toque. Remove 1 doença ou condição (cego, surdo, paralisado, envenenado). Sem ataque. 1 alvo.' }
+        { name: 'Augúrio (Augury)', level: 2, descricao: 'Você recebe um presságio sobre o resultado de uma ação específica que será realizada nos próximos 30 minutos. O Mestre pode responder com Bem, Mal, Bem e Mal ou Nada. Requer 1 minuto para conjurar e uma oferta sacrificial de 25 po.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
+        { name: 'Auxílio (Aid)', level: 2, descricao: 'Você toca até três criaturas. Cada criatura ganha +5 PV temporários e seus PV máximos aumentam em 5 até o fim da duração. A criatura deve ser vista por você.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '3 alvos' },
+        { name: 'Imobilizar Pessoa (Hold Person)', level: 2, descricao: 'Você escolhe uma criatura humanaide que possa ser vista dentro do alcance. A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, fica paralisado até o fim da duração ou até que sofra dano. Uma criatura paralisada está inconsciente e seus ataques contra ela têm vantagem.', dano: 'Não causa dano direto (efeito)', alcance: '18 m', alvos: '1 alvo humanoide' },
+        { name: 'Restauração Menor (Lesser Restoration)', level: 2, descricao: 'Você toca uma criatura e remove dela uma condição adversa: cega, surda, envenenada, paralisada, ou uma doença. A criatura deve ser vista por você.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' }
       ]
     }
   },
@@ -242,23 +242,23 @@ const CLASSES_DATA = {
       { name: 'Druidismo (Druidic)', level: 1, descricao: 'Você aprende e usa os segredos da magia da natureza.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
     ],
     truques: [
-      { name: 'Orientação (Guidance)', descricao: 'Truque — Duração 1 minuto (Concentração). Alvo +1d4 em teste. Sem ataque.' },
-      { name: 'Druidismo (Druidcraft)', descricao: 'Truque — Duração Instantânea. Predizer clima, fazer uma flor brotar, acender/apagar chama, etc. Sem ataque.' },
-      { name: 'Produzir Chamas (Produce Flame)', descricao: 'Truque — Duração 10 minutos. Ilumina 3 m ou dispara chama. Dano: 1d8 ígneo, Teste de Constituição, alcance 9 m. 1 alvo.' },
-      { name: 'Chicote de Espinhos (Thorn Whip)', descricao: 'Truque — Duração Instantâneo. Dano: 1d6 perfurante, Teste de Força, alcance 9 m, 9 m de puxão. 1 alvo.' }
+      { name: 'Orientação (Guidance)', level: 0, descricao: 'Você toca uma criatura disposta. Uma vez antes da magia terminar, o alvo pode rolar 1d4 e adicionar o número rolado a um teste de habilidade de sua escolha. Ele pode rolar o dado antes ou depois de fazer o teste de habilidade. A magia termina após isso.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+      { name: 'Druidismo (Druidcraft)', level: 0, descricao: 'Truque — Duração Instantânea. Predizer clima, fazer uma flor brotar, acender/apagar chama, etc. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
+      { name: 'Produzir Chamas (Produce Flame)', level: 0, descricao: 'Truque — Duração 10 minutos. Ilumina 3 m ou dispara chama. Dano: 1d8 ígneo, Teste de Constituição, alcance 9 m.', dano: '1d8 ígneo', alcance: '9 m', alvos: '1 alvo' },
+      { name: 'Chicote de Espinhos (Thorn Whip)', level: 0, descricao: 'Truque — Duração Instantâneo. Dano: 1d6 perfurante, Teste de Força, alcance 9 m, 9 m de puxão.', dano: '1d6 perfurante', alcance: '9 m', alvos: '1 alvo' }
     ],
     magiasPorCirculo: {
       '1º Círculo': [
-        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — Duração Instantâneo. Alcance toque. Cura 1d8 + mod. magia de Sabedoria. Sem ataque. 1 alvo.' },
-        { name: 'Emaranhar (Entangle)', descricao: '1º Círculo — Duração 1 minuto (Concentração). Alcance 27 m. Quadrado 6 m: Teste de Força ou fica enraizado. Múltiplos alvos.' },
-        { name: 'Bagas Boas (Goodberry)', descricao: '1º Círculo — Duração Instantâneo. Alcance toque. Cria até 10 bagas mágicas; cada uma cura 1 PV e alimenta por 1 dia. Até 10 alvos.' },
-        { name: 'Palavra Curativa (Healing Word)', descricao: '1º Círculo — Duração Instantâneo. Alcance 18 m. Ação bônus. Cura 1d4 + mod. magia de Sabedoria. Sem ataque. 1 alvo.' }
+        { name: 'Curar Feridas (Cure Wounds)', level: 1, descricao: 'Você toca uma criatura e ela recupera uma quantidade de PV igual ao 1d8 + seu modificador de Sabedoria. A magia não tem efeito em mortos-vivos.', dano: 'Não causa dano direto (cura)', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Emaranhar (Entangle)', level: 1, descricao: 'Plantas ágeis e enredadores se espalham a partir de um ponto dentro do alcance, criando um quadrado de 6 m. Criaturas no quadrado devem fazer um teste de resistência de Força. Se falharem, ficam enraizadas (restritas) até o fim da duração.', dano: 'Não causa dano direto (efeito)', alcance: '27 m', alvos: 'Múltiplos alvos' },
+        { name: 'Bagas Boas (Goodberry)', level: 1, descricao: 'Você toca uma planta e cria até 10 bagas mágicas. Cada baga cura 1 PV quando comida e alimenta uma criatura por um dia. As bagas são inofensivas e saborosas.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: 'Até 10 alvos' },
+        { name: 'Palavra Curativa (Healing Word)', level: 1, descricao: 'Você cura uma criatura que possa ser ouvida por você dentro do alcance. A criatura recupera 1d4 + seu modificador de Sabedoria em PV. A criatura deve ser vista por você.', dano: 'Não causa dano direto (cura)', alcance: '18 m', alvos: '1 alvo' }
       ],
       '2º Círculo': [
-        { name: 'Pele de Árvore (Barkskin)', descricao: '2º Círculo — Duração 1 hora (Concentração). Alcance toque. CA mínima 16 para o alvo. Sem ataque. 1 alvo.' },
-        { name: 'Rajada de Vento (Gust of Wind)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Alcance pessoal. Linha 18 m × 3 m: Teste de Força ou empurrado 4,5 m e velocidade reduzida. Múltiplos alvos.' },
-        { name: 'Passo sem Rastro (Pass without Trace)', descricao: '2º Círculo — Duração 1 hora (Concentração). Alcance pessoal. Aura 9 m raio: você e aliados ganham +10 em Furtividade e não deixam rastros. Múltiplos alvos.' },
-        { name: 'Esfera Flamejante (Flaming Sphere)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Alcance 18 m. Esfera 1,5 m raio: Dano 2d6 ígneo, Teste de Destreza (metade em falha). Move 9 m por ação bônus. 1 alvo por turno.' }
+        { name: 'Pele de Árvore (Barkskin)', level: 2, descricao: 'Você toca uma criatura. Até o fim da duração, a pele da criatura fica áspera e casca como a de uma árvore. A CA mínima da criatura é 16, se já não for maior.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Rajada de Vento (Gust of Wind)', level: 2, descricao: 'Você cria uma linha de vento forte que se estende de você em uma direção. Criaturas na linha devem fazer um teste de resistência de Força. Se falharem, são empurradas para trás 4,5 m e sua velocidade é reduzida pela metade até o fim do próximo turno.', dano: 'Não causa dano direto (efeito)', alcance: 'Pessoal', alvos: 'Múltiplos alvos' },
+        { name: 'Passo sem Rastro (Pass without Trace)', level: 2, descricao: 'Você cria uma aura que envolve você e até dez criaturas que escolher dentro do alcance. Enquanto dentro da aura, você e as criaturas ganham +10 em testes de Furtividade e não deixam rastros físicos.', dano: 'Não causa dano direto', alcance: 'Pessoal', alvos: 'Múltiplos alvos' },
+        { name: 'Esfera Flamejante (Flaming Sphere)', level: 2, descricao: 'Você cria uma esfera de fogo de 1,5 m de raio em um ponto dentro do alcance. A esfera derrama luz brilhante em 6 m e penumbra em mais 6 m. A cada turno, você pode usar uma ação bônus para mover a esfera até 9 m e empurrá-la contra uma criatura, causando dano.', dano: '2d6 ígneo', alcance: '18 m', alvos: '1 alvo por turno' }
       ]
     }
   },
@@ -290,38 +290,38 @@ const CLASSES_DATA = {
       { name: 'Recuperação Arcana (Arcane Recovery)', level: 1, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você pode recuperar espaços de magia durante um descanso curto. Recupera magias até metade dos seus pontos de feitiçaria.' }
     ],
     truques: [
-      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Truque — Duração 1 minuto. Mão espectral manipula até 5 kg a 9 m. Sem ataque.' },
-      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Truque — Duração até 1 hora. Pequenos truques. Sem ataque.' },
-      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Truque — Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.' },
-      { name: 'Toque Chocante (Shocking Grasp)', descricao: 'Truque — Duração Instantâneo. Dano: 1d8 elétrico. Vantagem contra alvo com armadura metálica. Reação. 1 alvo. Toque.' },
-      { name: 'Raio de Gelo (Ray of Frost)', descricao: 'Truque — Duração Instantâneo. Dano: 1d8 frio. Reduz velocidade em 3 m. Teste de Constituição, alcance 18 m. 1 alvo.' },
-      { name: 'Luz (Light)', descricao: 'Truque — Duração 1 hora. Objeto emite luz em 6 m. Sem ataque.' },
-      { name: 'Mensagem (Message)', descricao: 'Truque — Duração 1 rodada. Sussurra mensagem a 36 m. Sem ataque.' },
-      { name: 'Raio de Fogo (Fire Bolt)', descricao: 'Truque — Duração Instantâneo. Dano: 1d10 ígneo. Teste de Destreza, alcance 36 m. 1 alvo.' },
-      { name: 'Rajada de Veneno (Poison Spray)', descricao: 'Truque — Duração Instantâneo. Dano: 1d12 venenoso. Teste de Constituição, alcance 3 m. 1 alvo.' }
+      { name: 'Mãos Mágicas (Mage Hand)', level: 0, descricao: 'Truque — Duração 1 minuto. Mão espectral manipula até 5 kg a 9 m. Sem ataque.', dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo (objeto)' },
+      { name: 'Prestidigitação (Prestidigitation)', level: 0, descricao: 'Truque — Duração até 1 hora. Pequenos truques. Sem ataque.', dano: 'Não causa dano direto', alcance: '3 m', alvos: 'Varia pelo efeito' },
+      { name: 'Ilusão Menor (Minor Illusion)', level: 0, descricao: 'Truque — Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.', dano: 'Não causa dano direto', alcance: '18 m', alvos: '1 alvo (objeto)' },
+      { name: 'Toque Chocante (Shocking Grasp)', level: 0, descricao: 'Truque — Duração Instantâneo. Dano: 1d8 elétrico. Vantagem contra alvo com armadura metálica. Reação. 1 alvo. Toque.', dano: '1d8 elétrico', alcance: 'Toque', alvos: '1 alvo' },
+      { name: 'Raio de Gelo (Ray of Frost)', level: 0, descricao: 'Truque — Duração Instantâneo. Dano: 1d8 frio. Reduz velocidade em 3 m. Teste de Constituição, alcance 18 m.', dano: '1d8 frio', alcance: '18 m', alvos: '1 alvo' },
+      { name: 'Luz (Light)', level: 0, descricao: 'Truque — Duração 1 hora. Objeto emite luz em 6 m. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo (objeto)' },
+      { name: 'Mensagem (Message)', level: 0, descricao: 'Truque — Duração 1 rodada. Sussurra mensagem a 36 m. Sem ataque.', dano: 'Não causa dano direto', alcance: '36 m', alvos: '2 alvos' },
+      { name: 'Raio de Fogo (Fire Bolt)', level: 0, descricao: 'Truque — Duração Instantâneo. Dano: 1d10 ígneo. Teste de Destreza, alcance 36 m.', dano: '1d10 ígneo', alcance: '36 m', alvos: '1 alvo' },
+      { name: 'Rajada de Veneno (Poison Spray)', level: 0, descricao: 'Truque — Duração Instantâneo. Dano: 1d12 venenoso. Teste de Constituição, alcance 3 m.', dano: '1d12 venenoso', alcance: '3 m', alvos: '1 alvo' }
     ],
     magiasPorCirculo: {
       '1º Círculo': [
-        { name: 'Mísseis Mágicos (Magic Missile)', descricao: '1º Círculo — Dano: 1d4+1 de dano de força por dardo (3 dardos). Acerto automático. Alcance 36 m. 1-3 alvos.' },
-        { name: 'Escudo Arcano (Shield)', descricao: '1º Círculo — Duração 1 rodada. Reação. +5 CA até o próximo turno. Sem ataque.' },
-        { name: 'Armadura Arcana (Mage Armor)', descricao: '1º Círculo — Duração 8 horas. CA base 13 + modificador de Destreza. Sem ataque.' },
-        { name: 'Identificar (Identify)', descricao: '1º Círculo — Duração Instantâneo. Aprende propriedades de item mágico. Sem ataque.' },
-        { name: 'Proteção contra o Mal e o Bem (Protection from Evil and Good)', descricao: '1º Círculo — Duração 10 minutos (Concentração). +1 CA e testes de resistência contra 1 tipo de criatura. Sem ataque.' },
-        { name: 'Onda Trovejante (Thunderwave)', descricao: '1º Círculo — Dano: 2d8 trovejante, Teste de Constituição, empurra 3 m. Cubo 4,5 m. Múltiplos alvos.' }
+        { name: 'Mísseis Mágicos (Magic Missile)', level: 1, descricao: 'Você cria três dardos de força que atingem automaticamente uma ou mais criaturas dentro do alcance. Cada dardo causa 1d4+1 de dano de força. Você pode distribuir os dardos entre quantas criaturas quiser, mas cada criatura pode ser atingida por no máximo um dardo.', dano: '1d4+1 força por dardo (3 dardos)', alcance: '36 m', alvos: '1-3 alvos' },
+        { name: 'Escudo Arcano (Shield)', level: 1, descricao: 'Você cria um escudo de força invisível em frente a você. O escudo dura até o início do seu próximo turno e oferece +5 à CA contra todos os ataques. O escudo surge automaticamente quando você é atingido por um ataque.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
+        { name: 'Armadura Arcana (Mage Armor)', level: 1, descricao: 'Você toca uma criatura não equipada com armadura. Até o fim da duração, a CA da criatura é 13 + seu modificador de Destreza. A magia não tem efeito se a criatura já estiver usando armadura.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Identificar (Identify)', level: 1, descricao: 'Você toca um objeto e aprende suas propriedades mágicas, incluindo qual magia foi usada para criá-lo (se aplicável), quantos cargos ou usos restantes tiver e quaisquer outras informações relevantes. Requer 1 minuto para conjurar.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo (objeto)' },
+        { name: 'Proteção contra o Mal e o Bem (Protection from Evil and Good)', level: 1, descricao: 'Você toca uma criatura e cria uma barreira protetora contra celestiais, elementais, fadas, infernais e mortos-vivos. A criatura protegida não pode ser atacada por essas criaturas e testes de habilidade contra elas têm vantagem.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Onda Trovejante (Thunderwave)', level: 1, descricao: 'Você cria uma onda de som trovejante que se expande a partir de você em um cubo de 4,5 m. Criaturas na área devem fazer um teste de resistência de Constituição. Se falharem, recebem dano e são empurradas para trás 3 m.', dano: '2d8 trovejante', alcance: '4,5 m', alvos: 'Múltiplos alvos' }
       ],
       '2º Círculo': [
-        { name: 'Invisibilidade (Invisibility)', descricao: '2º Círculo — Duração 1 hora (Concentração). 1 criatura vira invisível. Sem ataque.' },
-        { name: 'Passo Nebuloso (Misty Step)', descricao: '2º Círculo — Duração Instantâneo. Teleporte até 9 m. Sem ataque.' },
-        { name: 'Sugestão (Suggestion)', descricao: '2º Círculo — Duração 8 horas. Teste de Sabedoria ou segue sugestão. 1 alvo. Sem ataque.' },
-        { name: 'Nuvem de Névoa (Fog Cloud)', descricao: '2º Círculo — Duração 1 hora. Esfera 6 m de neblina pesada. Sem ataque.' },
-        { name: 'Manto do Cruzado (Mirror Image)', descricao: '2º Círculo — Duração 1 minuto. 3 duplicatas que confundem ataques. Sem ataque.' }
+        { name: 'Invisibilidade (Invisibility)', level: 2, descricao: 'Você toca uma criatura e ela fica invisível até o fim da duração ou até que ataque, lance uma magia ou use uma ação de reação. A invisibilidade termina se a criatura causar dano ou lançar uma magia.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Passo Nebuloso (Misty Step)', level: 2, descricao: 'Você se teleporta até 9 m para um espaço que possa ver. Você se transforma momentaneamente em névoa até chegar ao destino. Você pode usar esta magia mesmo se estiver enfeitiçado ou paralisado.', dano: 'Não causa dano direto', alcance: '9 m', alvos: 'Apenas o conjurador' },
+        { name: 'Sugestão (Suggestion)', level: 2, descricao: 'Você faz uma sugestão razoável (máximo de 10 palavras) para uma criatura que possa ser vista e ouvida por você dentro do alcance. Ela deve fazer um teste de resistência de Sabedoria. Se falhar, seguirá a sugestão o máximo possível durante a duração.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo' },
+        { name: 'Nuvem de Névoa (Fog Cloud)', level: 2, descricao: 'Você cria uma esfera de neblina pesada de 6 m de raio em um ponto dentro do alcance. A neblina bloqueia visão e dá desvantagem em testes de Percepção baseados em visão. O vento forte dissipa a neblina.', dano: 'Não causa dano direto', alcance: '120 m', alvos: 'Múltiplos alvos' },
+        { name: 'Manto do Cruzado (Mirror Image)', level: 2, descricao: 'Você cria três duplicatas de si mesmo até o fim da duração. Ataques contra você têm 1 chance em 3 de acertar uma duplicata em vez de você. Uma duplicata é destruída quando um ataque a acerta.', dano: 'Não causa dano direto', alcance: '12 m', alvos: 'Apenas o conjurador' }
       ],
       '3º Círculo': [
-        { name: 'Bola de Fogo (Fireball)', descricao: '3º Círculo — Dano: 8d6 ígneo, Teste de Destreza (metade em falha). Esfera 6 m raio. Múltiplos alvos.' },
-        { name: 'Contramágica (Counterspell)', descricao: '3º Círculo — Duração Instantâneo. Reação. Anula magia alvo.' },
-        { name: 'Tempestade de Gelo (Ice Storm)', descricao: '3º Círculo — Dano: 4d6 frio + 2d6 cortante, Teste de Destreza. Cilindro 6 m x 3 m.' },
-        { name: 'Dissipar Magia (Dispel Magic)', descricao: '3º Círculo — Duração Instantâneo. Encerra magia de 3º círculo ou menor.' },
-        { name: 'Voar (Fly)', descricao: '3º Círculo — Duração 10 minutos (Concentração). 1 alvo ganha velocidade de voo 18 m.' }
+        { name: 'Bola de Fogo (Fireball)', level: 3, descricao: 'Você cria uma bola de fogo no ponto de sua escolha dentro do alcance. A bola explode em um raio de 6 m, causando 8d6 de dano ígneo. Criaturas na área devem fazer um teste de resistência de Destreza. Se falharem, recebem o dano total. Se acertarem, recebem metade do dano.', dano: '8d6 ígneo', alcance: '150 m', alvos: 'Múltiplos alvos' },
+        { name: 'Contramágica (Counterspell)', level: 3, descricao: 'Você interrompe uma criatura que está conjurando uma magia. Se a magia for de 3º círculo ou menor, ela é anulada automaticamente. Se for de nível superior, a criatura deve fazer um teste de habilidade de conjuração com desvantagem.', dano: 'Não causa dano direto', alcance: '60 m', alvos: '1 alvo' },
+        { name: 'Tempestade de Gelo (Ice Storm)', level: 3, descricao: 'Você cria uma chuva de pedras de gelo em um cilindro de 6 m de raio e 3 m de altura dentro do alcance. O dano inicial é 4d6 de dano frio e 2d6 de dano cortante. Criaturas na área devem fazer um teste de resistência de Destreza. Se falharem, recebem o dano total.', dano: '4d6 frio + 2d6 cortante', alcance: '120 m', alvos: 'Múltiplos alvos' },
+        { name: 'Dissipar Magia (Dispel Magic)', level: 3, descricao: 'Você escolhe uma criatura, objeto ou magia dentro do alcance. Se for uma magia, ela é encerrada se for de 3º círculo ou menor. Se for de nível superior, o alvo deve fazer um teste de habilidade de conjuração. Se falhar, a magia é encerrada.', dano: 'Não causa dano direto', alcance: '120 m', alvos: '1 alvo' },
+        { name: 'Voar (Fly)', level: 3, descricao: 'Você toca uma criatura e ela ganha uma velocidade de voo de 18 m até o fim da duração. A criatura deve ser vista por você. Se a magia terminar enquanto a criatura estiver no ar, ela cai.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' }
       ]
     }
   },
@@ -354,26 +354,26 @@ const CLASSES_DATA = {
       { name: 'Conjuração (Spellcasting)', level: 1, descricao: 'Meio-conjurador: prepara magias de paladino. Truques sempre, magias 1º a 5º círculo. Atributo: Carisma.', dano: 'Não causa dano direto', alcance: 'Varia pela magia', alvos: 'Varia pela magia' }
     ],
     truques: [
-      { name: 'Toque Sagrado (Sacred Flame)', descricao: 'Dano: 1d8 radiante. Teste de Destreza, alcance 18 m. 1 alvo. (Em portugês é Chama Sagrada; mesmo feitiço.)' },
-      { name: 'Orientação Divina (Divine Guidance)', descricao: 'Truque (Xanathar). Adiciona +1d4 a um teste de ataque ou salvaguarda.' },
-      { name: 'Luz (Light)', descricao: 'Duração 1 hora. Luz em 6 m. Sem ataque.' },
-      { name: 'Thaumaturgia (Thaumaturgy)', descricao: 'Pequenos milagres: voz ecoante, chamas tremem, etc. Sem ataque.' }
+      { name: 'Toque Sagrado (Sacred Flame)', level: 0, descricao: 'Dano: 1d8 radiante. Teste de Destreza, alcance 18 m. 1 alvo. (Em português é Chama Sagrada; mesmo feitiço.)', dano: '1d8 radiante', alcance: '18 m', alvos: '1 alvo' },
+      { name: 'Orientação Divina (Divine Guidance)', level: 0, descricao: 'Truque (Xanathar). Adiciona +1d4 a um teste de ataque ou salvaguarda.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
+      { name: 'Luz (Light)', level: 0, descricao: 'Duração 1 hora. Luz em 6 m. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo (objeto)' },
+      { name: 'Thaumaturgia (Thaumaturgy)', level: 0, descricao: 'Pequenos milagres: voz ecoante, chamas tremem, etc. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
     ],
     magiasPorCirculo: {
       '1º Círculo': [
-        { name: 'Bênção (Bless)', descricao: '1º Círculo — Duração 1 minuto (Concentração). 3 criaturas ganham +1d4 em ataques e salv. Sem ataque.' },
-        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — 1d8 + mod. magia de cura. Toque. Sem ataque.' },
-        { name: 'Comando (Command)', descricao: '1º Círculo — 1 rodada. Teste de Sabedoria ou segue 1 comando. Sem ataque.' },
-        { name: 'Palavra Curativa (Healing Word)', descricao: '1º Círculo — 1d4 + mod. cura. À distância 18 m. Sem ataque.' },
-        { name: 'Escudo da Fé (Shield of Faith)', descricao: '1º Círculo — Duração 10 min (Concentração). +2 CA. Sem ataque.' },
-        { name: 'Punição Marcante (Searing Smite)', descricao: '1º Círculo — Duração 1 min (Concentração). +1d6 ígneo, +1d6/turno. Adiciona ao ataque corpo a corpo. 1 alvo.' }
+        { name: 'Bênção (Bless)', level: 1, descricao: 'Você abençoa até três criaturas de sua escolha dentro do alcance. Enquanto abençoadas, cada criatura adiciona 1d4 ao resultado de seus testes de ataque e de salvaguarda. As criaturas devem ser vistas por você.', dano: 'Não causa dano direto', alcance: '30 m', alvos: '3 alvos' },
+        { name: 'Curar Feridas (Cure Wounds)', level: 1, descricao: 'Você toca uma criatura e ela recupera uma quantidade de PV igual ao 1d8 + seu modificador de Carisma. A magia não tem efeito em mortos-vivos.', dano: 'Não causa dano direto (cura)', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Comando (Command)', level: 1, descricao: 'Você fala uma palavra de poder que obriga uma criatura a agir de uma certa forma. A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, segue o comando (como Soltar, Fugir, Pousar, Render-se, etc.) no próximo turno.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo' },
+        { name: 'Palavra Curativa (Healing Word)', level: 1, descricao: 'Você cura uma criatura que possa ser ouvida por você dentro do alcance. A criatura recupera 1d4 + seu modificador de Carisma em PV. A criatura deve ser vista por você.', dano: 'Não causa dano direto (cura)', alcance: '18 m', alvos: '1 alvo' },
+        { name: 'Escudo da Fé (Shield of Faith)', level: 1, descricao: 'Você cria um campo de força celestial que envolve uma criatura. A criatura ganha +2 à CA até o fim da duração. A criatura deve ser vista por você.', dano: 'Não causa dano direto', alcance: '30 m', alvos: '1 alvo' },
+        { name: 'Punição Marcante (Searing Smite)', level: 1, descricao: 'Quando você acertar um ataque corpo a corpo com uma arma, você pode ativar esta magia. O alvo recebe dano extra de 1d6 ígneo e, a cada turno até o fim da duração, recebe 1d6 ígneo extra se estiver tocando você ou estiver a 1,5 m de você.', dano: 'Não causa dano direto (bônus de ataque)', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
       ],
       '2º Círculo': [
-        { name: 'Auxílio (Aid)', descricao: '2º Círculo — Duração 8 horas. Alcance 9 m. 3 criaturas ganham +5 PV máximos e atuais. Sem ataque. 3 alvos.' },
-        { name: 'Imobilizar Pessoa (Hold Person)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Alcance 18 m. Teste de Sabedoria ou fica paralisado. Novo teste a cada turno. 1 alvo humanoide.' },
-        { name: 'Restauração Menor (Lesser Restoration)', descricao: '2º Círculo — Duração Instantâneo. Alcance toque. Remove 1 doença ou condição (cego, surdo, paralisado, envenenado). Sem ataque. 1 alvo.' },
-        { name: 'Localizar Objeto (Locate Object)', descricao: '2º Círculo — Duração 10 minutos (Concentração). Alcance pessoal. Raio 300 m: sente direção de objeto familiar ou tipo de objeto. Sem ataque. 1 alvo (você).' },
-        { name: 'Marca da Punição (Branding Smite)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Alcance pessoal. Próximo ataque corpo a corpo causa +2d6 radiante extra e o alvo emite luz (não pode ficar invisível). 1 alvo.' }
+        { name: 'Auxílio (Aid)', level: 2, descricao: 'Você toca até três criaturas. Cada criatura ganha +5 PV temporários e seus PV máximos aumentam em 5 até o fim da duração. A criatura deve ser vista por você.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '3 alvos' },
+        { name: 'Imobilizar Pessoa (Hold Person)', level: 2, descricao: 'Você escolhe uma criatura humanaide que possa ser vista dentro do alcance. A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, fica paralisado até o fim da duração ou até que sofra dano. Uma criatura paralisada está inconsciente e seus ataques contra ela têm vantagem.', dano: 'Não causa dano direto (efeito)', alcance: '18 m', alvos: '1 alvo humanoide' },
+        { name: 'Restauração Menor (Lesser Restoration)', level: 2, descricao: 'Você toca uma criatura e remove dela uma condição adversa: cega, surda, envenenada, paralisada, ou uma doença. A criatura deve ser vista por você.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Localizar Objeto (Locate Object)', level: 2, descricao: 'Você cria um senso direcional para o objeto mais próximo do tipo descrito. A direção e distância são sentidas mentalmente. Se houver múltiplos objetos do mesmo tipo, o mais próximo é sentido. Requer 1 minuto para conjurar.', dano: 'Não causa dano direto', alcance: 'Pessoal', alvos: 'Apenas o conjurador' },
+        { name: 'Marca da Punição (Branding Smite)', level: 2, descricao: 'Quando você acertar um ataque corpo a corpo com uma arma, você pode ativar esta magia. O alvo recebe dano extra de 2d6 radiante e brilha com luz até o fim da duração. O alvo não pode ficar invisível enquanto estiver iluminado.', dano: 'Não causa dano direto (bônus de ataque)', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
       ]
     }
   },
@@ -391,25 +391,25 @@ const CLASSES_DATA = {
       { name: 'Conjuração (Spellcasting)', level: 2, descricao: 'Meio-conjurador (começa no nível 2). Truques sempre, magias 1º a 5º círculo. Atributo: Sabedoria.', dano: 'Não causa dano direto', alcance: 'Varia pela magia', alvos: 'Varia pela magia' }
     ],
     truques: [
-      { name: 'Orientação (Guidance)', descricao: 'Duração 1 min (Concentração). +1d4 em teste. Sem ataque.' },
-      { name: 'Produzir Chamas (Produce Flame)', descricao: 'Duração 10 min. Ilumina 3 m ou dispara chama. Dano: 1d8 ígneo, Teste Constituição, alcance 9 m. 1 alvo.' },
-      { name: 'Chicote de Espinhos (Thorn Whip)', descricao: 'Dano: 1d6 perfurante. Teste de Força, alcance 9 m, puxa 9 m. 1 alvo.' },
-      { name: 'Resistência (Resistance)', descricao: 'Duração 1 min (Concentração). +1d4 em teste de salvaguarda. Sem ataque.' },
-      { name: 'Druidcraft (Druidcraft)', descricao: 'Pequenos truques de natureza. Sem ataque.' }
+      { name: 'Orientação (Guidance)', level: 0, descricao: 'Duração 1 min (Concentração). +1d4 em teste. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+      { name: 'Produzir Chamas (Produce Flame)', level: 0, descricao: 'Duração 10 min. Ilumina 3 m ou dispara chama. Dano: 1d8 ígneo, Teste Constituição, alcance 9 m.', dano: '1d8 ígneo', alcance: '9 m', alvos: '1 alvo' },
+      { name: 'Chicote de Espinhos (Thorn Whip)', level: 0, descricao: 'Dano: 1d6 perfurante. Teste de Força, alcance 9 m, puxa 9 m.', dano: '1d6 perfurante', alcance: '9 m', alvos: '1 alvo' },
+      { name: 'Resistência (Resistance)', level: 0, descricao: 'Duração 1 min (Concentração). +1d4 em teste de salvaguarda. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+      { name: 'Druidcraft', level: 0, descricao: 'Pequenos truques de natureza. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
     ],
     magiasPorCirculo: {
       '1º Círculo': [
-        { name: 'Curar Feridas (Cure Wounds)', descricao: '1º Círculo — Duração Instantâneo. Alcance toque. Cura 1d8 + mod. magia de Sabedoria. Sem ataque. 1 alvo.' },
-        { name: 'Marca do Caçador (Hunter\'s Mark)', descricao: '1º Círculo — Duração 1 hora (Concentração). Alcance 27 m. Você marca 1 alvo: causa +1d6 dano extra ao acertá-lo. Pode mover a marca se o alvo morrer. 1 alvo.' },
-        { name: 'Bagas Boas (Goodberry)', descricao: '1º Círculo — Duração Instantâneo. Alcance toque. Cria até 10 bagas mágicas; cada uma cura 1 PV e alimenta por 1 dia. Até 10 alvos.' },
-        { name: 'Emaranhar (Entangle)', descricao: '1º Círculo — Duração 1 minuto (Concentração). Alcance 27 m. Quadrado 6 m: Teste de Força ou fica enraizado. Múltiplos alvos.' }
+        { name: 'Curar Feridas (Cure Wounds)', level: 1, descricao: 'Você toca uma criatura e ela recupera uma quantidade de PV igual ao 1d8 + seu modificador de Sabedoria. A magia não tem efeito em mortos-vivos.', dano: 'Não causa dano direto (cura)', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Marca do Caçador (Hunter\'s Mark)', level: 1, descricao: 'Você escolhe uma criatura dentro do alcance e a marca até o fim da duração. Enquanto marcada, você tem vantagem em testes de Percepção e Investigação para localizá-la. Quando acertar um ataque contra ela, causa 1d6 de dano extra.', dano: 'Não causa dano direto (bônus de ataque)', alcance: '27 m', alvos: '1 alvo' },
+        { name: 'Bagas Boas (Goodberry)', level: 1, descricao: 'Você toca uma planta e cria até 10 bagas mágicas. Cada baga cura 1 PV quando comida e alimenta uma criatura por um dia. As bagas são inofensivas e saborosas.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: 'Até 10 alvos' },
+        { name: 'Emaranhar (Entangle)', level: 1, descricao: 'Plantas ágeis e enredadores se espalham a partir de um ponto dentro do alcance, criando um quadrado de 6 m. Criaturas no quadrado devem fazer um teste de resistência de Força. Se falharem, ficam enraizadas (restritas) até o fim da duração.', dano: 'Não causa dano direto (efeito)', alcance: '27 m', alvos: 'Múltiplos alvos' }
       ],
       '2º Círculo': [
-        { name: 'Esfera Flamejante (Flaming Sphere)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Alcance 18 m. Esfera 1,5 m raio: Dano 2d6 ígneo, Teste de Destreza (metade em falha). Move 9 m por ação bônus. 1 alvo por turno.' },
-        { name: 'Imobilizar Pessoa (Hold Person)', descricao: '2º Círculo — Duração 1 minuto (Concentração). Alcance 18 m. Teste de Sabedoria ou fica paralisado. Novo teste a cada turno. 1 alvo humanoide.' },
-        { name: 'Localizar Animais ou Plantas (Locate Animals or Plants)', descricao: '2º Círculo — Duração 30 minutos (Concentração). Alcance pessoal. Raio 1,5 km: sente direção e distância de espécie específica de animal ou planta. Sem ataque. 1 alvo (você).' },
-        { name: 'Arma Espiritual (Spiritual Weapon)', descricao: '2º Círculo — Duração 1 minuto. Alcance 18 m. Cria arma flutuante: ataque mágico corpo a corpo, Dano 1d8 + mod. Sabedoria. Move 6 m e ataca por ação bônus. 1 alvo por turno.' },
-        { name: 'Restauração Menor (Lesser Restoration)', descricao: '2º Círculo — Duração Instantâneo. Alcance toque. Remove 1 doença ou condição (cego, surdo, paralisado, envenenado). Sem ataque. 1 alvo.' }
+        { name: 'Esfera Flamejante (Flaming Sphere)', level: 2, descricao: 'Você cria uma esfera de fogo de 1,5 m de raio em um ponto dentro do alcance. A esfera derrama luz brilhante em 6 m e penumbra em mais 6 m. A cada turno, você pode usar uma ação bônus para mover a esfera até 9 m e empurrá-la contra uma criatura, causando dano.', dano: '2d6 ígneo', alcance: '18 m', alvos: '1 alvo por turno' },
+        { name: 'Imobilizar Pessoa (Hold Person)', level: 2, descricao: 'Você escolhe uma criatura humanaide que possa ser vista dentro do alcance. A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, fica paralisado até o fim da duração ou até que sofra dano. Uma criatura paralisada está inconsciente e seus ataques contra ela têm vantagem.', dano: 'Não causa dano direto (efeito)', alcance: '18 m', alvos: '1 alvo humanoide' },
+        { name: 'Localizar Animais ou Plantas (Locate Animals or Plants)', level: 2, descricao: 'Você cria um senso direcional para o animal ou planta mais próximo do tipo descrito. A direção e distância são sentidas mentalmente. Se houver múltiplos do mesmo tipo, o mais próximo é sentido. Requer 1 minuto para conjurar.', dano: 'Não causa dano direto', alcance: 'Pessoal', alvos: 'Apenas o conjurador' },
+        { name: 'Arma Espiritual (Spiritual Weapon)', level: 2, descricao: 'Você cria uma arma flutuante em um ponto dentro do alcance. A arma ataca automaticamente criaturas a cada turno. O dano é 1d8 + seu modificador de Sabedoria. Você pode usar uma ação bônus para mover a arma até 6 m e atacar.', dano: '1d8 + mod. Sabedoria', alcance: '18 m', alvos: '1 alvo por turno' },
+        { name: 'Restauração Menor (Lesser Restoration)', level: 2, descricao: 'Você toca uma criatura e remove dela uma condição adversa: cega, surda, envenenada, paralisada, ou uma doença. A criatura deve ser vista por você.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' }
       ]
     }
   },
@@ -422,8 +422,24 @@ const CLASSES_DATA = {
     descricao: 'Um especialista em furtividade, roubo e precisão.',
     toque: 'Ataque Sorrateiro, Perícia, Senso Especial',
     habilidades: [
-      { name: 'Ataque Sorrateiro (Sneak Attack)', level: 1, dano: '1d6 por nível de ladino (escala)', alcance: 'Alcance da arma', alvos: '1 alvo', descricao: 'Adiciona dano extra (1x por turno) ao acertar com ataque com Furtividade ou à distância, se tiver vantagem ou um aliado adjacente ao alvo. Requer: arma Furtiva ou à distância.' },
-      { name: 'Perícia (Expertise)', level: 1, descricao: 'Você pode escolher perícias para se tornar particularmente hábil nelas.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
+      {
+        name: 'Ataque Sorrateiro (Sneak Attack)',
+        level: 1,
+        dano: '1d6 de dano extra',
+        alcance: 'Alcance da arma',
+        alvos: '1 alvo',
+        descricao: 'Adiciona dano extra (1x por turno) ao acertar com ataque usando arma com Furtividade ou à distância, se tiver vantagem ou um aliado adjacente ao alvo.',
+        description: 'Adiciona dano extra (1x por turno) ao acertar com ataque usando arma com Furtividade ou à distância, se tiver vantagem ou um aliado adjacente ao alvo.'
+      },
+      {
+        name: 'Perícia (Expertise)',
+        level: 1,
+        dano: 'Não causa dano direto',
+        alcance: 'Uso pessoal',
+        alvos: 'Apenas o conjurador',
+        descricao: 'Você pode escolher perícias para se tornar particularmente hábil nelas, dobrando o seu bônus de proficiência.',
+        description: 'Você pode escolher perícias para se tornar particularmente hábil nelas, dobrando o seu bônus de proficiência.'
+      }
     ],
     truques: []
   },
@@ -441,39 +457,39 @@ const CLASSES_DATA = {
       { name: 'Fonte de Feitiçaria (Sorcery Points)', level: 1, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Pontos de Feitiçaria por descanso longo: iguais ao nível. Usados para Metamagia ou para criar espaços de magia.' }
     ],
     truques: [
-      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Duração até 1 hora. Pequenos efeitos. Sem ataque.' },
-      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Duração 1 minuto. Mão espectral, 5 kg, 9 m. Sem ataque.' },
-      { name: 'Luz (Light)', descricao: 'Duração 1 hora. Luz em 6 m. Sem ataque.' },
-      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.' },
-      { name: 'Toque Chocante (Shocking Grasp)', descricao: 'Dano: 1d8 elétrico. Vantagem contra armadura metálica. Reação. 1 alvo.' },
-      { name: 'Raio de Gelo (Ray of Frost)', descricao: 'Dano: 1d8 frio. Reduz velocidade 3 m. Alcance 18 m. 1 alvo.' },
-      { name: 'Raio de Fogo (Fire Bolt)', descricao: 'Dano: 1d10 ígneo. Teste de Destreza, alcance 36 m. 1 alvo.' },
-      { name: 'Rajada de Veneno (Poison Spray)', descricao: 'Dano: 1d12 venenoso. Teste de Constituição, alcance 3 m. 1 alvo.' }
+      { name: 'Prestidigitação (Prestidigitation)', level: 0, descricao: 'Duração até 1 hora. Pequenos efeitos. Sem ataque.', dano: 'Não causa dano direto', alcance: '3 m', alvos: 'Varia pelo efeito' },
+      { name: 'Mãos Mágicas (Mage Hand)', level: 0, descricao: 'Duração 1 minuto. Mão espectral, 5 kg, 9 m. Sem ataque.', dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo (objeto)' },
+      { name: 'Luz (Light)', level: 0, descricao: 'Duração 1 hora. Luz em 6 m. Sem ataque.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo (objeto)' },
+      { name: 'Ilusão Menor (Minor Illusion)', level: 0, descricao: 'Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.', dano: 'Não causa dano direto', alcance: '18 m', alvos: '1 alvo (objeto)' },
+      { name: 'Toque Chocante (Shocking Grasp)', level: 0, descricao: 'Dano: 1d8 elétrico. Vantagem contra armadura metálica. Reação. 1 alvo.', dano: '1d8 elétrico', alcance: 'Toque', alvos: '1 alvo' },
+      { name: 'Raio de Gelo (Ray of Frost)', level: 0, descricao: 'Dano: 1d8 frio. Reduz velocidade 3 m. Alcance 18 m.', dano: '1d8 frio', alcance: '18 m', alvos: '1 alvo' },
+      { name: 'Raio de Fogo (Fire Bolt)', level: 0, descricao: 'Dano: 1d10 ígneo. Teste de Destreza, alcance 36 m.', dano: '1d10 ígneo', alcance: '36 m', alvos: '1 alvo' },
+      { name: 'Rajada de Veneno (Poison Spray)', level: 0, descricao: 'Dano: 1d12 venenoso. Teste de Constituição, alcance 3 m.', dano: '1d12 venenoso', alcance: '3 m', alvos: '1 alvo' }
     ],
     magiasPorCirculo: {
       '1º Círculo': [
-        { name: 'Mísseis Mágicos (Magic Missile)', descricao: '1º Círculo — 1d4+1 de dano de força por dardo (3 dardos). Acerto automático. Alcance 36 m. 1-3 alvos.' },
-        { name: 'Armadura Arcana (Mage Armor)', descricao: '1º Círculo — Duração 8 horas. CA 13 + mod. Destreza. Sem ataque.' },
-        { name: 'Escudo Arcano (Shield)', descricao: '1º Círculo — Duração 1 rodada. Reação. +5 CA. Sem ataque.' },
-        { name: 'Chama (Burning Hands)', descricao: '1º Círculo — Dano: 3d6 ígneo, Teste Destreza (metade em falha). Cone 4,5 m. Múltiplos alvos.' },
-        { name: 'Onda Trovejante (Thunderwave)', descricao: '1º Círculo — Dano: 2d8 trovejante, Teste Constituição, empurra 3 m. Cubo 4,5 m.' },
-        { name: 'Maldição (Hex)', descricao: '1º Círculo — 1 hora (Concentração). +1d6 dano, desvantagem em teste específico. 1 alvo.' }
+        { name: 'Mísseis Mágicos (Magic Missile)', level: 1, descricao: 'Você cria três dardos de força que atingem automaticamente uma ou mais criaturas dentro do alcance. Cada dardo causa 1d4+1 de dano de força. Você pode distribuir os dardos entre quantas criaturas quiser, mas cada criatura pode ser atingida por no máximo um dardo.', dano: '1d4+1 força por dardo (3 dardos)', alcance: '36 m', alvos: '1-3 alvos' },
+        { name: 'Armadura Arcana (Mage Armor)', level: 1, descricao: 'Você toca uma criatura não equipada com armadura. Até o fim da duração, a CA da criatura é 13 + seu modificador de Destreza. A magia não tem efeito se a criatura já estiver usando armadura.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Escudo Arcano (Shield)', level: 1, descricao: 'Você cria um escudo de força invisível em frente a você. O escudo dura até o início do seu próximo turno e oferece +5 à CA contra todos os ataques. O escudo surge automaticamente quando você é atingido por um ataque.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
+        { name: 'Chama (Burning Hands)', level: 1, descricao: 'Você levanta suas mãos e um fogo explode em um cone de 4,5 m. Criaturas no cone devem fazer um teste de resistência de Destreza. Se falharem, recebem 3d6 de dano ígneo. Se acertarem, recebem metade do dano.', dano: '3d6 ígneo', alcance: '4,5 m', alvos: 'Múltiplos alvos' },
+        { name: 'Onda Trovejante (Thunderwave)', level: 1, descricao: 'Você cria uma onda de som trovejante que se expande a partir de você em um cubo de 4,5 m. Criaturas na área devem fazer um teste de resistência de Constituição. Se falharem, recebem dano e são empurradas para trás 3 m.', dano: '2d8 trovejante', alcance: '4,5 m', alvos: 'Múltiplos alvos' },
+        { name: 'Maldição (Hex)', level: 1, descricao: 'Você amaldiçoa uma criatura dentro do alcance. Até o fim da duração, você causa 1d6 de dano extra contra o alvo sempre que acertar um ataque contra ele. Você também escolhe um atributo: o alvo tem desvantagem nos testes de habilidade usando aquele atributo.', dano: 'Não causa dano direto (bônus de ataque)', alcance: '90 m', alvos: '1 alvo' }
       ],
       '2º Círculo': [
-        { name: 'Invisibilidade (Invisibility)', descricao: '2º Círculo — 1 hora (Concentração). 1 criatura invisível. Sem ataque.' },
-        { name: 'Passo Nebuloso (Misty Step)', descricao: '2º Círculo — Instantâneo. Teleporte até 9 m. Sem ataque.' },
-        { name: 'Sugestão (Suggestion)', descricao: '2º Círculo — 8 horas. Teste de Sabedoria ou segue sugestão. Sem ataque.' },
-        { name: 'Manto do Cruzado (Mirror Image)', descricao: '2º Círculo — 1 minuto. 3 duplicatas. Sem ataque.' },
-        { name: 'Nuvem de Névoa (Fog Cloud)', descricao: '2º Círculo — 1 hora. Esfera 6 m de neblina. Sem ataque.' },
-        { name: 'Nublar (Blur)', descricao: '2º Círculo — 1 minuto (Concentração). Ataques contra você têm desvantagem. Sem ataque.' }
+        { name: 'Invisibilidade (Invisibility)', level: 2, descricao: 'Você toca uma criatura e ela fica invisível até o fim da duração ou até que ataque, lance uma magia ou use uma ação de reação. A invisibilidade termina se a criatura causar dano ou lançar uma magia.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Passo Nebuloso (Misty Step)', level: 2, descricao: 'Você se teleporta até 9 m para um espaço que possa ver. Você se transforma momentaneamente em névoa até chegar ao destino. Você pode usar esta magia mesmo se estiver enfeitiçado ou paralisado.', dano: 'Não causa dano direto', alcance: '9 m', alvos: 'Apenas o conjurador' },
+        { name: 'Sugestão (Suggestion)', level: 2, descricao: 'Você faz uma sugestão razoável (máximo de 10 palavras) para uma criatura que possa ser vista e ouvida por você dentro do alcance. Ela deve fazer um teste de resistência de Sabedoria. Se falhar, seguirá a sugestão o máximo possível durante a duração.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo' },
+        { name: 'Manto do Cruzado (Mirror Image)', level: 2, descricao: 'Você cria três duplicatas de si mesmo até o fim da duração. Ataques contra você têm 1 chance em 3 de acertar uma duplicata em vez de você. Uma duplicata é destruída quando um ataque a acerta.', dano: 'Não causa dano direto', alcance: '12 m', alvos: 'Apenas o conjurador' },
+        { name: 'Nuvem de Névoa (Fog Cloud)', level: 2, descricao: 'Você cria uma esfera de neblina pesada de 6 m de raio em um ponto dentro do alcance. A neblina bloqueia visão e dá desvantagem em testes de Percepção baseados em visão. O vento forte dissipa a neblina.', dano: 'Não causa dano direto', alcance: '120 m', alvos: 'Múltiplos alvos' },
+        { name: 'Nublar (Blur)', level: 2, descricao: 'Você cria uma aura que faz seu corpo parecer borrado e tremeluzente. Ataques contra você têm desvantagem até o fim da duração. Se um ataque acertar, o atacante deve fazer um teste de habilidade de conjuração para confirmar o crítico.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
       ],
       '3º Círculo': [
-        { name: 'Bola de Fogo (Fireball)', descricao: '3º Círculo — 8d6 ígneo, Teste de Destreza (metade em falha). Esfera 6 m raio. Múltiplos alvos.' },
-        { name: 'Contramágica (Counterspell)', descricao: '3º Círculo — Reação. Anula magia alvo. Sem ataque.' },
-        { name: 'Tempestade de Gelo (Ice Storm)', descricao: '3º Círculo — 4d6 frio + 2d6 cortante, Teste Destreza. Cilindro 6 m x 3 m.' },
-        { name: 'Dissipar Magia (Dispel Magic)', descricao: '3º Círculo — Encerra magia de 3º ou menor. Sem ataque.' },
-        { name: 'Voar (Fly)', descricao: '3º Círculo — 10 min (Concentração). Velocidade de voo 18 m. Sem ataque.' },
-        { name: 'Relâmpago (Lightning Bolt)', descricao: '3º Círculo — 8d6 elétrico, Teste Destreza. Linha 30 m. Múltiplos alvos.' }
+        { name: 'Bola de Fogo (Fireball)', level: 3, descricao: 'Você cria uma bola de fogo no ponto de sua escolha dentro do alcance. A bola explode em um raio de 6 m, causando 8d6 de dano ígneo. Criaturas na área devem fazer um teste de resistência de Destreza. Se falharem, recebem o dano total. Se acertarem, recebem metade do dano.', dano: '8d6 ígneo', alcance: '150 m', alvos: 'Múltiplos alvos' },
+        { name: 'Contramágica (Counterspell)', level: 3, descricao: 'Você interrompe uma criatura que está conjurando uma magia. Se a magia for de 3º círculo ou menor, ela é anulada automaticamente. Se for de nível superior, a criatura deve fazer um teste de habilidade de conjuração com desvantagem.', dano: 'Não causa dano direto', alcance: '60 m', alvos: '1 alvo' },
+        { name: 'Tempestade de Gelo (Ice Storm)', level: 3, descricao: 'Você cria uma chuva de pedras de gelo em um cilindro de 6 m de raio e 3 m de altura dentro do alcance. O dano inicial é 4d6 de dano frio e 2d6 de dano cortante. Criaturas na área devem fazer um teste de resistência de Destreza. Se falharem, recebem o dano total.', dano: '4d6 frio + 2d6 cortante', alcance: '120 m', alvos: 'Múltiplos alvos' },
+        { name: 'Dissipar Magia (Dispel Magic)', level: 3, descricao: 'Você escolhe uma criatura, objeto ou magia dentro do alcance. Se for uma magia, ela é encerrada se for de 3º círculo ou menor. Se for de nível superior, o alvo deve fazer um teste de habilidade de conjuração. Se falhar, a magia é encerrada.', dano: 'Não causa dano direto', alcance: '120 m', alvos: '1 alvo' },
+        { name: 'Voar (Fly)', level: 3, descricao: 'Você toca uma criatura e ela ganha uma velocidade de voo de 18 m até o fim da duração. A criatura deve ser vista por você. Se a magia terminar enquanto a criatura estiver no ar, ela cai.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
+        { name: 'Relâmpago (Lightning Bolt)', level: 3, descricao: 'Você cria um raio de eletricidade que se estende em uma linha de 30 m e 1,5 m de largura. Criaturas na linha devem fazer um teste de resistência de Destreza. Se falharem, recebem 8d6 de dano elétrico. Se acertarem, recebem metade do dano.', dano: '8d6 elétrico', alcance: '30 m', alvos: 'Múltiplos alvos' }
       ]
     }
   },
@@ -491,10 +507,10 @@ const CLASSES_DATA = {
       { name: 'Invocações (Eldritch Invocations)', level: 1, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você pode aprender invocações especiais inspiradas em seu pacto. 2 invocações no nível 3, mais a cada 5 níveis.' }
     ],
     truques: [
-      { name: 'Prestidigitação (Prestidigitation)', descricao: 'Truque — Duração até 1 hora. Pequenos efeitos. Sem ataque.' },
-      { name: 'Mãos Mágicas (Mage Hand)', descricao: 'Truque — Duração 1 minuto. Mão espectral, 5 kg, 9 m. Sem ataque.' },
-      { name: 'Ilusão Menor (Minor Illusion)', descricao: 'Truque — Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.' },
-      { name: 'Raio de Eldritch (Eldritch Blast)', descricao: 'Truque — Dano: 1d10 de força. Acerto automático. Alcance 18 m. 1 alvo. (Aumenta para 2 feixes no nível 5, 3 no 11, 4 no 17.)' }
+      { name: 'Prestidigitação (Prestidigitation)', level: 0, descricao: 'Truque — Duração até 1 hora. Pequenos efeitos. Sem ataque.', dano: 'Não causa dano direto', alcance: '3 m', alvos: 'Varia pelo efeito' },
+      { name: 'Mãos Mágicas (Mage Hand)', level: 0, descricao: 'Truque — Duração 1 minuto. Mão espectral, 5 kg, 9 m. Sem ataque.', dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo (objeto)' },
+      { name: 'Ilusão Menor (Minor Illusion)', level: 0, descricao: 'Truque — Duração 1 minuto. Som ou imagem 1,5 m³. Sem ataque.', dano: 'Não causa dano direto', alcance: '18 m', alvos: '1 alvo (objeto)' },
+      { name: 'Raio de Eldritch (Eldritch Blast)', level: 0, descricao: 'Truque — Dano: 1d10 de força. Acerto automático. Alcance 18 m. (Aumenta para 2 feixes no nível 5, 3 no 11, 4 no 17.)', dano: '1d10 força', alcance: '18 m', alvos: '1 alvo' }
     ]
   }
 };
@@ -600,59 +616,304 @@ const SUBCLASSES_DATA = {
     { name: 'Caminho do Caçador Furtivo (Fey Wanderer)', nivel: 3, descricao: 'Ranger com poderes feéricos, de charme e medo.', habilidades: [{ name: 'Presença Feérica', level: 3, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você usa charme feérico para distrair e controlar inimigos.' }], truques: [] }
   ],
   ladino: [
-    { name: 'Ladrão (Thief)', nivel: 3, descricao: 'Ladino clássico, mestre da escalada, fintagem e mãos rápidas.', habilidades: [
-      { name: 'Mãos Rápidas (Fast Hands)', level: 3, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você pode usar uma ação bônus para realizar uma ação de interagir com objetos ou usar um item mágico como parte da mesma ação.' }
-    ], truques: [] },
-    { name: 'Assassino (Assassin)', nivel: 3, descricao: 'Ladino letal, especialista em emboscadas e ataque surpresa.', habilidades: [
-      { name: 'Assassinar (Assassinate)', level: 3, dano: 'Não causa dano direto (aumenta críticos)', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'No primeiro turno de combate, você tem vantagem em ataques contra criaturas que ainda não agiram. Críticos automáticos contra alvos surpresos.' }
-    ], truques: [] },
-    { name: 'Trapaceiro Arcano (Arcane Trickster)', nivel: 3, descricao: 'Ladino que mistura truques arcanos com a sua trapaçaria.', habilidades: [
-      { name: 'Mãos Mágicas (Magical Knack)', level: 3, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você pode usar Mãos Mágicas para lançar magias de ilusão e manipulação de forma furtiva.' },
-      { name: 'Ilusão Menor (Minor Illusion)', level: 3, dano: 'Não causa dano direto', alcance: '18 m', alvos: '1 alvo', descricao: 'Cria som ou imagem de objeto inanimado de até 1,5 m³. Duração 1 minuto. Teste de Investigação (CD 13) para desmascarar.' },
-      { name: 'Amigos (Friends)', level: 3, dano: 'Não causa dano direto', alcance: '1,5 m', alvos: '1 alvo', descricao: 'Você tem vantagem em testes de Carisma contra 1 criatura não hostil. Ela percebe o encantamento ao fim.' }
-    ], truques: [
-      { name: 'Mãos Mágicas (Mage Hand)', level: 3, dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo', descricao: 'Mão espectral invisível manipula objetos até 5 kg a 9 m. Pode usar para Prestidigitação ou Ladinagem furtivamente.' },
-      { name: 'Ilusão Menor (Minor Illusion)', level: 3, dano: 'Não causa dano direto', alcance: '9 m', alvos: '1 alvo', descricao: 'Cria som ou imagem inanimada em 9 m. Teste de Investigação (CD sua magia) para desmascarar.' },
-      { name: 'Amigos (Friends)', level: 3, dano: 'Não causa dano direto', alcance: '1,5 m', alvos: '1 alvo', descricao: 'Vantagem em testes de Carisma contra 1 criatura não hostil. Ela percebe o encantamento ao fim.' }
-    ], magiasPorCirculo: {
-      '1º Círculo': [
-        { name: 'Sono (Sleep)', level: 3, descricao: 'Afeta criaturas em raio de 6 m somando 5d8 PV (começando pelas mais fracas). Sem teste de resistência.', dano: 'Não causa dano direto (efeito)', alcance: '27 m', alvos: 'Múltiplos alvos' },
-        { name: 'Cativar Pessoa (Charm Person)', level: 3, descricao: 'Teste de Sabedoria ou a criatura te trata como amigo.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo humanoide' },
-        { name: 'Disfarce (Disguise Self)', level: 3, descricao: 'Você altera sua aparência física (altura ±30 cm, roupas, rosto). Teste de Investigação CD 13 para desmascarar.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
-        { name: 'Cor Cegante (Color Spray)', level: 3, descricao: 'Cone de 4,5 m. Afeta criaturas somando 6d10 PV (começando pelas mais fracas) — ficam cegas por 1 rodada.', dano: 'Não causa dano direto (efeito)', alcance: '4,5 m', alvos: 'Múltiplos alvos' },
-        { name: 'Escudo (Shield)', level: 3, descricao: 'Reação ao ser atacado. +5 CA até o início do seu próximo turno.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
-      ],
-      '2º Círculo': [
-        { name: 'Invisibilidade (Invisibility)', level: 3, descricao: '1 criatura fica invisível. Termina se atacar ou lançar magia.', dano: 'Não causa dano direto', alcance: 'Toque', alvos: '1 alvo' },
-        { name: 'Passo Nebuloso (Misty Step)', level: 3, descricao: 'Ação bônus. Você se teleporta até 9 m para um espaço visível.', dano: 'Não causa dano direto', alcance: '9 m', alvos: 'Apenas o conjurador' },
-        { name: 'Sugestão (Suggestion)', level: 3, descricao: 'Teste de Sabedoria ou a criatura segue uma sugestão razoável.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: '1 alvo' },
-        { name: 'Imagem Espelhada (Mirror Image)', level: 3, descricao: 'Cria 3 duplicatas suas. Ataques contra você têm chance de acertar a duplicata.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' }
-      ],
-      '3º Círculo': [
-        { name: 'Piscar (Blink)', level: 3, descricao: 'No fim de cada turno, role d20: 11+ você vai para o Plano Etéreo até o início do próximo turno.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
-        { name: 'Dissipar Magia (Dispel Magic)', level: 3, descricao: 'Encerra automaticamente magias de 3º círculo ou menor no alvo.', dano: 'Não causa dano direto', alcance: '36 m', alvos: '1 alvo' },
-        { name: 'Medo (Fear)', level: 3, descricao: 'Cone de 9 m. Teste de Sabedoria ou a criatura fica amedrontada e foge.', dano: 'Não causa dano direto (efeito)', alcance: '9 m', alvos: 'Múltiplos alvos' }
-      ]
-    } },
     {
-      name: 'Lâmina Psíquica (Soulknife)', nivel: 3, descricao: 'Ladino com poder psônico, cria lâminas mentais e usa habilidades telepáticas.', habilidades: [
-        { name: 'Lâminas Psíquicas (Psychic Blades)', level: 3, dano: '1d6 psíquico (principal) + 1d4 psíquico (bônus)', alcance: '1,5 m (corpo a corpo) ou 18 m (arremesso)', alvos: '1 alvo', descricao: 'Você materializa lâminas de energia psíquica pura. Como parte de um ataque, você cria uma lâmina que desaparece após o golpe e não pode ser desarmada.' },
-        { name: 'Poder Psiónico (Psionic Power)', level: 3, descricao: 'Você possui dados de energia psiónica usados para somar em testes de perícia com proficiência que falharam, adicionando o resultado ao total após a rolagem. Você tem 2d4 psiónicos por nível de ladino.', dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador' },
-        { name: 'Fala Telepática (Telepathic Speech)', level: 3, dano: 'Não causa dano direto', alcance: '1.600 m', alvos: 'Criaturas igual à proficiência', descricao: 'Você cria um elo telepático com um número de criaturas igual ao seu bônus de proficiência. As criaturas podem estar a até 1.600 metros (1 milha) de distância.' }
-      ], truques: []
+      name: 'Ladrão (Thief)',
+      nivel: 3,
+      descricao: 'Ladino clássico, mestre da escalada, fintagem e mãos rápidas.',
+      habilidades: [
+        {
+          name: 'Mãos Rápidas (Fast Hands)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'Você pode usar uma ação bônus para realizar uma ação de interagir com objetos ou usar um item mágico como parte da mesma ação.',
+          description: 'Você pode usar uma ação bônus para realizar uma ação de interagir com objetos ou usar um item mágico como parte da mesma ação.'
+        }
+      ],
+      truques: []
     },
-    { name: 'Espião (Swashbuckler)', nivel: 3, descricao: 'Ladino carismático, especialista em combate individual e estilo.', habilidades: [
-      { name: 'Movimento Elegante (Rakishness)', level: 3, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você se move com graça e evita ataques de oportunidade. Adiciona Carisma aos PV temporários ao usar ação de Ataque.' }
-    ], truques: [] },
-    { name: 'Investigador (Investigator)', nivel: 3, descricao: 'Ladino detetive, analisa fraquezas dos inimigos antes de atacar.', habilidades: [
-      { name: 'Instinto do Inquisidor (Investigator)', level: 3, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você encontra pistas e explora fraquezas com precisão. Pode usar Investigação como ação bônus.' }
-    ], truques: [] },
-    { name: 'Mestre da Trapaça (Mastermind)', nivel: 3, descricao: 'Ladino manipulador, com truques de intimidação e controle social.', habilidades: [
-      { name: 'Manipulação Maestral (Mastermind)', level: 3, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você engana e direciona aliados e inimigos com perícia. Pode usar Intimidação para obter informações.' }
-    ], truques: [] },
-    { name: 'Escarlate (Scout)', nivel: 3, descricao: 'Ladino batedor, especialista em sobrevivência e combate na natureza.', habilidades: [
-      { name: 'Atirador Ágil (Skirmisher)', level: 3, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Você se move pelo terreno e ataca com vantagem contra inimigos desprevenidos. Pode usar ação bônus para mover 10 m sem ataque de oportunidade.' }
-    ], truques: [] }
+    {
+      name: 'Assassino (Assassin)',
+      nivel: 3,
+      descricao: 'Ladino letal, especialista em emboscadas e ataque surpresa.',
+      habilidades: [
+        {
+          name: 'Assassinar (Assassinate)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'No primeiro turno de combate, você tem vantagem em ataques contra criaturas que ainda não agiram. Críticos automáticos contra alvos surpresos.',
+          description: 'No primeiro turno de combate, você tem vantagem em ataques contra criaturas que ainda não agiram. Críticos automáticos contra alvos surpresos.'
+        }
+      ],
+      truques: []
+    },
+    {
+      name: 'Trapaceiro Arcano (Arcane Trickster)',
+      nivel: 3,
+      descricao: 'Ladino que mistura truques arcanos com a sua trapaçaria.',
+      habilidades: [
+        {
+          name: 'Mão de Mago Furtiva (Mage Hand Legerdemain)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'Você pode usar Mãos Mágicas para realizar tarefas de Ladinagem e esconder objetos de forma furtiva.',
+          description: 'Você pode usar Mãos Mágicas para realizar tarefas de Ladinagem e esconder objetos de forma furtiva.'
+        }
+      ],
+      truques: [
+        {
+          name: 'Mãos Mágicas (Mage Hand)',
+          level: 0,
+          dano: 'Não causa dano direto',
+          alcance: '9 m',
+          alvos: '1 alvo (objeto)',
+          descricao: 'Mão espectral invisível manipula objetos até 5 kg a 9 m. Pode usar para Prestidigitação ou Ladinagem furtivamente.',
+          description: 'Mão espectral invisível manipula objetos até 5 kg a 9 m. Pode usar para Prestidigitação ou Ladinagem furtivamente.'
+        },
+        {
+          name: 'Ilusão Menor (Minor Illusion)',
+          level: 0,
+          dano: 'Não causa dano direto',
+          alcance: '9 m',
+          alvos: '1 alvo (objeto)',
+          descricao: 'Cria som ou imagem inanimada em 9 m. Teste de Investigação para desmascarar.',
+          description: 'Cria som ou imagem inanimada em 9 m. Teste de Investigação para desmascarar.'
+        },
+        {
+          name: 'Amigos (Friends)',
+          level: 0,
+          dano: 'Não causa dano direto',
+          alcance: '1,5 m',
+          alvos: '1 alvo',
+          descricao: 'Vantagem em testes de Carisma contra 1 criatura não hostil. Ela percebe o encantamento ao fim.',
+          description: 'Vantagem em testes de Carisma contra 1 criatura não hostil. Ela percebe o encantamento ao fim.'
+        }
+      ],
+      magiasPorCirculo: {
+        '1º Círculo': [
+          {
+            name: 'Sono (Sleep)',
+            level: 1,
+            dano: 'Não causa dano direto',
+            alcance: '27 m',
+            alvos: 'Múltiplos alvos',
+            descricao: 'Você escolhe um ponto dentro do alcance. Criaturas em um raio de 6 m a partir desse ponto devem fazer um teste de resistência de Constituição. As criaturas são afetadas em ordem, começando pelas que têm menos PV. As criaturas afetadas ficam inconscientes.',
+            description: 'Você escolhe um ponto dentro do alcance. Criaturas em um raio de 6 m a partir desse ponto devem fazer um teste de resistência de Constituição. As criaturas são afetadas em ordem, começando pelas que têm menos PV. As criaturas afetadas ficam inconscientes.'
+          },
+          {
+            name: 'Cativar Pessoa (Charm Person)',
+            level: 1,
+            dano: 'Não causa dano direto',
+            alcance: '9 m',
+            alvos: '1 alvo humanoide',
+            descricao: 'A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, você a encanta até o fim da duração ou até que você ou seus aliados causem dano nela.',
+            description: 'A criatura deve fazer um teste de resistência de Sabedoria. Se falhar, você a encanta até o fim da duração ou até que você ou seus aliados causem dano nela.'
+          },
+          {
+            name: 'Disfarçar-se (Disguise Self)',
+            level: 1,
+            dano: 'Não causa dano direto',
+            alcance: 'Uso pessoal',
+            alvos: 'Apenas o conjurador',
+            descricao: 'Você altera sua aparência física, incluindo altura, peso, detalhes faciais e roupas. A ilusão dura até 1 hora ou até que você a remova.',
+            description: 'Você altera sua aparência física, incluindo altura, peso, detalhes faciais e roupas. A ilusão dura até 1 hora ou até que você a remova.'
+          },
+          {
+            name: 'Leque de Cores (Color Spray)',
+            level: 1,
+            dano: 'Não causa dano direto',
+            alcance: 'Uso pessoal',
+            alvos: 'Criaturas em um cone de 4,5 m',
+            descricao: 'Você cria um cone de luzes coloridas pulsantes. Criaturas no cone com menos pontos de vida atuais ficam cegas por 1 rodada.',
+            description: 'Você cria um cone de luzes coloridas pulsantes. Criaturas no cone com menos pontos de vida atuais ficam cegas por 1 rodada.'
+          },
+          {
+            name: 'Escudo Arcano (Shield)',
+            level: 1,
+            dano: 'Não causa dano direto',
+            alcance: 'Uso pessoal',
+            alvos: 'Apenas o conjurador',
+            descricao: 'Você cria um escudo invisível que oferece +5 de bônus na CA e imunidade a Mísseis Mágicos até o início do seu próximo turno.',
+            description: 'Você cria um escudo invisível que oferece +5 de bônus na CA e imunidade a Mísseis Mágicos até o início do seu próximo turno.'
+          }
+        ],
+        '2º Círculo': [
+          {
+            name: 'Invisibilidade (Invisibility)',
+            level: 2,
+            dano: 'Não causa dano direto',
+            alcance: 'Toque',
+            alvos: '1 alvo',
+            descricao: 'Você toca uma criatura e ela fica invisível até o fim da duração (Concentração, até 1 hora) ou até que ela ataque ou conjure uma magia.',
+            description: 'Você toca uma criatura e ela fica invisível até o fim da duração (Concentração, até 1 hora) ou até que ela ataque ou conjure uma magia.'
+          },
+          {
+            name: 'Passo Nebuloso (Misty Step)',
+            level: 2,
+            dano: 'Não causa dano direto',
+            alcance: '9 m',
+            alvos: 'Apenas o conjurador',
+            descricao: 'Você se teleporta até 9 m para um espaço vazio que possa ver.',
+            description: 'Você se teleporta até 9 m para um espaço vazio que possa ver.'
+          },
+          {
+            name: 'Sugestão (Suggestion)',
+            level: 2,
+            dano: 'Não causa dano direto',
+            alcance: '9 m',
+            alvos: '1 alvo',
+            descricao: 'Você sugere uma ação para uma criatura. Ela deve passar em um teste de Sabedoria ou seguir o curso de ação por até 8 horas.',
+            description: 'Você sugere uma ação para uma criatura. Ela deve passar em um teste de Sabedoria ou seguir o curso de ação por até 8 horas.'
+          },
+          {
+            name: 'Imagem Espelhada (Mirror Image)',
+            level: 2,
+            dano: 'Não causa dano direto',
+            alcance: 'Uso pessoal',
+            alvos: 'Apenas o conjurador',
+            descricao: 'Você cria três duplicatas ilusórias de si mesmo que confundem os atacantes, durando por 1 minuto.',
+            description: 'Você cria três duplicatas ilusórias de si mesmo que confundem os atacantes, durando por 1 minuto.'
+          }
+        ],
+        '3º Círculo': [
+          {
+            name: 'Piscar (Blink)',
+            level: 3,
+            dano: 'Não causa dano direto',
+            alcance: 'Uso pessoal',
+            alvos: 'Apenas o conjurador',
+            descricao: 'Role um d20 no final de cada um de seus turnos. Com um resultado de 11 ou mais, você se move para o Plano Etéreo.',
+            description: 'Role um d20 no final de cada um de seus turnos. Com um resultado de 11 ou mais, você se move para o Plano Etéreo.'
+          },
+          {
+            name: 'Dissipar Magia (Dispel Magic)',
+            level: 3,
+            dano: 'Não causa dano direto',
+            alcance: '36 m',
+            alvos: '1 alvo',
+            descricao: 'Você escolhe uma criatura, objeto ou efeito mágico. Qualquer magia de 3º nível ou menor termina.',
+            description: 'Você escolhe uma criatura, objeto ou efeito mágico. Qualquer magia de 3º nível ou menor termina.'
+          },
+          {
+            name: 'Medo (Fear)',
+            level: 3,
+            dano: 'Não causa dano direto',
+            alcance: 'Uso pessoal',
+            alvos: 'Criaturas em um cone de 9 m',
+            descricao: 'Você projeta uma imagem aterrorizante. Criaturas em um cone de 9 m devem passar num teste de Sabedoria ou ficarão amedrontadas.',
+            description: 'Você projeta uma imagem aterrorizante. Criaturas em um cone de 9 m devem passar num teste de Sabedoria ou ficarão amedrontadas.'
+          }
+        ]
+      }
+    },
+    {
+      name: 'Lâmina Psíquica (Soulknife)',
+      nivel: 3,
+      descricao: 'Ladino com poder psônico, cria lâminas mentais e usa habilidades telepáticas.',
+      habilidades: [
+        {
+          name: 'Lâminas Psíquicas (Psychic Blades)',
+          level: 3,
+          dano: '1d6 psíquico (principal) + 1d4 psíquico (bônus)',
+          alcance: '1,5 m (corpo a corpo) ou 18 m (arremesso)',
+          alvos: '1 alvo',
+          descricao: 'Você materializa lâminas de energia psíquica pura. Como parte de um ataque, você cria uma lâmina que desaparece após o golpe e não pode ser desarmada.',
+          description: 'Você materializa lâminas de energia psíquica pura. Como parte de um ataque, você cria uma lâmina que desaparece após o golpe e não pode ser desarmada.'
+        },
+        {
+          name: 'Poder Psiónico (Psionic Power)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'Você possui dados de energia psiónica usados para somar em testes de perícia com proficiência que falharam, adicionando o resultado ao total após a rolagem.',
+          description: 'Você possui dados de energia psiónica usados para somar em testes de perícia com proficiência que falharam, adicionando o resultado ao total após a rolagem.'
+        },
+        {
+          name: 'Fala Telepática (Telepathic Speech)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: '1.600 m',
+          alvos: 'Criaturas igual à proficiência',
+          descricao: 'Você cria um elo telepático com um número de criaturas igual ao seu bônus de proficiência.',
+          description: 'Você cria um elo telepático com um número de criaturas igual ao seu bônus de proficiência.'
+        }
+      ],
+      truques: []
+    },
+    {
+      name: 'Espião (Swashbuckler)',
+      nivel: 3,
+      descricao: 'Ladino carismático, especialista em combate individual e estilo.',
+      habilidades: [
+        {
+          name: 'Movimento Elegante (Rakishness)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'Você se move com graça e evita ataques de oportunidade. Adiciona Carisma aos PV temporários ao usar ação de Ataque.',
+          description: 'Você se move com graça e evita ataques de oportunidade. Adiciona Carisma aos PV temporários ao usar ação de Ataque.'
+        }
+      ],
+      truques: []
+    },
+    {
+      name: 'Investigador (Investigator)',
+      nivel: 3,
+      descricao: 'Ladino detetive, analisa fraquezas dos inimigos antes de atacar.',
+      habilidades: [
+        {
+          name: 'Instinto do Inquisidor (Investigator)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'Você encontra pistas e explora fraquezas com precisão. Pode usar Investigação como ação bônus.',
+          description: 'Você encontra pistas e explora fraquezas com precisão. Pode usar Investigação como ação bônus.'
+        }
+      ],
+      truques: []
+    },
+    {
+      name: 'Mestre da Trapaça (Mastermind)',
+      nivel: 3,
+      descricao: 'Ladino manipulador, com truques de intimidação e controle social.',
+      habilidades: [
+        {
+          name: 'Manipulação Maestral (Mastermind)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'Você engana e direciona aliados e inimigos com perícia. Pode usar Intimidação para obter informações.',
+          description: 'Você engana e direciona aliados e inimigos com perícia. Pode usar Intimidação para obter informações.'
+        }
+      ],
+      truques: []
+    },
+    {
+      name: 'Escarlate (Scout)',
+      nivel: 3,
+      descricao: 'Ladino batedor, especialista em sobrevivência e combate na natureza.',
+      habilidades: [
+        {
+          name: 'Atirador Ágil (Skirmisher)',
+          level: 3,
+          dano: 'Não causa dano direto',
+          alcance: 'Uso pessoal',
+          alvos: 'Apenas o conjurador',
+          descricao: 'Você se move pelo terreno e ataca com vantagem contra inimigos desprevenidos. Pode usar ação bônus para mover 10 m sem ataque de oportunidade.',
+          description: 'Você se move pelo terreno e ataca com vantagem contra inimigos desprevenidos. Pode usar ação bônus para mover 10 m sem ataque de oportunidade.'
+        }
+      ],
+      truques: []
+    }
   ],
   feiticeiro: [
     { name: 'Dracônico (Ancestral Draconata)', nivel: 1, descricao: 'Linhagem de dragões, com HP extra e magia elemental.', habilidades: [{ name: 'Resistência Dracônica', level: 1, dano: 'Não causa dano direto', alcance: 'Uso pessoal', alvos: 'Apenas o conjurador', descricao: 'Seu sangue dracônico concede resistência elemental e vigor extra.' }], truques: [] },

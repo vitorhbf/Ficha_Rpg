@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -498,83 +498,95 @@ function updateSubclassOptions() {
 function getFeatureTooltip(name, type) {
   const selectedClass = classSelect?.value || '';
   const selectedSubclass = subclassSelect?.value || '';
-  const searchName = (name || '').toLowerCase().trim();
-  // Procura em todas as fontes de dados possíveis
+
+  // 1. LIMPEZA DOS NOMES DE ENTRADA (Remove parênteses de inglês e níveis do select)
+  const searchNameClean = (name || '').toLowerCase().trim().split('(')[0].trim();
+  const selectedSubclassClean = (selectedSubclass || '').toLowerCase().trim().split('(')[0].trim();
+
+  // Função interna para varrer arrays e encontrar o item por nome parcial limpo
   const searchInList = (list) => {
     if (!Array.isArray(list)) return null;
+
     const found = list.find((entry) => {
-      if (typeof entry === 'string') {
-        return entry.toLowerCase().trim() === searchName;
-      }
-      if (entry && entry.name) {
-        return entry.name.toLowerCase().trim() === searchName;
-      }
-      return false;
+      if (!entry) return false;
+      const entryName = (typeof entry === 'string' ? entry : entry.name || '').toLowerCase().trim();
+      const entryClean = entryName.split('(')[0].trim();
+      return entryClean === searchNameClean || entryName === searchNameClean;
     });
+
     if (!found) return null;
-    if (typeof found === 'string') {
-      // Truques: buscar descrição na classe também
-      if (type === 'trick' && selectedClass && CLASSES_DATA[selectedClass]) {
-        const classTruques = CLASSES_DATA[selectedClass].truques || [];
-        const match = classTruques.find((t) => (typeof t === 'string' ? t : t.name) === found);
-        if (match && typeof match === 'object' && match.descricao) return match.descricao;
-      }
-      return 'Sem descrição disponível.';
-    }
-    // Se tem descrição, usa ela
-    if (found.descricao) {
-      const parts = [found.descricao];
-      // Adiciona dano, alcance e alvos se existirem
-      if (found.dano) parts.push(`Dano: ${found.dano}`);
-      if (found.alcance) parts.push(`Alcance: ${found.alcance}`);
-      if (found.alvos) parts.push(`Alvos: ${found.alvos}`);
-      return parts.join(' | ') + (found.level ? ` (Nível ${found.level})` : '');
-    }
-    // Se tem dano, alcance e alvos mas sem descrição, constrói a descrição
-    if (found.dano || found.alcance || found.alvos) {
+
+    // Se achou uma string pura, retorna ela mesma
+    if (typeof found === 'string') return found;
+
+    // Se achou o objeto completo, monta a string detalhada de retorno
+    const descFinal = found.descricao || found.description;
+    if (descFinal || found.dano || found.alcance || found.alvos) {
       const parts = [];
+      if (descFinal) parts.push(descFinal);
       if (found.dano) parts.push(`Dano: ${found.dano}`);
       if (found.alcance) parts.push(`Alcance: ${found.alcance}`);
       if (found.alvos) parts.push(`Alvos: ${found.alvos}`);
       return parts.join(' | ') + (found.level ? ` (Nível ${found.level})` : '');
     }
+
     return 'Sem descrição disponível.';
   };
-  // 1. Habilidades de classe
+
+  // 2. BUSCA AS INFORMAÇÕES DA SUBCLASSE SELECIONADA (Se houver)
+  let subclassData = null;
+  if (selectedClass && SUBCLASSES_DATA[selectedClass]) {
+    subclassData = SUBCLASSES_DATA[selectedClass].find((sc) => {
+      if (!sc || !sc.name) return false;
+      const scNameClean = sc.name.toLowerCase().trim().split('(')[0].trim();
+      return scNameClean === selectedSubclassClean;
+    });
+  }
+
+  // 3. FLUXO DE VERIFICAÇÃO POR TIPO DE ELEMENTO
+
+  // Tipo: Habilidades de Classe
   if (type === 'feature' && selectedClass && CLASSES_DATA[selectedClass]) {
     const desc = searchInList(CLASSES_DATA[selectedClass].habilidades);
     if (desc) return desc;
   }
-  // 2. Habilidades de subclasse
-  if (type === 'subclass' && selectedClass && SUBCLASSES_DATA[selectedClass]) {
-    const subclassData = SUBCLASSES_DATA[selectedClass].find((sc) => sc.name === selectedSubclass);
-    if (subclassData) {
-      const desc = searchInList(subclassData.habilidades);
+
+  // Tipo: Habilidades de Subclasse
+  if (type === 'subclass' && subclassData) {
+    const desc = searchInList(subclassData.habilidades);
+    if (desc) return desc;
+  }
+
+  // Tipo: Truques (CORRIGIDO: Agora busca na classe MÃE e também dentro do array da SUBCLASSE)
+  if (type === 'trick') {
+    // Primeiro tenta buscar na lista de truques específicos da subclasse (caso do Trapaceiro Arcano)
+    if (subclassData && subclassData.truques) {
+      const desc = searchInList(subclassData.truques);
+      if (desc) return desc;
+    }
+    // Se não achar na subclasse, busca nos truques globais da classe mãe
+    if (selectedClass && CLASSES_DATA[selectedClass] && CLASSES_DATA[selectedClass].truques) {
+      const desc = searchInList(CLASSES_DATA[selectedClass].truques);
       if (desc) return desc;
     }
   }
-  // 3. Truques
-  if (type === 'trick' && selectedClass && CLASSES_DATA[selectedClass]) {
-    const desc = searchInList(CLASSES_DATA[selectedClass].truques);
-    if (desc) return desc;
-  }
-  // 4. Magias por círculo
+
+  // Tipo: Magias por círculo
   if (type === 'spell' && selectedClass && CLASSES_DATA[selectedClass]) {
     if (CLASSES_DATA[selectedClass].magiasPorCirculo) {
       const desc = searchInList(Object.values(CLASSES_DATA[selectedClass].magiasPorCirculo).flat());
       if (desc) return desc;
     }
-    // Também nas subclasses
-    if (SUBCLASSES_DATA[selectedClass]) {
-      const subclassData = SUBCLASSES_DATA[selectedClass].find((sc) => sc.name === selectedSubclass);
-      if (subclassData && subclassData.magiasPorCirculo) {
-        const desc = searchInList(Object.values(subclassData.magiasPorCirculo).flat());
-        if (desc) return desc;
-      }
+    
+    if (subclassData && subclassData.magiasPorCirculo) {
+      const desc = searchInList(Object.values(subclassData.magiasPorCirculo).flat());
+      if (desc) return desc;
     }
   }
+
   return 'Sem descrição disponível.';
 }
+
 function normalizeFeatureItems(items) {
   if (!Array.isArray(items)) return [];
   return items
