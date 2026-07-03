@@ -1146,13 +1146,12 @@ function updateSummary() {
         const parsed = JSON.parse(attacksVal);
         if (Array.isArray(parsed) && parsed.length > 0) {
           parsed.forEach((attack) => {
-            const tooltipText = buildAttackTooltip(attack);
             const item = document.createElement('div');
             item.className = 'attack-list-item';
             item.style.background = 'rgba(17, 24, 39, 0.3)';
             item.innerHTML = `
               <div class="attack-info">
-                <span class="attack-name">${attack.item}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>
+                <span class="attack-name">${attack.item}</span>
                 <span class="attack-hit-badge">Acerto: ${attack.hit}</span>
                 <span class="attack-damage-badge">Dano: ${attack.damage}</span>
               </div>
