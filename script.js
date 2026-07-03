@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -1571,6 +1571,10 @@ function loadForm() {
           field.checked = value === 'on';
         } else {
           field.value = value;
+          // Ensure base value dataset is in sync for attribute fields
+          if (ATTRIBUTE_KEYS.includes(key)) {
+            field.dataset.baseValue = value;
+          }
         }
       }
     });
@@ -1678,18 +1682,33 @@ form.addEventListener('submit', (e) => {
 
 resetBtn.addEventListener('click', () => {
   if (confirm('Tem certeza que deseja limpar a ficha?')) {
+    // Reset form fields to defaults
     form.reset();
     localStorage.removeItem(STORAGE_KEY);
+    // Reset selects
+    raceSelect.value = '';
+    classSelect.value = '';
     if (subclassSelect) {
       subclassSelect.dataset.lastValue = '';
+      subclassSelect.value = '';
       updateSubclassOptions();
     }
+    // Reset attribute inputs to base value 10 and sync dataset
+    ATTRIBUTE_KEYS.forEach((attr) => {
+      const input = form.elements.namedItem(attr);
+      if (input) {
+        input.value = 10;
+        input.dataset.baseValue = 10;
+      }
+    });
+    // Clear attacks and class features
     attacksData = [];
     renderAttacks();
+    renderClassFeaturesInCombat();
+    // Re‑apply race bonuses (now none selected)
     applyRaceBonus();
     updateHeader();
     calculateModifiers();
-    renderClassFeaturesInCombat();
     updateSummary();
     statusText.textContent = 'Ficha limpa';
     setTimeout(() => {
