@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -37,6 +37,8 @@ subclassSelect.addEventListener('change', () => {
   renderClassFeaturesInCombat();
   // Update the overview summary and save the form state
   updateSummary();
+  // Update the header to reflect the new subclass
+  updateHeader();
   saveForm();
 });
 const ATTRIBUTE_KEYS = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
@@ -1347,13 +1349,17 @@ function updateHeader() {
   const classKey = classSelect.value;
   const className = classKey && CLASSES_DATA[classKey] ? CLASSES_DATA[classKey].name : 'Classe';
 
+  // Include subclass if one is selected
+  const subclass = subclassSelect && subclassSelect.value ? ` • ${subclassSelect.value}` : '';
+
   const level = form.elements.namedItem('level').value || '1';
 
   const raceKey = raceSelect.value;
   const race = raceKey && RACES_DATA[raceKey] ? RACES_DATA[raceKey].name : 'Raça';
 
   document.getElementById('charName').textContent = name;
-  document.getElementById('charClass').textContent = className;
+  // Show class and subclass together
+  document.getElementById('charClass').textContent = `${className}${subclass}`;
   document.getElementById('charLevel').textContent = `Nível ${level}`;
   document.getElementById('charRace').textContent = race;
 }
@@ -1552,6 +1558,19 @@ function importCharacter(e) {
   reader.readAsText(file);
   e.target.value = ''; // Reset file input
 }
+  // If a Ladino class is selected and no subclass is set, auto-select the first available subclass
+  if (classSelect.value === 'ladino' && !subclassSelect.value) {
+    // Ensure subclass options are populated
+    updateSubclassOptions();
+    const firstEnabled = Array.from(subclassSelect.options).find(opt => !opt.disabled && opt.value);
+    if (firstEnabled) {
+      subclassSelect.value = firstEnabled.value;
+      subclassSelect.dataset.lastValue = firstEnabled.value;
+      renderClassFeaturesInCombat();
+      updateHeader();
+      saveForm();
+    }
+  }
 
 // LOAD FORM
 function loadForm() {
