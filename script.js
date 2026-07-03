@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -1527,23 +1527,27 @@ function importCharacter(e) {
 
   const reader = new FileReader();
   reader.onload = function(evt) {
+    // Remove possible UTF-8 BOM and trim whitespace before parsing
+    const rawText = typeof evt.target.result === 'string' ? evt.target.result.replace(/^\uFEFF/, '').trim() : '';
+    let data;
     try {
-      const data = JSON.parse(evt.target.result);
-      if (typeof data !== 'object' || data === null) {
-        throw new Error('Formato inválido.');
-      }
-
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      loadForm();
-
-      statusText.textContent = '✓ Ficha importada';
-      setTimeout(() => {
-        statusText.textContent = 'Ficha salva automaticamente';
-      }, 2000);
-    } catch (err) {
+      data = JSON.parse(rawText);
+    } catch (parseErr) {
       alert('Erro ao importar arquivo: Certifique-se de que é um arquivo JSON válido de ficha de RPG.');
-      console.error(err);
+      console.error(parseErr);
+      return;
     }
+    if (typeof data !== 'object' || data === null) {
+      alert('Erro ao importar arquivo: Formato de dados inválido.');
+      return;
+    }
+    // Store data and load form without wrapping in a try-catch to avoid false error alerts
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    loadForm();
+    statusText.textContent = '✓ Ficha importada';
+    setTimeout(() => {
+      statusText.textContent = 'Ficha salva automaticamente';
+    }, 2000);
   };
   reader.readAsText(file);
   e.target.value = ''; // Reset file input
