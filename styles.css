@@ -1098,3 +1098,11 @@ label.form-group:has(#hitDie) {
     height: 18px;
   }
 }
+
+.info-icon {
+  cursor: pointer;
+  margin-left: 6px;
+  display: inline-block !important;
+  flex-shrink: 0 !important;
+  user-select: none;
+}

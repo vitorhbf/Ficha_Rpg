@@ -823,7 +823,6 @@ function renderClassFeaturesInCombat() {
         const text = document.createElement('span');
         text.textContent = item.name;
         text.style.fontSize = '13px';
-        text.style.borderBottom = '1px dotted var(--primary)';
 
       const infoIcon = document.createElement('span');
       infoIcon.className = 'info-icon';
@@ -904,7 +903,6 @@ function renderClassFeaturesInCombat() {
         const text = document.createElement('span');
         text.textContent = item.name;
         text.style.fontSize = '13px';
-        text.style.borderBottom = '1px dotted var(--primary)';
 
         const infoIconSpell = document.createElement('span');
         infoIconSpell.className = 'info-icon';
@@ -1245,7 +1243,7 @@ function updateSummary() {
       item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de classe:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${featureSelections.map((name) => {
         const tooltipText = getFeatureTooltip(name, "feature");
-        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+        return `<span>• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
       }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     }
@@ -1255,7 +1253,7 @@ function updateSummary() {
       item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de subclasse:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${subclassSelections.map((name) => {
         const tooltipText = getFeatureTooltip(name, "subclass");
-        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+        return `<span>• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
       }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     }
@@ -1265,7 +1263,7 @@ function updateSummary() {
       item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Truques:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${trickSelections.map((name) => {
         const tooltipText = getFeatureTooltip(name, "trick");
-        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+        return `<span>• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
       }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     }
@@ -1276,7 +1274,7 @@ function updateSummary() {
       item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Magia de Círculo — ${circleName}:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${names.map((name) => {
         const tooltipText = getFeatureTooltip(name, "spell");
-        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+        return `<span>• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
       }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     });
