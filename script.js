@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -28,9 +28,13 @@ classSelect.addEventListener('change', () => {
 });
 
 // When subclass changes, simply store the selected value and refresh the summary.
+// When subclass changes we need to refresh the class‑specific features (abilities, tricks, spells) shown in the Combat tab
+// and also update the Overview summary. We keep the selected value persisted for later loads.
 subclassSelect.addEventListener('change', () => {
   // Persist the chosen subclass for later loads
   subclassSelect.dataset.lastValue = subclassSelect.value;
+  // Re‑render the class feature options for the newly selected subclass
+  renderClassFeaturesInCombat();
   // Update the overview summary and save the form state
   updateSummary();
   saveForm();
