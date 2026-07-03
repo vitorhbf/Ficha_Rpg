@@ -1,4 +1,4 @@
-﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -10,6 +10,27 @@ const STORAGE_KEY = 'rpg-character-sheet-v2';
 const raceSelect = document.getElementById('raceSelect');
 const classSelect = document.getElementById('classSelect');
 const subclassSelect = document.getElementById('subclassSelect');
+
+// ---------------------------------------------------------------------------
+//  Class / Subclass change handling
+// ---------------------------------------------------------------------------
+// When the user selects a different class or subclass we must clear any
+// previously selected class features (tricks, abilities, spells) that belong to
+// the old class. The function `applyClassFeatures` already performs the cleanup
+// via `clearClassFeatureSelections()`, so we simply invoke it whenever the
+// selects change.
+// This ensures that hidden check‑boxes from the previous class do not remain
+// checked in memory and therefore do not appear in the "Resumo de Jogo"
+// (Combat & Resistances) summary.
+classSelect.addEventListener('change', () => {
+  // Reset selections and re‑render class‑specific options
+  applyClassFeatures();
+});
+
+subclassSelect.addEventListener('change', () => {
+  // Subclass change may affect available tricks/spells; clear old selections
+  applyClassFeatures();
+});
 const ATTRIBUTE_KEYS = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
 const PROFICIENCY_BONUS = 2;
 const ATTRIBUTE_LABELS = {
@@ -339,6 +360,11 @@ function applyRaceBonus() {
 // APPLY CLASS FEATURES
 function clearClassFeatureSelections() {
   saveSelectedClassFeatureChoices([]);
+  // Desmarcar todos os checkboxes de truques, habilidades e magias
+  document.querySelectorAll('#classFeatureOptions input[type="checkbox"]').forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  // Limpar os textareas de magias por círculo também, pois eles armazenam seleções
   ['spells_1_desc', 'spells_2_desc', 'spells_3_desc', 'spells_4_desc', 'spells_5_desc', 'spells_6_9_desc'].forEach((name) => {
     const field = form.elements.namedItem(name);
     if (field) field.value = '';
@@ -363,11 +389,12 @@ function updateMaxHp() {
     hpCurrentInput.value = classData.hpInicial * level;
   }
 }
+
 function applyClassFeatures() {
   const selectedClass = classSelect.value;
   const classData = selectedClass && CLASSES_DATA[selectedClass] ? CLASSES_DATA[selectedClass] : null;
 
-  // Se mudou de classe, zera seleções de habilidades/magias anteriores
+  // Sempre zera as seleções ao mudar de classe
   clearClassFeatureSelections();
 
   // Atualiza a lista de subclasses conforme a classe escolhida
@@ -793,14 +820,21 @@ function renderClassFeaturesInCombat() {
         updateSummary();
       });
 
-      const text = document.createElement('span');
-      text.textContent = item.name;
-      text.style.fontSize = '13px';
-      text.style.cursor = 'help';
-      text.style.borderBottom = '1px dotted var(--primary)';
-      text.title = getFeatureTooltip(item.name, type);
+        const text = document.createElement('span');
+        text.textContent = item.name;
+        text.style.fontSize = '13px';
+        text.style.borderBottom = '1px dotted var(--primary)';
+
+      const infoIcon = document.createElement('span');
+      infoIcon.className = 'info-icon';
+      infoIcon.style.cssText = 'cursor:pointer; margin-left:6px;';
+      infoIcon.title = getFeatureTooltip(item.name, type);
+      infoIcon.textContent = 'ℹ️';
+      infoIcon.onclick = function(e) { e.stopPropagation(); e.preventDefault(); alert(this.title); };
+
       label.appendChild(checkbox);
       label.appendChild(text);
+      label.appendChild(infoIcon); // Adiciona o ícone após o texto
       group.appendChild(label);
     });
     optionsContainer.appendChild(group);
@@ -870,11 +904,18 @@ function renderClassFeaturesInCombat() {
         const text = document.createElement('span');
         text.textContent = item.name;
         text.style.fontSize = '13px';
-        text.style.cursor = 'help';
         text.style.borderBottom = '1px dotted var(--primary)';
-        text.title = getFeatureTooltip(item.name, 'spell');
+
+        const infoIconSpell = document.createElement('span');
+        infoIconSpell.className = 'info-icon';
+        infoIconSpell.style.cssText = 'cursor:pointer; margin-left:6px;';
+        infoIconSpell.title = getFeatureTooltip(item.name, 'spell');
+        infoIconSpell.textContent = 'ℹ️';
+        infoIconSpell.onclick = function(e) { e.stopPropagation(); e.preventDefault(); alert(this.title); };
+
         itemLabel.appendChild(checkbox);
         itemLabel.appendChild(text);
+        itemLabel.appendChild(infoIconSpell); // Adiciona o ícone após o texto da magia
         optionList.appendChild(itemLabel);
       });
     } else {
@@ -1105,12 +1146,13 @@ function updateSummary() {
         const parsed = JSON.parse(attacksVal);
         if (Array.isArray(parsed) && parsed.length > 0) {
           parsed.forEach((attack) => {
+            const tooltipText = buildAttackTooltip(attack);
             const item = document.createElement('div');
             item.className = 'attack-list-item';
             item.style.background = 'rgba(17, 24, 39, 0.3)';
             item.innerHTML = `
               <div class="attack-info">
-                <span class="attack-name">${attack.item}</span>
+                <span class="attack-name">${attack.item}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>
                 <span class="attack-hit-badge">Acerto: ${attack.hit}</span>
                 <span class="attack-damage-badge">Dano: ${attack.damage}</span>
               </div>
@@ -1146,86 +1188,97 @@ function updateSummary() {
 
     let hasAnySpell = false;
 
+    const summary = getClassFeatureSummary();
+    const selectedClass = classSelect?.value || "";
+    const selectedSubclass = subclassSelect?.value || "";
+    const classData = selectedClass && CLASSES_DATA[selectedClass] ? CLASSES_DATA[selectedClass] : null;
+    
     const featureSelections = [];
     const subclassSelections = [];
     const trickSelections = [];
     const spellSelectionsByCircle = {};
 
-    try {
-      const rawSelections = JSON.parse(form.elements.namedItem('spells_0_desc')?.value || '[]');
-      if (Array.isArray(rawSelections)) {
-        rawSelections.forEach((entry) => {
-          if (entry?.type === 'feature') featureSelections.push(entry.name);
-          if (entry?.type === 'subclass') subclassSelections.push(entry.name);
-          if (entry?.type === 'trick') trickSelections.push(entry.name);
-          if (entry?.type === 'spell') {
-            const circleName = entry.circle || 'Círculo não informado';
-            if (!spellSelectionsByCircle[circleName]) spellSelectionsByCircle[circleName] = [];
-            spellSelectionsByCircle[circleName].push(entry.name);
-          }
-        });
+    // Coleta seleções de truques, habilidades e magias dos checkboxes visíveis e ativos
+    document.querySelectorAll('#classFeatureOptions input[type="checkbox"]:checked').forEach(checkbox => {
+      const type = checkbox.dataset.type;
+      const name = checkbox.closest('label')?.querySelector('span')?.textContent?.trim();
+      const circle = checkbox.dataset.circle || null;
+
+      if (!name) return;
+
+      if (type === 'feature') featureSelections.push(name);
+      if (type === 'subclass') subclassSelections.push(name);
+      if (type === 'trick') trickSelections.push(name);
+      if (type === 'spell') {
+        const circleName = circle || 'Círculo não informado';
+        if (!spellSelectionsByCircle[circleName]) spellSelectionsByCircle[circleName] = [];
+        spellSelectionsByCircle[circleName].push(name);
       }
-    } catch (error) {
-      // Ignora se não houver seleção válida
-    }
+    });
+
+    // Coleta magias por círculo dos campos de texto ocultos, filtrando apenas as que pertencem à classe/subclasse atual
+    const allAvailableSpellsNames = new Set(Object.values(summary.spellsByCircle).flat().map(s => s.name.toLowerCase()));
 
     const circleFieldConfigs = [
-      { fieldName: 'spells_1_desc', label: '1º Círculo' },
-      { fieldName: 'spells_2_desc', label: '2º Círculo' },
-      { fieldName: 'spells_3_desc', label: '3º Círculo' },
-      { fieldName: 'spells_4_desc', label: '4º Círculo' },
-      { fieldName: 'spells_5_desc', label: '5º Círculo' },
-      { fieldName: 'spells_6_9_desc', label: 'Círculos Superiores (6º ao 9º)' }
+      { fieldName: "spells_1_desc", label: "1º Círculo" },
+      { fieldName: "spells_2_desc", label: "2º Círculo" },
+      { fieldName: "spells_3_desc", label: "3º Círculo" },
+      { fieldName: "spells_4_desc", label: "4º Círculo" },
+      { fieldName: "spells_5_desc", label: "5º Círculo" },
+      { fieldName: "spells_6_9_desc", label: "Círculos Superiores (6º ao 9º)" }
     ];
 
     circleFieldConfigs.forEach(({ fieldName, label }) => {
       const selections = getCircleSpellSelections(fieldName);
       selections.forEach((entry) => {
-        const circleName = entry.circle || label;
-        if (!spellSelectionsByCircle[circleName]) spellSelectionsByCircle[circleName] = [];
-        spellSelectionsByCircle[circleName].push(entry.name);
+        // Adiciona apenas se a magia ainda estiver disponível na classe/subclasse atual
+        if (allAvailableSpellsNames.has(entry.name.toLowerCase())) { // Usa o conjunto de nomes de magias disponíveis
+          const circleName = entry.circle || label;
+          if (!spellSelectionsByCircle[circleName]) spellSelectionsByCircle[circleName] = [];
+          spellSelectionsByCircle[circleName].push(entry.name);
+        }
       });
     });
 
     if (featureSelections.length) {
       hasAnySpell = true;
-      const item = document.createElement('div');
-      item.style.marginBottom = '8px';
+      const item = document.createElement("div");
+      item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de classe:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${featureSelections.map((name) => {
-        const tip = getFeatureTooltip(name, 'feature');
-        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
-      }).join('<br>')}</div>`;
+        const tooltipText = getFeatureTooltip(name, "feature");
+        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+      }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     }
     if (subclassSelections.length) {
       hasAnySpell = true;
-      const item = document.createElement('div');
-      item.style.marginBottom = '8px';
+      const item = document.createElement("div");
+      item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Habilidades de subclasse:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${subclassSelections.map((name) => {
-        const tip = getFeatureTooltip(name, 'subclass');
-        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
-      }).join('<br>')}</div>`;
+        const tooltipText = getFeatureTooltip(name, "subclass");
+        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+      }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     }
     if (trickSelections.length) {
       hasAnySpell = true;
-      const item = document.createElement('div');
-      item.style.marginBottom = '8px';
+      const item = document.createElement("div");
+      item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Truques:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${trickSelections.map((name) => {
-        const tip = getFeatureTooltip(name, 'trick');
-        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
-      }).join('<br>')}</div>`;
+        const tooltipText = getFeatureTooltip(name, "trick");
+        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+      }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     }
     Object.entries(spellSelectionsByCircle).forEach(([circleName, names]) => {
       if (!names.length) return;
       hasAnySpell = true;
-      const item = document.createElement('div');
-      item.style.marginBottom = '8px';
+      const item = document.createElement("div");
+      item.style.marginBottom = "8px";
       item.innerHTML = `<strong style="color: var(--primary); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;">Magia de Círculo — ${circleName}:</strong> <div style="margin-top: 2px; padding-left: 8px; border-left: 2px solid var(--border); font-size: 13px; white-space: pre-wrap; word-break: break-word; line-height: 1.4;">${names.map((name) => {
-        const tip = getFeatureTooltip(name, 'spell');
-        return `<span title="${tip}" style="cursor: help; border-bottom: 1px dotted var(--primary);">• ${name}</span>`;
-      }).join('<br>')}</div>`;
+        const tooltipText = getFeatureTooltip(name, "spell");
+        return `<span style="border-bottom: 1px dotted var(--primary);">• ${name}</span><span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${tooltipText}" onclick="alert(this.title)">ℹ️</span>`;
+      }).join("<br>")}</div>`;
       spellsBox.appendChild(item);
     });
 
