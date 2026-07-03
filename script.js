@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -27,9 +27,13 @@ classSelect.addEventListener('change', () => {
   applyClassFeatures();
 });
 
+// When subclass changes, simply store the selected value and refresh the summary.
 subclassSelect.addEventListener('change', () => {
-  // Subclass change may affect available tricks/spells; clear old selections
-  applyClassFeatures();
+  // Persist the chosen subclass for later loads
+  subclassSelect.dataset.lastValue = subclassSelect.value;
+  // Update the overview summary and save the form state
+  updateSummary();
+  saveForm();
 });
 const ATTRIBUTE_KEYS = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
 const PROFICIENCY_BONUS = 2;
@@ -1626,14 +1630,7 @@ classSelect.addEventListener('change', () => {
   saveForm();
 });
 
-if (subclassSelect) {
-  subclassSelect.addEventListener('change', () => {
-    subclassSelect.dataset.lastValue = subclassSelect.value;
-    renderClassFeaturesInCombat();
-    updateSummary();
-    saveForm();
-  });
-}
+// The earlier listener already handles subclass changes, so we remove the duplicate to avoid double execution.
 
 form.addEventListener('input', (e) => {
   if (['name', 'className', 'level', 'race'].includes(e.target.name)) {
