@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -191,20 +191,70 @@ function setupAttacks() {
 
   if (addAttackBtn) {
   // Auto-fill weapon stats from EQUIPMENT_DATA
-    attackItemInput.addEventListener('input', () => {
-      const name = attackItemInput.value.trim().toLowerCase();
-      const entry = Object.values(EQUIPMENT_DATA).find(w => w.name.toLowerCase() === name);
-      if (entry) {
-        attackDamageQtyInput.value = entry.diceQty || '';
-        // Ensure the die select matches the option value case‑insensitively
-         const target = entry.diceType ? entry.diceType.toLowerCase() : '';
-         const options = Array.from(attackDamageDieInput.options);
-         const match = options.find(opt => opt.value.toLowerCase() === target);
-         attackDamageDieInput.value = match ? match.value : '';
-         // Preenche o tipo de dano, se disponível
-         document.getElementById('attackDamageType').value = entry.damageType || '';
-      }
+  // When a weapon is selected, auto‑populate damage fields and calculate hit based on current attribute inputs
+  attackItemInput.addEventListener('input', () => {
+    const name = attackItemInput.value.trim().toLowerCase();
+    const entry = Object.values(EQUIPMENT_DATA).find(w => {
+      const wName = (w.name || '').toLowerCase().trim();
+      return wName === name || wName.includes(name) || name.includes(wName);
     });
+    if (!entry) return;
+
+    // Populate dice quantity and type
+    attackDamageQtyInput.value = entry.diceQty || '';
+    const target = entry.diceType ? entry.diceType.toLowerCase() : '';
+    const options = Array.from(attackDamageDieInput.options);
+    const match = options.find(opt => opt.value.toLowerCase() === target);
+    attackDamageDieInput.value = match ? match.value : '';
+    // Damage type
+    document.getElementById('attackDamageType').value = entry.damageType || '';
+
+      // ----- Calculate attribute modifiers using existing validation functions -----
+      const finalStrScore = typeof getEffectiveAttributeValue === 'function' ? getEffectiveAttributeValue('strength') : 10;
+      const finalDexScore = typeof getEffectiveAttributeValue === 'function' ? getEffectiveAttributeValue('dexterity') : 10;
+      const totalStrMod = Math.floor((finalStrScore - 10) / 2);
+      const totalDexMod = Math.floor((finalDexScore - 10) / 2);
+
+      // Determine which modifier the weapon uses
+      let usedMod = totalStrMod;
+      if (entry.type === 'arma_simples_dist' || entry.type === 'arma_marcial_dist') {
+        usedMod = totalDexMod;
+      } else if (entry.properties && entry.properties.includes('Acuidade')) {
+        usedMod = Math.max(totalStrMod, totalDexMod);
+      }
+
+      // Set damage bonus field
+      document.getElementById('attackDamageBonus').value = usedMod;
+
+    // ----- Proficiency bonus calculation using form level value -----
+    let lvl = 1;
+    const charLevelEl = document.getElementById('charLevel');
+    if (charLevelEl && charLevelEl.textContent) {
+      const levelMatch = charLevelEl.textContent.match(/\d+/);
+      if (levelMatch) {
+        lvl = parseInt(levelMatch[0]) || 1;
+      }
+    } else {
+      const lvlElement = document.querySelector('input[name="level"]') || document.getElementById('level');
+      if (lvlElement) {
+        lvl = parseInt(lvlElement.value) || 1;
+      } else if (typeof level !== 'undefined') {
+        lvl = parseInt(level) || 1;
+      }
+    }
+    const prof = lvl >= 17 ? 6 : lvl >= 13 ? 5 : lvl >= 9 ? 4 : lvl >= 5 ? 3 : 2;
+
+    // Força a exibição do acerto destravando o input se estiver bloqueado
+    const hitTotal = usedMod + prof;
+    const hitString = hitTotal >= 0 ? `+${hitTotal}` : `${hitTotal}`;
+    const hitInput = document.getElementById('attackHit');
+    if (hitInput) {
+      hitInput.disabled = false;
+      hitInput.removeAttribute('readonly');
+      hitInput.value = hitString;
+      hitInput.setAttribute('value', hitString);
+    }
+  });
 
   addAttackBtn.addEventListener('click', () => {
       const itemInput = document.getElementById('attackItem');
