@@ -1746,9 +1746,30 @@ function populateWeaponList() {
   });
 }
 
+// FUNCTION TO UPDATE SPEED FROM SELECTED RACE
+function updateSpeedFromRace() {
+  const selectedRace = raceSelect.value;
+  const speedInput = form.elements.namedItem('speed');
+  if (!speedInput) return;
+
+  if (selectedRace && RACES_DATA[selectedRace]) {
+    const raceData = RACES_DATA[selectedRace];
+    if (raceData.velocidade) {
+      const pes = parseInt(raceData.velocidade);
+      if (!isNaN(pes)) {
+        const metros = pes * 0.3;
+        speedInput.value = metros;
+      }
+    }
+  } else {
+    speedInput.value = '';
+  }
+}
+
 // EVENT LISTENERS
 raceSelect.addEventListener('change', () => {
   applyRaceBonus();
+  updateSpeedFromRace();
   updateHeader();
   saveForm();
 });
