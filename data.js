@@ -136,6 +136,14 @@ const RACES_DATA = {
     velocidade: '30 pés',
     idiomas: 'Comum, Infernal',
     descricao: 'Tieflings carregam a marca de sua herança ancestral infernal.'
+  },
+  goblin: {
+    name: 'Goblin',
+    bonusAtributos: { dexterity: 2, constitution: 1 },
+    tamanho: 'Pequeno',
+    velocidade: '30 pés',
+    idiomas: 'Comum, Goblinês',
+    descricao: 'Goblin são criaturas pequenas e astutas, conhecidas por sua agilidade e natureza caótica.'
   }
 };
 
