@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -111,8 +111,9 @@ function renderAttacks() {
     item.innerHTML = `
       <div class="attack-info" style="cursor: help;" title="${tooltipText}">
         <span class="attack-name">${attack.item}</span>
+        <span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${attack.mastery}" onclick="alert(this.title)">ℹ️</span>
         <span class="attack-hit-badge">Acerto: ${attack.hit}</span>
-        <span class="attack-damage-badge">Dano: ${attack.damage}</span>
+        <span class="attack-damage-badge">Dano: ${attack.damage}${attack.tipoDano ? ` [${attack.tipoDano}]` : ''}</span>
       </div>
       <div style="display: flex; gap: 8px; align-items: center;">
         <button type="button" class="btn-edit-attack" data-index="${index}" title="Editar" style="background: none; border: none; color: var(--primary); cursor: pointer; font-size: 14px; padding: 4px 8px;">Editar</button>
@@ -184,9 +185,28 @@ function cancelEdit() {
 function setupAttacks() {
   const addAttackBtn = document.getElementById('addAttackBtn');
   const cancelBtn = document.getElementById('cancelAttackEditBtn');
+  const attackItemInput = document.getElementById('attackItem');
+  const attackDamageQtyInput = document.getElementById('attackDamageQty');
+  const attackDamageDieInput = document.getElementById('attackDamageDie');
 
   if (addAttackBtn) {
-    addAttackBtn.addEventListener('click', () => {
+  // Auto-fill weapon stats from EQUIPMENT_DATA
+    attackItemInput.addEventListener('input', () => {
+      const name = attackItemInput.value.trim().toLowerCase();
+      const entry = Object.values(EQUIPMENT_DATA).find(w => w.name.toLowerCase() === name);
+      if (entry) {
+        attackDamageQtyInput.value = entry.diceQty || '';
+        // Ensure the die select matches the option value case‑insensitively
+         const target = entry.diceType ? entry.diceType.toLowerCase() : '';
+         const options = Array.from(attackDamageDieInput.options);
+         const match = options.find(opt => opt.value.toLowerCase() === target);
+         attackDamageDieInput.value = match ? match.value : '';
+         // Preenche o tipo de dano, se disponível
+         document.getElementById('attackDamageType').value = entry.damageType || '';
+      }
+    });
+
+  addAttackBtn.addEventListener('click', () => {
       const itemInput = document.getElementById('attackItem');
       const hitInput = document.getElementById('attackHit');
       const qtyInput = document.getElementById('attackDamageQty');
@@ -225,13 +245,27 @@ function setupAttacks() {
         damageVal = `${bonusVal > 0 ? '+' : ''}${bonusVal}`;
       }
 
+      // Gather extra weapon data if available
+      // Robust lookup for weapon data (key, exact name, or name prefix before parentheses)
+      const weaponEntry = EQUIPMENT_DATA[itemVal.toLowerCase()] ||
+        Object.values(EQUIPMENT_DATA).find(w =>
+          w.name.toLowerCase().trim() === itemVal.toLowerCase() ||
+          w.name.toLowerCase().includes(itemVal.toLowerCase().split('(')[0].trim())
+        );
       const attackObj = {
         item: itemVal,
         hit: hitVal,
         damageQty: qtyVal,
         damageDie: dieVal,
         damageBonus: bonusVal,
-        damage: damageVal
+        damage: damageVal,
+        // Preserve original damage type for display
+        damageType: weaponEntry ? weaponEntry.damageType : undefined,
+        // New field used in UI rendering
+        tipoDano: document.getElementById('attackDamageType')?.value || '',
+        // Capture mastery, default to 'Nenhuma' if not present
+        mastery: weaponEntry ? (weaponEntry.mastery || 'Nenhuma') : 'Nenhuma',
+        properties: weaponEntry ? weaponEntry.properties : undefined
       };
 
       if (editingAttackIndex !== null) {
@@ -1160,8 +1194,9 @@ function updateSummary() {
             item.innerHTML = `
               <div class="attack-info">
                 <span class="attack-name">${attack.item}</span>
+                <span class="info-icon" style="cursor:pointer; margin-left:6px;" title="${attack.mastery}" onclick="alert(this.title)">ℹ️</span>
                 <span class="attack-hit-badge">Acerto: ${attack.hit}</span>
-                <span class="attack-damage-badge">Dano: ${attack.damage}</span>
+                <span class="attack-damage-badge">Dano: ${attack.damage}${attack.tipoDano ? ` [${attack.tipoDano}]` : ''}</span>
               </div>
             `;
             summaryAttacksList.appendChild(item);
@@ -1644,6 +1679,23 @@ function loadForm() {
   }
 }
 
+// Populate weapon datalist for auto‑complete suggestions
+function populateWeaponList() {
+  const weaponList = document.getElementById('weaponList');
+  if (!weaponList) return;
+  // Clear any existing options
+  weaponList.innerHTML = '';
+  // Ensure EQUIPMENT_DATA is available
+  if (typeof EQUIPMENT_DATA !== 'object' || EQUIPMENT_DATA === null) return;
+  Object.values(EQUIPMENT_DATA).forEach((weapon) => {
+    if (weapon && weapon.name) {
+      const opt = document.createElement('option');
+      opt.value = weapon.name;
+      weaponList.appendChild(opt);
+    }
+  });
+}
+
 // EVENT LISTENERS
 raceSelect.addEventListener('change', () => {
   applyRaceBonus();
@@ -1784,3 +1836,4 @@ setupTabs();
 setupAttacks();
 loadForm();
 setupCollapsibles();
+populateWeaponList();
