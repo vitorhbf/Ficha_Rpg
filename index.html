@@ -113,7 +113,19 @@
             <div class="form-grid two-col">
               <label class="form-group">
                 <span class="label-text">Antecedente</span>
-                <input name="background" type="text" placeholder="Ex.: Soldado, Criminoso..." />
+                <input name="background" type="text" placeholder="Ex.: Soldado, Criminoso..." list="backgroundList" />
+                <datalist id="backgroundList">
+                  <option value="Acólito (Acolyte)">
+                  <option value="Charlatão (Charlatan)">
+                  <option value="Criminoso (Criminal)">
+                  <option value="Artesão de Guilda (Guild Artisan)">
+                  <option value="Eremita (Hermit)">
+                  <option value="Nobre (Noble)">
+                  <option value="Sábio (Sage)">
+                  <option value="Marinheiro (Sailor)">
+                  <option value="Soldado (Soldier)">
+                  <option value="Órfão (Urchin)">
+                </datalist>
               </label>
               <label class="form-group">
                 <span class="label-text">Tendência</span>
