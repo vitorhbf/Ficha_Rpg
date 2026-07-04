@@ -1467,6 +1467,14 @@ function calculateModifiers() {
   // Recalcula salvaguardas e perícias
   calculateSaves();
   calculateSkills();
+
+  // Calcular iniciativa automaticamente (modificador de Destreza)
+  const dexVal = getEffectiveAttributeValue('dexterity');
+  const dexMod = Math.floor((dexVal - 10) / 2);
+  const initiativeInput = form.elements.namedItem('initiative');
+  if (initiativeInput) {
+    initiativeInput.value = (dexMod >= 0 ? '+' : '') + dexMod;
+  }
 }
 
 // CALCULATE SAVING THROWS

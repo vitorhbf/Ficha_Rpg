@@ -192,7 +192,10 @@
             <div class="form-grid">
               <label class="form-group">
                 <span class="label-text">Iniciativa</span>
-                <input name="initiative" type="number" placeholder="Bônus" />
+                <div style="display: flex; align-items: center; gap: 4px;">
+                  <input name="initiative" type="text" placeholder="Bônus" style="width: 60px; text-align: center;" />
+                  <span class="info-icon" style="cursor:pointer; margin-left:6px;" title="Iniciativa baseada no seu Modificador de Destreza padrão." onclick="alert(this.title)">ℹ️</span>
+                </div>
               </label>
             </div>
           </div>
