@@ -117,7 +117,17 @@
               </label>
               <label class="form-group">
                 <span class="label-text">Tendência</span>
-                <input name="alignment" type="text" placeholder="Ex.: Neutro Bom" />
+                <select id="charAlignment" name="alignment">
+                  <option value="Ordeiro e Bom">Ordeiro e Bom (Lawful Good)</option>
+                  <option value="Neutro e Bom" selected>Neutro e Bom (Neutral Good)</option>
+                  <option value="Caótico e Bom">Caótico e Bom (Chaotic Good)</option>
+                  <option value="Ordeiro e Neutro">Ordeiro e Neutro (Lawful Neutral)</option>
+                  <option value="Neutro Puro">Neutro Puro (True Neutral)</option>
+                  <option value="Caótico e Neutro">Caótico e Neutro (Chaotic Neutral)</option>
+                  <option value="Ordeiro e Mau">Ordeiro e Mau (Lawful Evil)</option>
+                  <option value="Neutro e Mau">Neutro e Mau (Neutral Evil)</option>
+                  <option value="Caótico e Mau">Caótico e Mau (Chaotic Evil)</option>
+                </select>
               </label>
             </div>
           </div>
