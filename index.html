@@ -36,6 +36,7 @@
           <button class="tab-btn" data-tab="appearance">Aparência</button>
           <button class="tab-btn" data-tab="notes">Notas</button>
           <button class="tab-btn" data-tab="summary">Resumo de Jogo</button>
+          <button class="tab-btn" data-tab="para-jogar">Para Jogar 🎮</button>
         </nav>
       </div>
 
@@ -637,11 +638,12 @@
         </section>
         <!-- TAB: RESUMO DE JOGO (somente leitura, alimentado pelas outras abas) -->
         <section class="tab-content" id="summary">
-          <div class="card summary-card" data-collapsible>
-            <div class="summary-card-header">
-              <h2>Identidade</h2>
-              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
-            </div>
+          <div id="summary-full-content" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="card summary-card" data-collapsible>
+              <div class="summary-card-header">
+                <h2>Identidade</h2>
+                <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+              </div>
             <div class="summary-card-body">
               <div class="summary-grid">
                 <div class="summary-item">
@@ -808,24 +810,136 @@
             </div>
           </div>
 
-          <div class="card summary-card" data-collapsible>
-            <div class="summary-card-header">
-              <h2>História & Talentos</h2>
-              <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+            <div class="card summary-card" data-collapsible>
+              <div class="summary-card-header">
+                <h2>História & Talentos</h2>
+                <button type="button" class="summary-toggle" aria-label="Minimizar">▾</button>
+              </div>
+              <div class="summary-card-body">
+                <div class="summary-grid">
+                  <div class="summary-item full">
+                    <span class="summary-label">História do Personagem</span>
+                    <span class="summary-value" data-summary="backstory">—</span>
+                  </div>
+                  <div class="summary-item full">
+                    <span class="summary-label">Características & Talentos</span>
+                    <span class="summary-value" data-summary="traits">—</span>
+                  </div>
+                  <div class="summary-item full">
+                    <span class="summary-label">Anotações de Campanha</span>
+                    <span class="summary-value" data-summary="notes">—</span>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="summary-card-body">
-              <div class="summary-grid">
-                <div class="summary-item full">
-                  <span class="summary-label">História do Personagem</span>
-                  <span class="summary-value" data-summary="backstory">—</span>
+          </div>
+
+          </div>
+        </section>
+
+        <!-- TAB: PARA JOGAR (Aba principal) -->
+        <section class="tab-content" id="para-jogar">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+              
+              <!-- BLOCO 1: SOBREVIVÊNCIA -->
+              <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                <h3 style="margin: 0; color: var(--primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">❤️ Sobrevivência</h3>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                  <div style="background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center;">
+                    <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase;">HP (Atual / Max)</span>
+                    <div id="pjHp" style="font-size: 20px; font-weight: 700; color: #fca5a5; margin-top: 4px;">—</div>
+                  </div>
+                  <div style="background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center;">
+                    <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase;">Armadura (CA)</span>
+                    <div id="pjAc" style="font-size: 20px; font-weight: 700; color: var(--primary); margin-top: 4px;">—</div>
+                  </div>
+                  <div style="background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center;">
+                    <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase;">Iniciativa</span>
+                    <div id="pjInitiative" style="font-size: 20px; font-weight: 700; color: #38bdf8; margin-top: 4px;">—</div>
+                  </div>
+                  <div style="background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center;">
+                    <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase;">Deslocamento</span>
+                    <div id="pjSpeed" style="font-size: 20px; font-weight: 700; color: #34d399; margin-top: 4px;">—</div>
+                  </div>
                 </div>
-                <div class="summary-item full">
-                  <span class="summary-label">Características & Talentos</span>
-                  <span class="summary-value" data-summary="traits">—</span>
+                <div style="background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;">
+                  <span style="font-size: 11px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;">Salvaguarda Contra Morte</span>
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                    <span>Sucessos:</span>
+                    <div style="display: flex; gap: 4px;">
+                      <input type="checkbox" id="pjDeathSuccess1" />
+                      <input type="checkbox" id="pjDeathSuccess2" />
+                      <input type="checkbox" id="pjDeathSuccess3" />
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                    <span>Falhas:</span>
+                    <div style="display: flex; gap: 4px;">
+                      <input type="checkbox" id="pjDeathFailure1" />
+                      <input type="checkbox" id="pjDeathFailure2" />
+                      <input type="checkbox" id="pjDeathFailure3" />
+                    </div>
+                  </div>
                 </div>
-                <div class="summary-item full">
-                  <span class="summary-label">Anotações de Campanha</span>
-                  <span class="summary-value" data-summary="notes">—</span>
+              </div>
+
+              <!-- BLOCO 2: ATRIBUTOS RÁPIDOS -->
+              <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+                <h3 style="margin: 0; color: var(--primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">⚡ Atributos & Percepção</h3>
+                <div id="pjAttributesGrid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+                  <!-- Dinâmico via JS: FOR +3, DES -1, etc. -->
+                </div>
+                <div style="background: rgba(56, 189, 248, 0.05); border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">👁️ Percepção Passiva</span>
+                  <strong id="pjPassivePerception" style="font-size: 18px; color: var(--primary);">10</strong>
+                </div>
+                <!-- Nova Percepção Passiva: Investigação -->
+                <div style="background: rgba(56, 189, 248, 0.05); border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">🔎 Investigação Passiva</span>
+                  <strong id="pjPassiveInvestigation" style="font-size: 18px; color: var(--primary);">10</strong>
+                </div>
+                <!-- Nova Percepção Passiva: Intuição -->
+                <div style="background: rgba(56, 189, 248, 0.05); border: 1px dashed rgba(56, 189, 248, 0.3); border-radius: 8px; padding: 10px; display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">🧠 Intuição Passiva</span>
+                  <strong id="pjPassiveInsight" style="font-size: 18px; color: var(--primary);">10</strong>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- BLOCO 3: AÇÕES DE COMBATE & MAGIAS -->
+            <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
+              <h3 style="margin: 0; color: var(--primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">⚔️ Ações de Combate & Espaços de Magia</h3>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                <div>
+                  <h4 style="margin: 0 0 8px 0; font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Ataques Cadastrados</h4>
+                  <div id="pjAttacksList" style="display: flex; flex-direction: column; gap: 6px;">
+                    <!-- Dinâmico via JS -->
+                  </div>
+                </div>
+                <div>
+                  <h4 style="margin: 0 0 8px 0; font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Rastreador de Magia (Slots Gastos)</h4>
+                  <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                      <span>1º Círculo:</span>
+                      <div style="display: flex; gap: 4px;">
+                        <input type="checkbox" id="pjSlot1_1" /> <input type="checkbox" id="pjSlot1_2" /> <input type="checkbox" id="pjSlot1_3" /> <input type="checkbox" id="pjSlot1_4" />
+                      </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                      <span>2º Círculo:</span>
+                      <div style="display: flex; gap: 4px;">
+                        <input type="checkbox" id="pjSlot2_1" /> <input type="checkbox" id="pjSlot2_2" /> <input type="checkbox" id="pjSlot2_3" />
+                      </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                      <span>3º Círculo:</span>
+                      <div style="display: flex; gap: 4px;">
+                        <input type="checkbox" id="pjSlot3_1" /> <input type="checkbox" id="pjSlot3_2" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

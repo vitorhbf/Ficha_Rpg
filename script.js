@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -353,9 +353,16 @@ function setupTabs() {
       tabContents.forEach((c) => c.classList.remove('active'));
       // Add active class
       btn.classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-      // Atualiza o resumo sempre que a aba de resumo for aberta
-      if (tabId === 'summary') updateSummary();
+      const targetContent = document.getElementById(tabId);
+      if (targetContent) {
+        targetContent.classList.add('active');
+      }
+      // Atualiza o resumo ou "para jogar" conforme a aba
+      if (tabId === 'summary') {
+        updateSummary();
+      } else if (tabId === 'para-jogar') {
+        updateParaJogar();
+      }
       // Save selected tab
       localStorage.setItem('selected-tab', tabId);
     });
@@ -1425,6 +1432,127 @@ function updateSummary() {
   setVal('backstory', form.elements.namedItem('backstory')?.value);
   setVal('traits', form.elements.namedItem('traits')?.value);
   setVal('notes', form.elements.namedItem('notes')?.value);
+
+  // Atualizar sub‑aba "Para Jogar" com valores essenciais
+  updateParaJogar();
+}
+
+// Preenche a sub‑aba "Para Jogar" (id="tabParaJogar") com os mesmos dados críticos
+function updateParaJogar() {
+  // Utiliza os mesmos valores já calculados acima
+  const setPJ = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = value ?? '—';
+  };
+
+  // HP, AC, Iniciativa, Deslocamento
+  const hpCurrent = form.elements.namedItem('hpCurrent')?.value;
+  const hpMax = form.elements.namedItem('hpMax')?.value;
+  setPJ('pjHp', hpCurrent && hpMax ? `${hpCurrent} / ${hpMax}` : '—');
+  setPJ('pjAc', form.elements.namedItem('ac')?.value);
+  setPJ('pjInitiative', form.elements.namedItem('initiative')?.value);
+  setPJ('pjSpeed', form.elements.namedItem('speed')?.value);
+
+  // Atributos rápidos – reutiliza o mesmo grid de atributos já renderizado na aba principal
+  // O grid já está presente no HTML da sub‑aba (id="pjAttributesGrid"). Vamos garantir que ele seja preenchido
+  const attrsBox = document.getElementById('pjAttributesGrid');
+  if (attrsBox) {
+    attrsBox.innerHTML = '';
+    const attrs = [
+      { key: 'strength', label: 'Força' },
+      { key: 'dexterity', label: 'Destreza' },
+      { key: 'constitution', label: 'Constituição' },
+      { key: 'intelligence', label: 'Inteligência' },
+      { key: 'wisdom', label: 'Sabedoria' },
+      { key: 'charisma', label: 'Carisma' }
+    ];
+    attrs.forEach((a) => {
+      const input = form.elements.namedItem(a.key);
+      const baseValue = parseInt(input?.value) || 10;
+      const raceBonus = getRaceBonusForAttribute(a.key) || 0;
+      const total = baseValue + raceBonus;
+      const mod = Math.floor((total - 10) / 2);
+      const item = document.createElement('div');
+      item.style.cssText = "display: flex; flex-direction: column; align-items: center; gap: 4px;";
+      item.innerHTML = `
+        <span style="font-size: 12px; font-weight: 600; color: var(--text-secondary);">${a.label}</span>
+        <span style="font-size: 16px; font-weight: 700;">${total}</span>
+        <span style="font-size: 14px; color: var(--primary);">${mod >= 0 ? '+' : ''}${mod}</span>
+      `;
+      attrsBox.appendChild(item);
+    });
+  }
+
+  // Percepção Passiva (já calculada em calculateModifiers)
+  const perceptionEl = document.getElementById('pjPassivePerception');
+  if (perceptionEl) {
+    const wisVal = getEffectiveAttributeValue('wisdom');
+    const wisMod = Math.floor((wisVal - 10) / 2);
+    const prof = (() => {
+      const lvl = parseInt(form.elements.namedItem('level')?.value) || 1;
+      if (lvl >= 17) return 6;
+      if (lvl >= 13) return 5;
+      if (lvl >= 9) return 4;
+      if (lvl >= 5) return 3;
+      return 2;
+    })();
+    const passive = 10 + wisMod + (form.elements.namedItem('skill_perception')?.checked ? prof : 0);
+    perceptionEl.textContent = passive;
+  }
+
+  // Nova Percepção Passiva: Investigação
+  const investigationEl = document.getElementById('pjPassiveInvestigation');
+  if (investigationEl) {
+    const intVal = getEffectiveAttributeValue('intelligence');
+    const intMod = Math.floor((intVal - 10) / 2);
+    const prof = (() => {
+      const lvl = parseInt(form.elements.namedItem('level')?.value) || 1;
+      if (lvl >= 17) return 6;
+      if (lvl >= 13) return 5;
+      if (lvl >= 9) return 4;
+      if (lvl >= 5) return 3;
+      return 2;
+    })();
+    const passiveInv = 10 + intMod + (form.elements.namedItem('skill_investigation')?.checked ? prof : 0);
+    investigationEl.textContent = passiveInv;
+  }
+
+  // Nova Percepção Passiva: Intuição
+  const insightEl = document.getElementById('pjPassiveInsight');
+  if (insightEl) {
+    const wisVal2 = getEffectiveAttributeValue('wisdom');
+    const wisMod2 = Math.floor((wisVal2 - 10) / 2);
+    const prof = (() => {
+      const lvl = parseInt(form.elements.namedItem('level')?.value) || 1;
+      if (lvl >= 17) return 6;
+      if (lvl >= 13) return 5;
+      if (lvl >= 9) return 4;
+      if (lvl >= 5) return 3;
+      return 2;
+    })();
+    const passiveInsight = 10 + wisMod2 + (form.elements.namedItem('skill_insight')?.checked ? prof : 0);
+    insightEl.textContent = passiveInsight;
+  }
+
+  // Ataques cadastrados – reutiliza a mesma lógica de resumo
+  const pjAttacks = document.getElementById('pjAttacksList');
+  if (pjAttacks) {
+    pjAttacks.innerHTML = '';
+    // Use the global attacks array if available; otherwise fallback to attacksData or empty array
+    const currentAttacks = typeof attacks !== 'undefined' ? attacks : (typeof attacksData !== 'undefined' ? attacksData : []);
+    currentAttacks.forEach((attack) => {
+      const div = document.createElement('div');
+      div.style.cssText = "font-size: 13px;";
+      const itemName = attack.item || attack.name || '';
+      const hitVal = attack.hit || '';
+      const dmgVal = attack.damage || attack.diceQty || '';
+      div.textContent = `${itemName} – Acerto: ${hitVal} – Dano: ${dmgVal}`;
+      pjAttacks.appendChild(div);
+    });
+    if (currentAttacks.length === 0) {
+      pjAttacks.innerHTML = '<span class="empty-msg" style="padding:0;">Nenhum ataque adicionado.</span>';
+    }
+  }
 }
 
 // UPDATE HEADER
