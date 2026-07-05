@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -360,8 +360,12 @@ function setupTabs() {
       // Atualiza o resumo ou "para jogar" conforme a aba
       if (tabId === 'summary') {
         updateSummary();
+        // Ensure HP display is correctly rendered when returning to the summary tab
+        updateHpDisplay();
       } else if (tabId === 'para-jogar') {
         updateParaJogar();
+        // Also refresh HP display for the "Para Jogar" view
+        updateHpDisplay();
       }
       // Save selected tab
       localStorage.setItem('selected-tab', tabId);
@@ -374,6 +378,70 @@ function setupTabs() {
   if (tabBtn) {
     tabBtn.click();
   }
+}
+
+// ---------------------------------------------------------------------------
+//  HP QUICK BUTTONS (Survival tab)
+// ---------------------------------------------------------------------------
+// The "Para Jogar" tab contains quick‑action buttons to adjust the current HP.
+// They are identified by the IDs `pjBtnDano` (damage, i.e. decrement) and
+// `pjBtnCura` (heal, i.e. increment). The displayed HP is in the span `pjHp`
+// formatted as "current / max". The underlying form fields are `hpCurrent`
+// and `hpMax`.
+// This block adds event listeners to keep everything in sync.
+
+function updateHpDisplay() {
+  const hpCurrentInput = form.elements.namedItem('hpCurrent');
+  const hpMaxInput = form.elements.namedItem('hpMax');
+  const hpSpan = document.getElementById('pjHp');
+  if (!hpCurrentInput || !hpMaxInput || !hpSpan) return;
+  const cur = parseInt(hpCurrentInput.value) || 0;
+  const max = parseInt(hpMaxInput.value) || 0;
+  // Determine color for current HP based on percentage
+  let curColor = 'white';
+  if (max > 0) {
+    const ratio = cur / max;
+    if (ratio < 1 / 3) curColor = 'red';
+    else if (ratio < 1 / 2) curColor = 'orange';
+  }
+  // Light green for max HP (similar ao botão de cura)
+  const maxColor = '#90ee90';
+  // Exibe o rótulo em uma linha acima do valor "cur / max"
+  hpSpan.innerHTML = `<div style="font-size:12px; font-weight:600;">HP Atual / Máximo</div><div><span style='color:${curColor};'>${cur}</span> / <span style='color:${maxColor};'>${max}</span></div>`;
+}
+
+function adjustHp(delta) {
+  const hpCurrentInput = form.elements.namedItem('hpCurrent');
+  const hpMaxInput = form.elements.namedItem('hpMax');
+  if (!hpCurrentInput || !hpMaxInput) return;
+  const max = parseInt(hpMaxInput.value) || 0;
+  let cur = parseInt(hpCurrentInput.value) || 0;
+  cur = Math.min(Math.max(cur + delta, 0), max);
+  hpCurrentInput.value = cur;
+  updateHpDisplay();
+  saveForm();
+}
+
+function setupHpButtons() {
+  const btnDano = document.getElementById('pjBtnDano');
+  const btnCura = document.getElementById('pjBtnCura');
+  if (btnDano) {
+    btnDano.addEventListener('click', () => adjustHp(-1));
+  }
+  if (btnCura) {
+    btnCura.addEventListener('click', () => adjustHp(1));
+  }
+  // Keep display in sync when user edits the inputs directly
+  const hpCurrentInput = form.elements.namedItem('hpCurrent');
+  const hpMaxInput = form.elements.namedItem('hpMax');
+  if (hpCurrentInput) {
+    hpCurrentInput.addEventListener('input', updateHpDisplay);
+  }
+  if (hpMaxInput) {
+    hpMaxInput.addEventListener('input', updateHpDisplay);
+  }
+  // Initial sync on page load
+  updateHpDisplay();
 }
 
 function formatBonusValue(value) {
@@ -1442,13 +1510,34 @@ function updateParaJogar() {
   // Utiliza os mesmos valores já calculados acima
   const setPJ = (id, value) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = value ?? '—';
+    if (!el) return;
+    // For the HP field we need to render HTML, otherwise the markup is shown as text
+    if (id === 'pjHp') {
+      el.innerHTML = value ?? '—';
+    } else {
+      el.textContent = value ?? '—';
+    }
   };
 
   // HP, AC, Iniciativa, Deslocamento
   const hpCurrent = form.elements.namedItem('hpCurrent')?.value;
   const hpMax = form.elements.namedItem('hpMax')?.value;
-  setPJ('pjHp', hpCurrent && hpMax ? `${hpCurrent} / ${hpMax}` : '—');
+  // Exibe o rótulo em uma linha acima do valor
+  if (hpCurrent && hpMax) {
+    // Determine color for current HP based on percentage
+    let curColor = 'white';
+    const maxVal = parseInt(hpMax) || 0;
+    const curVal = parseInt(hpCurrent) || 0;
+    if (maxVal > 0) {
+      const ratio = curVal / maxVal;
+      if (ratio < 1 / 3) curColor = 'red';
+      else if (ratio < 1 / 2) curColor = 'orange';
+    }
+    const maxColor = '#90ee90'; // light green
+    setPJ('pjHp', `<div style="font-size:12px; font-weight:600;">HP Atual / Máximo</div><div><span style='color:${curColor};'>${hpCurrent}</span> / <span style='color:${maxColor};'>${hpMax}</span></div>`);
+  } else {
+    setPJ('pjHp', '—');
+  }
   setPJ('pjAc', form.elements.namedItem('ac')?.value);
   setPJ('pjInitiative', form.elements.namedItem('initiative')?.value);
   setPJ('pjSpeed', form.elements.namedItem('speed')?.value);
@@ -1960,6 +2049,8 @@ function loadForm() {
   } catch (error) {
     console.error('Erro ao carregar ficha:', error);
   }
+  // Ensure HP display is correctly rendered after loading the form
+  updateHpDisplay();
 }
 
 // Populate weapon datalist for auto‑complete suggestions
@@ -2141,3 +2232,4 @@ setupAttacks();
 loadForm();
 setupCollapsibles();
 populateWeaponList();
+setupHpButtons();

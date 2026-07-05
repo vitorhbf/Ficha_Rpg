@@ -847,8 +847,16 @@
                 <h3 style="margin: 0; color: var(--primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">❤️ Sobrevivência</h3>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                   <div style="background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center;">
-                    <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase;">HP (Atual / Max)</span>
-                    <div id="pjHp" style="font-size: 20px; font-weight: 700; color: #fca5a5; margin-top: 4px;">—</div>
+                     <div style="text-align: center;">
+                       <!-- O ID fica exclusivo para o número, impedindo o JS de apagar os botões -->
+                       <span id="pjHp" style="font-size: 16px; font-weight: bold; color: var(--primary); display: block;">24 / 24</span>
+                       
+                       <!-- Botões de ação rápida -->
+                       <div style="display: flex; gap: 8px; justify-content: center; margin-top: 6px;">
+                         <button type="button" id="pjBtnDano" class="btn-danger" style="padding: 2px 12px; font-size: 14px; font-weight: bold; border-radius: 4px; cursor: pointer; color: #ffffff;">−</button>
+                         <button type="button" id="pjBtnCura" class="btn-secondary" style="padding: 2px 12px; font-size: 14px; font-weight: bold; border-radius: 4px; background-color: #10b981; cursor: pointer; color: #ffffff;">+</button>
+                       </div>
+                     </div>
                   </div>
                   <div style="background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 8px; text-align: center;">
                     <span style="font-size: 10px; color: var(--text-secondary); text-transform: uppercase;">Armadura (CA)</span>
