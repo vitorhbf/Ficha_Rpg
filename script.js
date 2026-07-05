@@ -1630,7 +1630,9 @@ function updateParaJogar() {
     currentAttacks.forEach((attack) => {
       const div = document.createElement('div');
       div.style.cssText = "font-size: 13px; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;";
-      const itemName = attack.item || attack.name || '';
+      // Exibe apenas o nome em português, removendo texto entre parênteses (ex.: "Adaga (Dagger)" -> "Adaga")
+      const rawName = attack.item || attack.name || '';
+      const itemName = rawName.replace(/\s*\(.*\)\s*/, '').trim();
       const hitVal = attack.hit || '';
       const dmgVal = attack.damage || attack.diceQty || '';
       const dmgType = attack.damageType ? ` (${attack.damageType})` : '';

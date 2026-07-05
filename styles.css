@@ -141,6 +141,13 @@ body {
   letter-spacing: 1px;
 }
 
+/* Ajuste para ícones de informação nos ataques */
+.attack-info .info-icon {
+  margin-left: 4px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 /* FORM GRID */
 .form-grid {
   display: grid;
@@ -197,6 +204,20 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+
+/* COMBAT SECTION GRID */
+/* COMBAT SECTION GRID */
+.combat-grid {
+  display: grid;
+  gap: 16px;
+  /* Three equal columns on wide screens */
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Ensure cards inside combat grid take full width */
+.combat-grid .card {
+  width: 100%;
+}
 }
 
 .spell-circle-group.full-width-spell-group {
@@ -928,6 +949,10 @@ label.form-group:has(#hitDie) {
   .summary-vitals {
     grid-template-columns: repeat(3, 1fr);
   }
+  /* Stack combat columns on medium screens */
+  .combat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -1105,4 +1130,10 @@ label.form-group:has(#hitDie) {
   display: inline-block !important;
   flex-shrink: 0 !important;
   user-select: none;
+  /* Ensure the icon does not overlap adjacent text in any column */
+  margin-right: 4px;
+  vertical-align: middle;
+  /* Reduce size to prevent crushing adjacent letters */
+  font-size: 0.9em;
+  line-height: 1;
 }
