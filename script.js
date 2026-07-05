@@ -1534,25 +1534,38 @@ function updateParaJogar() {
     insightEl.textContent = passiveInsight;
   }
 
-  // Ataques cadastrados – reutiliza a mesma lógica de resumo
   const pjAttacks = document.getElementById('pjAttacksList');
   if (pjAttacks) {
     pjAttacks.innerHTML = '';
-    // Use the global attacks array if available; otherwise fallback to attacksData or empty array
     const currentAttacks = typeof attacks !== 'undefined' ? attacks : (typeof attacksData !== 'undefined' ? attacksData : []);
     currentAttacks.forEach((attack) => {
       const div = document.createElement('div');
-      div.style.cssText = "font-size: 13px;";
+      div.style.cssText = "font-size: 13px; display: flex; align-items: center; gap: 4px; margin-bottom: 2px;";
       const itemName = attack.item || attack.name || '';
       const hitVal = attack.hit || '';
       const dmgVal = attack.damage || attack.diceQty || '';
-      div.textContent = `${itemName} – Acerto: ${hitVal} – Dano: ${dmgVal}`;
+      const dmgType = attack.damageType ? ` (${attack.damageType})` : '';
+      
+      const armaNomeLower = itemName.toLowerCase().trim();
+      const dbWeapon = typeof EQUIPMENT_DATA !== 'undefined' ? Object.values(EQUIPMENT_DATA).find(w => (w.name || '').toLowerCase().trim().includes(armaNomeLower) || armaNomeLower.includes((w.name || '').toLowerCase().trim())) : null;
+      
+      let descArma = attack.properties || (dbWeapon ? dbWeapon.properties : '') || 'Sem propriedades.';
+      const masteryTxt = dbWeapon ? dbWeapon.mastery : '';
+      if (masteryTxt) {
+        descArma += ` | MAESTRIA: ${masteryTxt}`;
+      }
+      
+      div.innerHTML = `
+        <span>${itemName} – Acerto: ${hitVal} – Dano: ${dmgVal}${dmgType}</span>
+        <span class="info-icon" style="cursor:pointer; margin-left:2px; color:var(--primary);" title="${descArma.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); event.preventDefault(); alert(this.title);">ℹ️</span>
+      `;
       pjAttacks.appendChild(div);
     });
     if (currentAttacks.length === 0) {
-      pjAttacks.innerHTML = '<span class="empty-msg" style="padding:0;">Nenhum ataque adicionado.</span>';
+      pjAttacks.innerHTML = '<span class="empty-msg" style="padding:0; font-size:12px;">Nenhum ataque adicionado.</span>';
     }
   }
+
   // Truques & Habilidades – renderiza as escolhas de recursos de classe organizadas por categoria
   const pjFeatures = document.getElementById('pjFeaturesList');
   if (pjFeatures) {
