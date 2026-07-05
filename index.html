@@ -911,40 +911,52 @@
             <!-- BLOCO 3: AÇÕES DE COMBATE & MAGIAS -->
             <div class="card" style="padding: 16px; display: flex; flex-direction: column; gap: 12px;">
               <h3 style="margin: 0; color: var(--primary); font-size: 14px; text-transform: uppercase; letter-spacing: 0.8px;">⚔️ Ações de Combate & Espaços de Magia</h3>
-              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
-                <div>
-                  <h4 style="margin: 0 0 8px 0; font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Ataques Cadastrados</h4>
-                  <div id="pjAttacksList" style="display: flex; flex-direction: column; gap: 6px;">
-                    <!-- Dinâmico via JS -->
-                  </div>
-                </div>
-                <div>
-                  <h4 style="margin: 0 0 8px 0; font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Rastreador de Magia (Slots Gastos)</h4>
-                  <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                      <span>1º Círculo:</span>
-                      <div style="display: flex; gap: 4px;">
-                        <input type="checkbox" id="pjSlot1_1" /> <input type="checkbox" id="pjSlot1_2" /> <input type="checkbox" id="pjSlot1_3" /> <input type="checkbox" id="pjSlot1_4" />
-                      </div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                      <span>2º Círculo:</span>
-                      <div style="display: flex; gap: 4px;">
-                        <input type="checkbox" id="pjSlot2_1" /> <input type="checkbox" id="pjSlot2_2" /> <input type="checkbox" id="pjSlot2_3" />
-                      </div>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
-                      <span>3º Círculo:</span>
-                      <div style="display: flex; gap: 4px;">
-                        <input type="checkbox" id="pjSlot3_1" /> <input type="checkbox" id="pjSlot3_2" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                   <div>
+                     <h4 style="margin: 0 0 8px 0; font-size: 12px; color: var(--primary); text-transform: uppercase;">Ataques Cadastrados</h4>
+                     <div id="pjAttacksList" style="display: flex; flex-direction: column; gap: 6px;">
+                       <!-- Dinâmico via JS -->
+                     </div>
+                   </div>
+                   <div>
+                     <h4 style="margin: 0 0 8px 0; font-size: 12px; color: var(--primary); text-transform: uppercase;">Truques & Habilidades</h4>
+                     <div id="pjFeaturesList" style="display: flex; flex-direction: column; gap: 6px;">
+                       <!-- Dinâmico via JS -->
+                     </div>
+                   </div>
+                   <div>
+                     <h4 style="margin: 0 0 8px 0; font-size: 12px; color: var(--text-secondary); text-transform: uppercase;">Rastreador de Magia (Slots Gastos)</h4>
+                     <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(17, 24, 39, 0.4); border: 1px solid var(--border); border-radius: 8px; padding: 10px;">
+                       <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                         <span>1º Círculo:</span>
+                         <div style="display: flex; gap: 4px;">
+                           <input type="checkbox" id="pjSlot1_1" /> <input type="checkbox" id="pjSlot1_2" /> <input type="checkbox" id="pjSlot1_3" /> <input type="checkbox" id="pjSlot1_4" />
+                         </div>
+                       </div>
+                       <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                         <span>2º Círculo:</span>
+                         <div style="display: flex; gap: 4px;">
+                           <input type="checkbox" id="pjSlot2_1" /> <input type="checkbox" id="pjSlot2_2" /> <input type="checkbox" id="pjSlot2_3" />
+                         </div>
+                       </div>
+                       <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                         <span>3º Círculo:</span>
+                         <div style="display: flex; gap: 4px;">
+                           <input type="checkbox" id="pjSlot3_1" /> <input type="checkbox" id="pjSlot3_2" />
+                         </div>
+                       </div>
+                     </div>
+
+                     <div style="margin-top: 12px;">
+                       <h4 style="margin: 0 0 6px 0; font-size: 11px; color: var(--primary); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">🔮 Magias Conhecidas</h4>
+                       <div id="pjSpellsList" style="display: flex; flex-direction: column; gap: 4px; background: rgba(17, 24, 39, 0.2); border: 1px solid var(--border); border-radius: 8px; padding: 10px; max-height: 180px; overflow-y: auto;">
+                         <!-- Dinâmico via JS -->
+                       </div>
+                     </div>
+                   </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
         <!-- Automatic saving is handled in the background; manual save button remove -->
       </form>

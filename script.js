@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
+﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿const form = document.getElementById('sheetForm');
 const statusText = document.getElementById('statusText');
 const resetBtn = document.getElementById('resetBtn');
 const exportBtn = document.getElementById('exportBtn');
@@ -1552,6 +1552,90 @@ function updateParaJogar() {
     if (currentAttacks.length === 0) {
       pjAttacks.innerHTML = '<span class="empty-msg" style="padding:0;">Nenhum ataque adicionado.</span>';
     }
+  }
+  // Truques & Habilidades – renderiza as escolhas de recursos de classe organizadas por categoria
+  const pjFeatures = document.getElementById('pjFeaturesList');
+  if (pjFeatures) {
+    pjFeatures.innerHTML = '';
+    
+    // Coleta as escolhas diretamente do banco de dados de recursos do projeto
+    const classFeatures = typeof getSelectedClassFeatureChoices === 'function' ? getSelectedClassFeatureChoices() : [];
+    const spells = typeof getSelectedSpells === 'function' ? getSelectedSpells() : (typeof selectedSpells !== 'undefined' ? selectedSpells : []);
+    const selectedFeatures = [...classFeatures, ...spells];
+    
+    // Categorizar por tipo
+    const categories = { trick: [], feature: [], subclass: [] };
+    selectedFeatures.forEach((item) => {
+      const t = item.type || '';
+      if (categories[t]) categories[t].push(item);
+    });
+
+    const renderCategory = (title, items, icon) => {
+      if (!items.length) return;
+      const titleEl = document.createElement('div');
+      titleEl.style.cssText = 'font-size:11px;text-transform:uppercase;color:var(--primary);font-weight:700;margin:6px 0 2px 0;';
+      titleEl.textContent = `${icon} ${title}`;
+      pjFeatures.appendChild(titleEl);
+      
+      items.forEach((feature) => {
+        const div = document.createElement('div');
+        div.style.cssText = "font-size: 13px; display: flex; align-items: center; gap: 4px;";
+        const rawName = feature.name || '';
+        const cleanName = rawName.replace('ℹ️', '').trim();
+        let textoDescricao = feature.descricao || feature.description || feature.desc || feature.text || '';
+        if (!textoDescricao && typeof getFeatureTooltip === 'function') {
+          textoDescricao = getFeatureTooltip(cleanName, feature.type || '');
+        }
+        if (!textoDescricao) textoDescricao = 'Sem descrição disponível.';
+        const descricaoEscapada = textoDescricao.replace(/"/g, '&quot;');
+        div.innerHTML = `
+          <span>${cleanName}</span>
+          <span class="info-icon" style="cursor:pointer; margin-left:2px; color:var(--primary);" title="${descricaoEscapada}" onclick="event.stopPropagation(); event.preventDefault(); alert(this.title);">ℹ️</span>
+        `;
+        pjFeatures.appendChild(div);
+      });
+    };
+
+    // Renderiza todas as 3 categorias na coluna central (Corrigido!)
+    renderCategory('TRUQUES', categories.trick, '🪄');
+    renderCategory('HABILIDADES DE CLASSE', categories.feature, '🛡️');
+    renderCategory('HABILIDADES DE SUBCLASSE', categories.subclass, '🔮');
+    
+    if (!selectedFeatures.length) {
+      pjFeatures.innerHTML = '<span class="empty-msg" style="padding:0;">Nenhum truque ou habilidade selecionado.</span>';
+    }
+  }
+
+  // Magias Ativas – lista de magias selecionadas agrupadas por círculo (Mantido idêntico e funcionando!)
+  const pjSpells = document.getElementById('pjSpellsList');
+  if (pjSpells) {
+    pjSpells.innerHTML = '';
+    const sum = typeof getClassFeatureSummary === 'function' ? getClassFeatureSummary() : { spellsByCircle: {} };
+    const validNames = new Set(Object.values(sum.spellsByCircle).flat().map(s => s.name.toLowerCase()));
+    const configs = [
+      { f: "spells_1_desc", l: "1º Círculo" },
+      { f: "spells_2_desc", l: "2º Círculo" },
+      { f: "spells_3_desc", l: "3º Círculo" },
+      { f: "spells_4_desc", l: "4º Círculo" },
+      { f: "spells_5_desc", l: "5º Círculo" },
+      { f: "spells_6_9_desc", l: "Círculos Superiores" }
+    ];
+    let total = 0;
+    configs.forEach(({ f, l }) => {
+      const list = typeof getCircleSpellSelections === 'function' ? getCircleSpellSelections(f) : [];
+      list.forEach((m) => {
+        if (validNames.has(m.name.toLowerCase())) {
+          total++;
+          const div = document.createElement('div');
+          div.style.cssText = "font-size:13px; display:flex; align-items:center; gap:4px; margin-bottom:2px;";
+          const n = m.name.replace('ℹ️', '').trim();
+          const d = typeof getFeatureTooltip === 'function' ? getFeatureTooltip(m.name, "spell") : 'Sem descrição disponível.';
+          div.innerHTML = `<span>${n} (${m.circle || l})</span><span class="info-icon" style="cursor:pointer; margin-left:2px; color:var(--primary);" title="${d.replace(/"/g, '&quot;')}" onclick="event.stopPropagation(); event.preventDefault(); alert(this.title);">ℹ️</span>`;
+          pjSpells.appendChild(div);
+        }
+      });
+    });
+    if (total === 0) pjSpells.innerHTML = '<span class="empty-msg" style="padding:0; font-size:12px;">Nenhuma magia selecionada.</span>';
   }
 }
 
